@@ -20,7 +20,6 @@
 // AutonNumber          pot           H
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "custom/autonomous.h"
-
 //motors
 Motor FL (FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
@@ -55,6 +54,7 @@ ADIAnalogIn outtakeSense ('B');
 
 //Staic defines
 RobotMovement Robot::Movement;
+Math Robot::myMath;
 bool Robot::teamIsBlue;
 const int Robot::delayVisionTime;
 

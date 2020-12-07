@@ -18,6 +18,7 @@ private:
 public:
   // globalThreads customThreads;
   static RobotMovement Movement;
+  static Math myMath;
 
   int PIDMove(double targetX, double targetY, int maxspeed = 100) {
     int PIDspeed = 20;
@@ -1051,7 +1052,7 @@ bool passBall() {
     }
   }
 };
-Robot Bongo;
+
 /*
 
 Movement.flywheel.flywheelset(true);

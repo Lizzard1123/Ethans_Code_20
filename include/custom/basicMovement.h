@@ -195,9 +195,8 @@ public:
     return solution;
   }
 };
-Math myMath;
 
-class flywheel {
+class flywheelClass {
 private:
   double flywheelspeed = 40;
   bool flywheeltoggle = false;
@@ -207,7 +206,7 @@ public:
   double speedLow = 50;
   double speedMedium = 45;
   double speedHigh = 100;
-
+  Math myMath;
   // toggles flywheel
   void flywheeltoggleswitch() { flywheeltoggle = !flywheeltoggle; };
   void flywheelset(bool setting) { flywheeltoggle = setting; };
@@ -229,13 +228,14 @@ public:
   void setSpeed(double speed) { flywheelspeed = speed; }
 };
 
-class intake {
+class intakeClass {
 private:
   double intakespeed = 100;
   bool isflush = false;
   bool moving = false;
   bool opposite = false;
 public:
+  Math myMath;
   // stops intakes
   void stopBoth() {
     LArm.move_velocity(0);
@@ -269,7 +269,7 @@ public:
   void flush(bool setting) { isflush = setting; }
 };
 
-class uptake {
+class uptakeClass {
 private:
   int liftspeed = 50;
   bool toggled = false;
@@ -277,6 +277,7 @@ private:
   bool output = false;
 
 public:
+  Math myMath;
   void stopBoth() { Lift.move_velocity(0); }
   void update() {
     if (output) {
@@ -327,10 +328,10 @@ private:
 
 public:
   // parts of the bot
-  flywheel flywheel;
-  intake intake;
-  uptake uptake;
-
+  flywheelClass flywheel;
+  intakeClass intake;
+  uptakeClass uptake;
+  Math myMath;
   // speedcontrol variables
   double mediummultiplier = .75;
   double regularmultiplier = 1;
