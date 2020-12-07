@@ -1,4 +1,4 @@
-#include "staticFunctions.h"
+#include "basicMovement.h"
 #include <climits>
 
 class Robot {
@@ -16,7 +16,7 @@ private:
   double moveDist;
 
 public:
-  globalThreads customThreads;
+  // globalThreads customThreads;
   static RobotMovement Movement;
 
   int PIDMove(double targetX, double targetY, int maxspeed = 100) {
@@ -512,6 +512,7 @@ public:
   }
 
   // sets up threads for each debugger
+  /*
   void setUpDebugger(bool temp, bool inert, bool enc) {
     if (temp) {
       customThreads.displayTemp(true, 500);
@@ -523,6 +524,34 @@ public:
       customThreads.displayMotorEncoders(true, 20);
     }
   }
+  */
+
+/*
+int darkThreshold = 10;
+bool currentBall = false;
+
+// checks to see if a ball has passed
+bool passBall() {
+  // gets current value of reflectivity of line tracker
+  // high val == dark enviroment
+  double val = outtakeSense.reflectivity();
+  // if its darker than the threshold detect ball
+  if (val >= darkThreshold) {
+    currentBall = true;
+    Brain.Screen.print(val);
+    Brain.Screen.newLine();
+  } else if (val <= darkThreshold && currentBall) {
+    // if the ball has been logged and the value reads light again
+    currentBall = false;
+    Brain.Screen.print("returning false");
+    Brain.Screen.newLine();
+    return false;
+  }
+  return true;
+}
+
+*/
+
   // delay between checking outake in ms
   static const int delayVisionTime = 50;
 
@@ -546,6 +575,7 @@ public:
     int maxIterations = maxTime / delayVisionTime;
     int iterations = 0;
     // wait until the ball passes the back
+    /*
     while (passBall()) {
 //this_thread::sleep_for(delayVisionTime);
       if (iterations >= maxIterations) {
@@ -554,6 +584,7 @@ public:
         iterations++;
       }
     }
+    */
     // sets flywheel to output top
     Movement.flywheel.setSpeed(Movement.flywheel.speedMedium);
     Movement.flywheel.outputBall(false);

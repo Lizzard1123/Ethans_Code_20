@@ -361,6 +361,7 @@ public:
   double CX;
   double width;
   double Pval = .4;
+  /*
   void lineUp() {
     EYES.takeSnapshot(EYES__CUSTOM_GREEN);
     if (EYES.largestObject.exists) {
@@ -386,7 +387,7 @@ public:
       //Brain.Screen.print("Fail");
     }
   }
-
+*/
   // helper func that returns number of encoder pos away from average scaled
   // from global var
   double scale(double av, double part) { return (av - part) * headingScale; }
