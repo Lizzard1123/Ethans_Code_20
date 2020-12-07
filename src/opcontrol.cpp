@@ -4,6 +4,6 @@ void opcontrol() {
 
 	while (true) {
 
-		pros::delay(20);
+		delay(20);
 	}
 }

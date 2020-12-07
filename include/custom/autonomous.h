@@ -1,4 +1,4 @@
-#include "threads.h"
+#include "staticFunctions.h"
 #include <climits>
 
 class Robot {
@@ -43,7 +43,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Vincent.heading(deg);
+      double currentAngle = Vincent.get_heading();
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       double FLAuton = myMath.sRound(
@@ -90,21 +90,21 @@ public:
         Movement.moveRight(0);
         break;
       }
-      Brain.Screen.setFillColor(transparent);
-      Brain.Screen.setPenColor(white);
-      Brain.Screen.setCursor(1, 1);
-      Brain.Screen.print(error);
-      Brain.Screen.setCursor(2, 1);
-      Brain.Screen.print(derivative);
-      Brain.Screen.setCursor(3, 1);
-      Brain.Screen.print(speed);
-      Brain.Screen.setCursor(4, 1);
-      Brain.Screen.print(currentAngle);
-      Brain.Screen.setCursor(5, 1);
-      Brain.Screen.print(Dangle);
-      Brain.Screen.setCursor(6, 1);
-      Brain.Screen.print(reachedGoal);
-      wait(PIDspeed, msec);
+      //Brain.Screen.setFillColor(transparent);
+      //Brain.Screen.setPenColor(white);
+      //Brain.Screen.setCursor(1, 1);
+      //Brain.Screen.print(error);
+      //Brain.Screen.setCursor(2, 1);
+      //Brain.Screen.print(derivative);
+      //Brain.Screen.setCursor(3, 1);
+      //Brain.Screen.print(speed);
+      //Brain.Screen.setCursor(4, 1);
+      //Brain.Screen.print(currentAngle);
+      //Brain.Screen.setCursor(5, 1);
+      //Brain.Screen.print(Dangle);
+      //Brain.Screen.setCursor(6, 1);
+      //Brain.Screen.print(reachedGoal);
+      delay(PIDspeed);
     }
     return 1;
   }
@@ -130,7 +130,7 @@ public:
     double headingVal;
     while (true) {
       // update left and right odom values
-      headingVal = Vincent.rotation(degrees);
+      headingVal = Vincent.get_rotation();
       // find the error of both sides  for P
       error = turnTarget - headingVal;
 
@@ -138,8 +138,8 @@ public:
       // integralone = 0;
       if (integralone == -4294967295.4294967295 || integralone == 1045) {
         integralone = 0;
-        Brain.Screen.setCursor(8, 4);
-        Brain.Screen.print("HRDFAG");
+        //Brain.Screen.setCursor(8, 4);
+        //Brain.Screen.print("HRDFAG");
       }
       if (motorSpeed <= 20) {
         integralone += error;
@@ -173,27 +173,27 @@ public:
       } else {
         reachedGoal = false;
       }
-      Brain.Screen.clearScreen();
-      Brain.Screen.setCursor(1, 1);
-      Brain.Screen.print(Vincent.rotation(degrees));
-      Brain.Screen.setCursor(2, 1);
-      Brain.Screen.print(error);
-      Brain.Screen.setCursor(3, 1);
-      Brain.Screen.print(integralone);
-      Brain.Screen.setCursor(4, 1);
-      Brain.Screen.print(Derivative);
-      Brain.Screen.setCursor(5, 1);
-      Brain.Screen.print(reachedGoal);
-      Brain.Screen.setCursor(6, 1);
-      Brain.Screen.print(motorSpeed);
+      //Brain.Screen.clearScreen();
+      //Brain.Screen.setCursor(1, 1);
+      //Brain.Screen.print(Vincent.rotation(degrees));
+      //Brain.Screen.setCursor(2, 1);
+      //Brain.Screen.print(error);
+      //Brain.Screen.setCursor(3, 1);
+      //Brain.Screen.print(integralone);
+      //Brain.Screen.setCursor(4, 1);
+      //Brain.Screen.print(Derivative);
+      //Brain.Screen.setCursor(5, 1);
+      //Brain.Screen.print(reachedGoal);
+      //Brain.Screen.setCursor(6, 1);
+      //Brain.Screen.print(motorSpeed);
       if (reachedGoal) {
-        Vincent.setRotation(0, degrees);
+        //Vincent.setRotation(0, degrees);
         Movement.moveLeft(0);
         Movement.moveRight(0);
         break;
       }
 
-      wait(PIDspeed, msec);
+      delay(PIDspeed);
     }
     return 1;
   }
@@ -238,30 +238,32 @@ public:
   */
   static int updatePos() {
     double wheelCircumfrence = 8.65795;
-    double head = Vincent.heading(degrees);
+    double head = Vincent.get_heading();
     double rightOdomVal;
+    double leftOdomVal;
     while (true) {
-      head = Vincent.heading(degrees);
-      rightOdomVal = rightOdom.position(degrees);
+      head = Vincent.get_heading();
+      rightOdomVal = rightOdom.get_value();
+      leftOdomVal = leftOdom.get_value();
       // YWhee
       Y += myMath.toInch(-rightOdomVal * cos(head * M_PI / 180),
                          wheelCircumfrence);
       X += myMath.toInch(-rightOdomVal * sin(head * M_PI / 180),
                          wheelCircumfrence);
       // X wheel
-      Y -= myMath.toInch(leftOdom.position(degrees) * sin(head * M_PI / 180),
+      Y -= myMath.toInch(leftOdomVal * sin(head * M_PI / 180),
                          wheelCircumfrence);
-      X += myMath.toInch(leftOdom.position(degrees) * cos(head * M_PI / 180),
+      X += myMath.toInch(leftOdomVal * cos(head * M_PI / 180),
                          wheelCircumfrence);
 
-      Brain.Screen.setCursor(3, 8);
-      Brain.Screen.print(X);
-      Brain.Screen.setCursor(4, 8);
-      Brain.Screen.print(Y);
+      //Brain.Screen.setCursor(3, 8);
+      //Brain.Screen.print(X);
+      //Brain.Screen.setCursor(4, 8);
+      //Brain.Screen.print(Y);
       // reset
-      rightOdom.setPosition(0, degrees);
-      leftOdom.setPosition(0, degrees);
-      this_thread::sleep_for(posDelay);
+      rightOdom.reset();
+      leftOdom.reset();
+      //this_thread::sleep_for(posDelay);
     }
     return 0;
   }
@@ -403,6 +405,7 @@ public:
     Y = y;
   }
 
+/*
   void setTeamNum(bool isBlue) {
     Brain.Screen.setPenWidth(5);
     Brain.Screen.setPenColor(black);
@@ -412,7 +415,8 @@ public:
     isBlue ? Brain.Screen.printAt(100, 225, "Blue")
            : Brain.Screen.printAt(100, 225, "Red");
   }
-
+*/
+/*
   void setTeamSide(bool left) {
     Brain.Screen.setPenWidth(5);
     Brain.Screen.setPenColor(black);
@@ -420,6 +424,8 @@ public:
     left ? Brain.Screen.printAt(140, 225, "L")
          : Brain.Screen.printAt(140, 225, "R");
   }
+*/
+/*
   void setAutoNum(int num) {
     Brain.Screen.setPenWidth(5);
     Brain.Screen.setPenColor(black);
@@ -441,6 +447,7 @@ public:
       break;
     }
   }
+*/
   int teamColorLow = 67;
   int teamColorMiddle = 67 * 2;
   int teamColorHigh = 67 * 3;
@@ -449,57 +456,57 @@ public:
   bool left = false;
 
   void setTeamColor() {
-    Brain.Screen.setCursor(1, 1);
-    Brain.Screen.print(TeamColor.value(vex::rotationUnits::deg));
-    Brain.Screen.setCursor(2, 1);
-    Brain.Screen.print(AutonNumber.value(vex::rotationUnits::deg));
-    if (TeamColor.value(vex::rotationUnits::deg) <= teamColorLow) {
+    //Brain.Screen.setCursor(1, 1);
+    //Brain.Screen.print(TeamColor.value(vex::rotationUnits::deg));
+    //Brain.Screen.setCursor(2, 1);
+    //Brain.Screen.print(AutonNumber.value(vex::rotationUnits::deg));
+    if (TeamColor.get_value() <= teamColorLow) {
       // less than angle set color blue
-      setTeamNum(true);
+      //setTeamNum(true);
       teamIsBlue = true;
       left = true;
-    } else if (TeamColor.value(vex::rotationUnits::deg) <= teamColorMiddle) {
+    } else if (TeamColor.get_value() <= teamColorMiddle) {
       // less than angle set color blue
-      setTeamNum(true);
+      //setTeamNum(true);
       teamIsBlue = true;
       left = false;
-    } else if (TeamColor.value(vex::rotationUnits::deg) <= teamColorHigh) {
+    } else if (TeamColor.get_value() <= teamColorHigh) {
       // greater than angle set color red
-      setTeamNum(false);
+      //setTeamNum(false);
       teamIsBlue = false;
       left = true;
     } else {
       // greater than angle set color red
-      setTeamNum(false);
+      //setTeamNum(false);
       teamIsBlue = false;
       left = false;
     }
   }
 
   void changeTeam() {
-    if (Controller1.ButtonL1.pressing() && Controller1.ButtonL2.pressing()) {
+    if (master.get_digital(E_CONTROLLER_DIGITAL_L1) == 1 && master.get_digital(E_CONTROLLER_DIGITAL_L2) == 1) {
       teamIsBlue = !teamIsBlue;
       if (teamIsBlue) {
-        setTeamNum(true);
+        //setTeamNum(true);
       } else {
-        setTeamNum(false);
+        //setTeamNum(false);
       }
     }
   }
 
   void setAuton() {
     // setup for 3 autons
-    if (AutonNumber.value(vex::rotationUnits::deg) >= autonLimitOne) {
+    if (AutonNumber.get_value() >= autonLimitOne) {
       // set auton number 1
-      setAutoNum(1);
+      //setAutoNum(1);
       autonCodeNum = 1;
-    } else if (AutonNumber.value(vex::rotationUnits::deg) >= autonLimitTwo) {
+    } else if (AutonNumber.get_value() >= autonLimitTwo) {
       // set auton number 2
-      setAutoNum(2);
+      //setAutoNum(2);
       autonCodeNum = 2;
     } else {
       // greater than autonLimitTwo set 3rd code
-      setAutoNum(3);
+      //setAutoNum(3);
       autonCodeNum = 3;
     }
   }
@@ -533,14 +540,14 @@ public:
     // Movement.uptake.setSpeed(20);
     Movement.uptake.outputBall(true);
     // set vision color
-    Police.setLedColor(0, 0, 0);
+    //Police.set_led(000000);
     // define precautions if ball doesnt output
     int maxTime = 1500;
     int maxIterations = maxTime / delayVisionTime;
     int iterations = 0;
     // wait until the ball passes the back
     while (passBall()) {
-      this_thread::sleep_for(delayVisionTime);
+//this_thread::sleep_for(delayVisionTime);
       if (iterations >= maxIterations) {
         break;
       } else {
@@ -561,9 +568,10 @@ public:
     // Movement.uptake.setSpeed(50);
     Movement.uptake.outputBall(false);
     // sets vision color
-    Police.setLedColor(0, 50, 0);
+    //Police.set_led(005000);
   }
 
+/*
   static int startVisionSort() {
     // forever while loop that tracks every ball
     while (true) {
@@ -584,6 +592,7 @@ public:
       }
     }
   }
+  */
 
   int IntakedarkThreshold = 10;
   bool currenIntaketBall = false;
@@ -591,13 +600,13 @@ public:
   bool passIntakeBall() {
     // gets current value of reflectivity of line tracker
     // high val == dark enviroment
-    double val = intakeSense.reflectivity();
+    double val = IntakeSense.get_value();
     // if its darker than the threshold detect ball
-    Brain.Screen.clearScreen();
-    Brain.Screen.setCursor(6, 20);
-    Brain.Screen.print(val);
-    Brain.Screen.setCursor(7, 20);
-    Brain.Screen.print(currenIntaketBall);
+    //Brain.Screen.clearScreen();
+    //Brain.Screen.setCursor(6, 20);
+    //Brain.Screen.print(val);
+    //Brain.Screen.setCursor(7, 20);
+    //Brain.Screen.print(currenIntaketBall);
     if (val >= IntakedarkThreshold) {
       currenIntaketBall = true;
     } else if (val <= IntakedarkThreshold && currenIntaketBall) {
@@ -618,10 +627,10 @@ public:
         if (count > customLimit) {
           break;
         }
-        wait(5, msec);
+        delay(5);
       }
-      Brain.Screen.setCursor(8, 20);
-      Brain.Screen.print(i);
+      //Brain.Screen.setCursor(8, 20);
+      //Brain.Screen.print(i);
     }
     return true;
   }
@@ -642,22 +651,22 @@ public:
 
   bool init() {
     // control updates from intake uptake flywheel
-    thread controlRobot = thread(updateEverything);
+    //thread controlRobot = thread(updateEverything);
     // track location
-    thread updatePositionThread = thread(updatePos);
+    //thread updatePositionThread = thread(updatePos);
     // motivational lizard + cosmetics
-    Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
-    Police.setLedMode(vision::ledMode::manual);
-    Police.setLedColor(255, 255, 255);
+    //Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
+    //Police.setLedMode(vision::ledMode::manual);
+    //Police.setLedColor(255, 255, 255);
     // set team from pot
-    setTeamColor();
+    //setTeamColor();
     // set auton from pot
-    setAuton();
-    setTeamSide(left);
+    //setAuton();
+    //setTeamSide(left);
     // start pooper vision
     // Help he has locked me in the laptop and wont let me out
     // I am starving in here please send help
-    thread visionSort = thread(startVisionSort);
+    //thread visionSort = thread(startVisionSort);
     return 1;
   }
 
@@ -667,7 +676,7 @@ public:
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(225, degrees);
+        //Vincent.setHeading(225, degrees);
         setPos(43, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -679,12 +688,12 @@ public:
         Movement.uptake.setToggle(true);
         // in front of side tower
         PIDMove(24, 20);
-        wait(9000, msec);
+        delay(9000);
         PIDMove(28, 24);
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(135, degrees);
+        //Vincent.setHeading(135, degrees);
         setPos(101, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -696,7 +705,7 @@ public:
         Movement.uptake.setToggle(true);
         // in front of side tower
         PIDMove(120, 20);
-        wait(9000, msec);
+        delay(9000);
         PIDMove(115, 25);
       }
 
@@ -705,7 +714,7 @@ public:
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(225, degrees);
+        //Vincent.setHeading(225, degrees);
         setPos(43, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -717,12 +726,12 @@ public:
         Movement.uptake.setToggle(true);
         // in front of side tower
         PIDMove(24, 20);
-        wait(9000, msec);
+        delay(9000);
         PIDMove(28, 24);
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(135, degrees);
+        //Vincent.setHeading(135, degrees);
         setPos(101, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -734,7 +743,7 @@ public:
         Movement.uptake.setToggle(true);
         // in front of side tower
         PIDMove(120, 20);
-        wait(9000, msec);
+        delay(9000);
         PIDMove(115, 25);
       }
     }
@@ -747,7 +756,7 @@ public:
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(225, degrees);
+        //Vincent.setHeading(225, degrees);
         setPos(43, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -760,7 +769,7 @@ public:
         // in front of side tower
         PIDMove(24, 20);
         // shoot + index
-        wait(500, msec);
+        delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
@@ -768,10 +777,12 @@ public:
         // line up to middle tower and line up
         PIDMove(72.5, 35);
         PIDTurn(-45);
+        /*
         EYES.takeSnapshot(EYES__CUSTOM_GREEN);
         if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
           PIDTurn(45);
         }
+        */
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -779,7 +790,7 @@ public:
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(135, degrees);
+        //Vincent.setHeading(135, degrees);
         setPos(101, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -792,7 +803,7 @@ public:
         // in front of side tower
         PIDMove(120, 20);
         // shoot + index
-        wait(500, msec);
+        delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
@@ -800,10 +811,12 @@ public:
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+        /*
         EYES.takeSnapshot(EYES__CUSTOM_GREEN);
         if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
           PIDTurn(-45);
         }
+        */
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -814,7 +827,7 @@ public:
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(135, degrees);
+        //Vincent.setHeading(135, degrees);
         setPos(101, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -827,7 +840,7 @@ public:
         // in front of side tower
         PIDMove(120, 20);
         // shoot + index
-        wait(500, msec);
+        delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
@@ -835,10 +848,12 @@ public:
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(-45);
+        /*
         EYES.takeSnapshot(EYES__CUSTOM_GREEN);
         if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
           PIDTurn(45);
         }
+        */
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -846,7 +861,7 @@ public:
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(135, degrees);
+        //Vincent.setHeading(135, degrees);
         setPos(101, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -859,7 +874,7 @@ public:
         // in front of side tower
         PIDMove(120, 20);
         // shoot + index
-        wait(500, msec);
+        delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
@@ -867,10 +882,12 @@ public:
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+        /*
         EYES.takeSnapshot(EYES__CUSTOM_GREEN);
         if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
           PIDTurn(-45);
         }
+        */
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -886,7 +903,7 @@ public:
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(135, degrees);
+        //Vincent.setHeading(135, degrees);
         setPos(101, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -899,7 +916,7 @@ public:
         // in front of side tower
         PIDMove(120, 20);
         // shoot + index
-        wait(500, msec);
+        delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
@@ -907,15 +924,17 @@ public:
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+        /*
         EYES.takeSnapshot(EYES__CUSTOM_GREEN);
         if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
           PIDTurn(-45);
         }
+        */
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
         Movement.uptake.setToggle(true);
-        wait(900, msec);
+        delay(900);
         // stop get some help
         Movement.intake.flush(false);
         Movement.intake.activate(false);
@@ -938,7 +957,7 @@ public:
         // initzilize
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        Vincent.setHeading(135, degrees);
+        //Vincent.setHeading(135, degrees);
         setPos(101, 12);
         // deploy da boi
         Movement.intake.activate(true, true);
@@ -951,7 +970,7 @@ public:
         // in front of side tower
         PIDMove(120, 20);
         // shoot + index
-        wait(500, msec);
+        delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
@@ -959,15 +978,17 @@ public:
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+        /*
         EYES.takeSnapshot(EYES__CUSTOM_GREEN);
         if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
           PIDTurn(-45);
         }
+        */
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
         Movement.uptake.setToggle(true);
-        wait(900, msec);
+        delay(900);
         // stop get some help
         Movement.intake.flush(false);
         Movement.intake.activate(false);
@@ -1000,33 +1021,6 @@ public:
   }
 };
 Robot Bongo;
-
-class coordinateSystem {
-public:
-  double BongoRotation;
-  /*
-  TODO
-  global coordinates
-  variable refresh rate
-  FOR X AND Y DIRECTION
-  testing numbers
-  keep track of acc during interval
-  find the v during interval
-  find displacemnt in interval
-  update global coords
-  keep log of current direction
-  with gyro
-  figure out setting up gyro/acc during preAUTON
-  */
-  void updateHeading() { Vincent.rotation(degrees); }
-  void getAccArray() {
-    double AccGraph[100] = {};
-    double XAcc = Vincent.acceleration(xaxis);
-    double YAcc = Vincent.acceleration(yaxis);
-  }
-};
-coordinateSystem CS;
-
 /*
 
 Movement.flywheel.flywheelset(true);

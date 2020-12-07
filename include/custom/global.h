@@ -20,7 +20,14 @@
 // TeamColor            pot           G
 // AutonNumber          pot           H
 // ---- END VEXCODE CONFIGURED DEVICES ----
-
+#define FLPort 6
+#define FRPort 4
+#define BLPort 1
+#define BRPort 10
+#define LArmPort 11
+#define RArmPort 20
+#define FlywheelPort 7
+#define LiftPort 8
 //motors
 extern Motor FL;
 extern Motor FR;
@@ -32,7 +39,7 @@ extern Motor Flywheel;
 extern Motor Lift;
 
 //controllers
-extern Controller Controller;
+extern Controller master;
 
 //vision sensors
 extern Vision Police;

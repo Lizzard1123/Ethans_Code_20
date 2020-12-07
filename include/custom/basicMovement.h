@@ -233,34 +233,38 @@ class intake {
 private:
   double intakespeed = 100;
   bool isflush = false;
-  bool direc = false;
+  bool moving = false;
   bool opposite = false;
 public:
   // stops intakes
   void stopBoth() {
-    LArm.stop(coast);
-    RArm.stop(coast);
+    LArm.move_velocity(0);
+    RArm.move_velocity(0);
   }
   void update() {
-    if (direc && !isflush) {
+    //if moving and not flushing
+    //spin intakes inward
+    if (moving && !isflush) {
+      //spins left opposite
       if(opposite){
-        LArm.spin(reverse, intakespeed, percent);
+        LArm.move_velocity(myMath.toRPM(true, intakespeed, LArm.get_gearing()));
       } else {
-        LArm.spin(forward, intakespeed, percent);
+        LArm.move_velocity(myMath.toRPM(false, intakespeed, LArm.get_gearing()));
       }
-      RArm.spin(reverse, intakespeed, percent);
-    } else if ((!direc && isflush) || (direc && isflush)) {
+      RArm.move_velocity(myMath.toRPM(true, intakespeed, RArm.get_gearing()));
+    // if the intakes are flusing  reverse intakes
+    } else if (isflush) {
       if(opposite){
-        LArm.spin(forward, intakespeed, percent);
+        LArm.move_velocity(myMath.toRPM(false, intakespeed, LArm.get_gearing()));
       } else {
-        LArm.spin(reverse, intakespeed, percent);
+        LArm.move_velocity(myMath.toRPM(true, intakespeed, LArm.get_gearing()));
       }
-      RArm.spin(forward, intakespeed, percent);
+      RArm.move_velocity(myMath.toRPM(false, intakespeed, RArm.get_gearing()));
     } else {
       stopBoth();
     }
   }
-  void activate(bool setting, bool other = false) { direc = setting; opposite = other;}
+  void activate(bool setting, bool other = false) { moving = setting; opposite = other;}
   // sets flush
   void flush(bool setting) { isflush = setting; }
 };
@@ -273,14 +277,14 @@ private:
   bool output = false;
 
 public:
-  void stopBoth() { Lift.stop(coast); }
+  void stopBoth() { Lift.move_velocity(0); }
   void update() {
     if (output) {
       stopBoth();
     } else if (toggled && !isflush) {
-      Lift.spin(reverse, liftspeed, percent);
-    } else if ((!toggled && isflush) || (toggled && isflush)) {
-      Lift.spin(forward, liftspeed, percent);
+      Lift.move_velocity(myMath.toRPM(true, liftspeed, Lift.get_gearing()));
+    } else if (isflush) {
+      Lift.move_velocity(myMath.toRPM(false, liftspeed, Lift.get_gearing()));
     } else {
       stopBoth();
     }
@@ -308,12 +312,6 @@ private:
   double tune = 1.5;
   double flushspeed = 60;
   bool currenttoggleState = false;
-
-  void clearandreplacescreen(int number) {
-    Controller1.Screen.clearScreen();
-    Controller1.Screen.setCursor(2, 6);
-    Controller1.Screen.print("Speed is at: %d", number);
-  }
 
   // takes in inputs and makes final speed
   double FLspeed = LYaxis + LXaxis + RXaxis;
@@ -351,10 +349,10 @@ public:
 
   // clears rotations for encoders
   void clearRotations() {
-    FL.setPosition(0, degrees);
-    FR.setPosition(0, degrees);
-    BL.setPosition(0, degrees);
-    BR.setPosition(0, degrees);
+    c::motor_set_zero_position(FLPort, 0);
+    c::motor_set_zero_position(FRPort, 0);
+    c::motor_set_zero_position(BLPort, 0);
+    c::motor_set_zero_position(BRPort, 0);
   }
   // neg right pos left
   double offset = -16;
@@ -375,17 +373,17 @@ public:
       FRspeed -= Pval * error;
       BLspeed += Pval * error;
       BRspeed -= Pval * error;
-      Brain.Screen.setCursor(1, 15);
-      Brain.Screen.print(width);
-      Brain.Screen.setCursor(2, 15);
-      Brain.Screen.print(CX);
-      Brain.Screen.setCursor(3, 15);
-      Brain.Screen.print(targetCX);
-      Brain.Screen.setCursor(4, 15);
-      Brain.Screen.print(error);
+      //Brain.Screen.setCursor(1, 15);
+      //Brain.Screen.print(width);
+      //Brain.Screen.setCursor(2, 15);
+      //Brain.Screen.print(CX);
+      //Brain.Screen.setCursor(3, 15);
+      //Brain.Screen.print(targetCX);
+      //Brain.Screen.setCursor(4, 15);
+      //Brain.Screen.print(error);
     } else {
-      Brain.Screen.setCursor(6, 12);
-      Brain.Screen.print("Fail");
+      //Brain.Screen.setCursor(6, 12);
+      //Brain.Screen.print("Fail");
     }
   }
 
@@ -395,10 +393,10 @@ public:
   double deadZone = 5;
   // moves in cardinal directions
   void cardinalMove(bool forward[]) {
-    double FLcurrent = FL.position(degrees);
-    double FRcurrent = FR.position(degrees);
-    double BLcurrent = BL.position(degrees);
-    double BRcurrent = BR.position(degrees);
+    double FLcurrent = c::motor_get_position(FLPort);
+    double FRcurrent = c::motor_get_position(FRPort);
+    double BLcurrent = c::motor_get_position(BLPort);
+    double BRcurrent = c::motor_get_position(BRPort);
     double average = myMath.getAverage(fabs(FLcurrent), fabs(FRcurrent),
                                        fabs(BLcurrent), fabs(BRcurrent));
     double FLscale = scale(average, fabs(FLcurrent));
@@ -413,14 +411,14 @@ public:
         forward[2] ? -(cardinalspeed + BLscale) : (cardinalspeed + BLscale);
     BRspeed =
         forward[3] ? -(cardinalspeed + BRscale) : (cardinalspeed + BRscale);
-    wait(10, msec);
+    //delay(10);
   }
   // upadate controller vars for bongo orientation
   void catieControll() {
-    LXaxis = Controller1.Axis4.position();
-    LYaxis = Controller1.Axis3.position();
-    RXaxis = Controller1.Axis1.position() / tune;
-    RYaxis = Controller1.Axis2.position();
+    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127);
+    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127);
+    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127) / tune;
+    RYaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y) / 127);
 
     FLspeed = RYaxis + RXaxis;
     FRspeed = RYaxis - RXaxis;
@@ -443,7 +441,7 @@ public:
         Dangle *= -1;
       }
       // current angle
-      double currentAngle = Vincent.heading(deg);
+      double currentAngle = Vincent.get_heading();
       FLspeed += myMath.sRound(
           myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
       FRspeed += myMath.sRound(
@@ -465,9 +463,9 @@ public:
 
   // upadate controller vars for bongo orientation
   void updateControllerAxis() {
-    LXaxis = Controller1.Axis4.position();
-    LYaxis = Controller1.Axis3.position();
-    RXaxis = Controller1.Axis1.position() / tune;
+    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127);
+    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127);
+    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127) / tune;
     // updates
     FLspeed = LYaxis + LXaxis + RXaxis;
     FRspeed = LYaxis - LXaxis - RXaxis;
@@ -486,9 +484,9 @@ public:
   // upadate controller vars
   void moveRelative() {
     // current controller axis values in %
-    LXaxis = Controller1.Axis4.position();
-    LYaxis = Controller1.Axis3.position();
-    RXaxis = Controller1.Axis1.position() / tune;
+    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127);
+    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127);
+    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127) / tune;
     // speed is distance from 0
     double speed = myMath.TwoPointsDistance(0, 0, LXaxis, LYaxis);
 
@@ -502,7 +500,7 @@ public:
       Dangle *= -1;
     }
     // current angle
-    double currentAngle = Vincent.heading(deg);
+    double currentAngle = Vincent.get_heading();
 
     // set speeds in order to move bongo in target agle taken into account
     // current angle
@@ -545,31 +543,33 @@ public:
 
   // drives motors from private vars
   void move() {
-    FR.spin(forward, FRspeed, percent);
-    FL.spin(forward, FLspeed, percent);
-    BR.spin(forward, BRspeed, percent);
-    BL.spin(forward, BLspeed, percent);
-    Brain.Screen.setCursor(6, 19);
-    Brain.Screen.print(FLspeed);
-    Brain.Screen.setCursor(7, 19);
-    Brain.Screen.print(FRspeed);
-    Brain.Screen.setCursor(8, 19);
-    Brain.Screen.print(BLspeed);
-    Brain.Screen.setCursor(9, 19);
-    Brain.Screen.print(BRspeed);
+    FR.move_velocity(myMath.toRPM(false, FRspeed, FR.get_gearing()));
+    FL.move_velocity(myMath.toRPM(false, FLspeed, FL.get_gearing()));
+    BR.move_velocity(myMath.toRPM(false, BRspeed, BR.get_gearing()));
+    BL.move_velocity(myMath.toRPM(false, BLspeed, BL.get_gearing()));
+    //Brain.Screen.setCursor(6, 19);
+    //Brain.Screen.print(FLspeed);
+    //Brain.Screen.setCursor(7, 19);
+    //Brain.Screen.print(FRspeed);
+    //Brain.Screen.setCursor(8, 19);
+    //Brain.Screen.print(BLspeed);
+    //Brain.Screen.setCursor(9, 19);
+    //Brain.Screen.print(BRspeed);
   }
   void moveLeft(double speed) {
-    FL.spin(forward, speed, percent);
-    BL.spin(forward, speed, percent);
+    FL.move_velocity(myMath.toRPM(false, speed, FL.get_gearing()));
+    BL.move_velocity(myMath.toRPM(false, speed, BL.get_gearing()));
   }
+
   void moveRight(double speed) {
-    FR.spin(forward, speed, percent);
-    BR.spin(forward, speed, percent);
+    FR.move_velocity(myMath.toRPM(false, speed, FR.get_gearing()));
+    BR.move_velocity(myMath.toRPM(false, speed, BR.get_gearing()));
   }
-  void moveFL(double speed) { FL.spin(forward, speed, percent); }
-  void moveFR(double speed) { FR.spin(forward, speed, percent); }
-  void moveBL(double speed) { BL.spin(forward, speed, percent); }
-  void moveBR(double speed) { BR.spin(forward, speed, percent); }
+
+  void moveFL(double speed) { FL.move_velocity(myMath.toRPM(false, speed, FL.get_gearing())); }
+  void moveFR(double speed) { FR.move_velocity(myMath.toRPM(false, speed, FR.get_gearing())); }
+  void moveBL(double speed) { BL.move_velocity(myMath.toRPM(false, speed, BL.get_gearing())); }
+  void moveBR(double speed) { BR.move_velocity(myMath.toRPM(false, speed, BR.get_gearing())); }
 
   // reverses motors to get a ball out front
   void flush(bool setting) {
