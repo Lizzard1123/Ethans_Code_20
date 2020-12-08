@@ -1,3 +1,9 @@
 #include "custom/autonomous.h"
 //hello
-void autonomous() {}
+Robot Bongo;
+void autonomous() {
+    while(Vincent.is_calibrating()){
+    delay(5);
+  }
+  Bongo.Autonomous();
+}

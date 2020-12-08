@@ -1,3 +1,6 @@
+#ifndef SET_H
+#define SET_H
+
 #include "basicMovement.h"
 #include <climits>
 
@@ -1052,7 +1055,7 @@ bool passBall() {
     }
   }
 };
-
+extern Robot Bongo;
 /*
 
 Movement.flywheel.flywheelset(true);
@@ -1086,3 +1089,4 @@ Movement.flywheel.flywheelset(true);
         Movement.intake.activate(false);
         Movement.uptake.setToggle(false);
 */
+#endif
