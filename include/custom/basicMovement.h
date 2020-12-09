@@ -1,3 +1,5 @@
+#ifndef MOVE
+#define MOVE
 #include "global.h"
 #include <climits>
 #define FLnum 1
@@ -586,3 +588,4 @@ public:
     flywheel.flywheelset(false);
   }
 };
+#endif

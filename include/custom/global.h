@@ -1,3 +1,5 @@
+#ifndef GLOBAL
+#define GLOBAL
 #include "main.h"
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -59,3 +61,4 @@ extern ADIAnalogIn AutonNumber;
 //line trackers
 extern ADIAnalogIn IntakeSense;
 extern ADIAnalogIn outtakeSense;
+#endif

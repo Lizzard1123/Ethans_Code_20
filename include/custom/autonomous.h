@@ -1,5 +1,5 @@
-#ifndef SET_H
-#define SET_H
+#ifndef AUTON
+#define AUTON
 
 #include "basicMovement.h"
 #include <climits>
