@@ -12,19 +12,22 @@ class Math {
 public:
   double toRPM(bool reverse, double speed, int gear){
     int check = (reverse) ? -1 : 1;
-    int gearRatio;
+    int gearRatio = 10;
     switch(gear){
       case E_MOTOR_GEARSET_36:
         gearRatio = 100;
+        //printf("Torq");
         break;
       case E_MOTOR_GEARSET_18:
         gearRatio = 200;
+        //printf("Reg");
         break;
       case E_MOTOR_GEARSET_06:
         gearRatio = 600;
+        //printf("Speed");
         break;
     }
-    return check * speed * gearRatio;
+    return check * (speed/100) * gearRatio;
   }
   // returns sum of all vals in array
   double sumOf(int length, double nums[]) {
@@ -419,10 +422,13 @@ public:
   }
   // upadate controller vars for bongo orientation
   void catieControll() {
-    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127);
-    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127);
-    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127) / tune;
-    RYaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y) / 127);
+    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X));
+    printf("LXaxis %f\n", LXaxis);
+    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y));
+    printf("LYaxis %f\n", LYaxis);
+    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) / tune;
+    printf("RXaxis %f\n", RXaxis);
+    RYaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y));
 
     FLspeed = RYaxis + RXaxis;
     FRspeed = RYaxis - RXaxis;
@@ -467,10 +473,9 @@ public:
 
   // upadate controller vars for bongo orientation
   void updateControllerAxis() {
-    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127);
-    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127);
-    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127) / tune;
-    // updates
+      LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X));
+      LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y));
+      RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) / tune;    // updates
     FLspeed = LYaxis + LXaxis + RXaxis;
     FRspeed = LYaxis - LXaxis - RXaxis;
     BLspeed = LYaxis - LXaxis + RXaxis;
@@ -488,9 +493,9 @@ public:
   // upadate controller vars
   void moveRelative() {
     // current controller axis values in %
-    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127);
-    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127);
-    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127) / tune;
+    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127 * 100);
+    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127 * 100);
+    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127 * 100) / tune;
     // speed is distance from 0
     double speed = myMath.TwoPointsDistance(0, 0, LXaxis, LYaxis);
 
@@ -548,9 +553,13 @@ public:
   // drives motors from private vars
   void move() {
     FR.move_velocity(myMath.toRPM(false, FRspeed, FR.get_gearing()));
+    //printf("FL %f\n", FLspeed);
     FL.move_velocity(myMath.toRPM(false, FLspeed, FL.get_gearing()));
+    //printf("FR %f\n", FRspeed);
     BR.move_velocity(myMath.toRPM(false, BRspeed, BR.get_gearing()));
+    //printf("BL %f\n", BLspeed);
     BL.move_velocity(myMath.toRPM(false, BLspeed, BL.get_gearing()));
+    //printf("BR %f\n", BRspeed);
     //Brain.Screen.setCursor(6, 19);
     //Brain.Screen.print(FLspeed);
     //Brain.Screen.setCursor(7, 19);

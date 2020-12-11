@@ -22,8 +22,8 @@
 // TeamColor            pot           G
 // AutonNumber          pot           H
 // ---- END VEXCODE CONFIGURED DEVICES ----
-#define FLPort 19
-#define FRPort 4
+#define FLPort 4
+#define FRPort 19
 #define BLPort 2
 #define BRPort 1
 #define LArmPort 5

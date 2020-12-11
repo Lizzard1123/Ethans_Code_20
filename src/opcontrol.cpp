@@ -16,11 +16,11 @@ void opcontrol() {
 
 		//updates controler values
     	//bongo orientation
-    	//Bongo.Movement.updateControllerAxis();
+    	Bongo.Movement.updateControllerAxis();
     	//controller orientation
     	//Bongo.Movement.moveRelative();
     	//catie control
-    	Bongo.Movement.catieControll();
+    	//Bongo.Movement.catieControll();
 
 		// cardinal Directions
     	if (master.get_digital(E_CONTROLLER_DIGITAL_UP)) {
@@ -35,21 +35,26 @@ void opcontrol() {
       		Bongo.Movement.clearRotations();
     	}
 
-		if (master.get_digital(E_CONTROLLER_DIGITAL_R1) && master.get_digital(E_CONTROLLER_DIGITAL_L2)) { //intake
+		if (master.get_digital(E_CONTROLLER_DIGITAL_R1) && master.get_digital(E_CONTROLLER_DIGITAL_L1)) { //intake
 	      Bongo.Movement.uptake.setToggle(true);
 	      Bongo.Movement.intake.activate(true);
+          //printf("both");
 	  	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L1)){
 	      Bongo.Movement.intake.activate(true);
 	      Bongo.Movement.uptake.setToggle(false);
+          //printf("inta");
 	  	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R1)){
 	      Bongo.Movement.uptake.setToggle(true);
 	      Bongo.Movement.intake.activate(false);
+          //printf("uptake");
 	  	} else if (master.get_digital(E_CONTROLLER_DIGITAL_L2)) { // flush
 	      Bongo.Movement.flush(true);
+          //printf("flush");
 	    } else { // nothing
 	      Bongo.Movement.flush(false);
 	      Bongo.Movement.uptake.setToggle(false);
 	      Bongo.Movement.intake.activate(false);
+          //printf("none");
 	    }
 
 		if(master.get_digital(E_CONTROLLER_DIGITAL_R2)){
@@ -60,13 +65,18 @@ void opcontrol() {
 	      Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedMedium);
 	    }
 
-	    if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
+	    //if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
 	      //Bongo.Movement.lineUp();
-	    }
-
+	    //}
+        // starts up flywheel
+        Bongo.Movement.flywheel.update();
+        // starts up uptake
+        Bongo.Movement.uptake.update();
+        // starts up intake
+        Bongo.Movement.intake.update();
 		// starts the spin on motors or cuts power
     	Bongo.Movement.move();
-		
+
 		delay(20);
 	}
 }
