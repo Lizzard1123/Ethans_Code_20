@@ -61,9 +61,9 @@ const int Robot::delayVisionTime;
 double Robot::X = 0;
 double Robot::Y = 0;
 /*
-double Robot::VX = 0;
-double Robot::VY = 0;
-double Robot::Xacceleration = 0;
-double Robot::Yacceleration = 0;
-*/
+   double Robot::VX = 0;
+   double Robot::VY = 0;
+   double Robot::Xacceleration = 0;
+   double Robot::Yacceleration = 0;
+ */
 double Robot::posDelay = 20;

@@ -63,5 +63,5 @@ extern ADIAnalogIn IntakeSense;
 extern ADIAnalogIn outtakeSense;
 
 //vars
-extern bool PREAUTON;
+
 #endif
