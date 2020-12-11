@@ -1,6 +1,9 @@
 #include "custom/autonomous.h"
 
 void opcontrol() {
+    if(!Bongo.isinit()){
+        Bongo.init();
+    }
 	//turn on flywheel
   Bongo.Movement.flywheel.flywheelset(true);
 
@@ -17,8 +20,6 @@ void opcontrol() {
 		//updates controler values
     	//bongo orientation
     	Bongo.Movement.updateControllerAxis();
-    	//controller orientation
-    	//Bongo.Movement.moveRelative();
     	//catie control
     	//Bongo.Movement.catieControll();
 
@@ -68,12 +69,6 @@ void opcontrol() {
 	    //if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
 	      //Bongo.Movement.lineUp();
 	    //}
-        // starts up flywheel
-        Bongo.Movement.flywheel.update();
-        // starts up uptake
-        Bongo.Movement.uptake.update();
-        // starts up intake
-        Bongo.Movement.intake.update();
 		// starts the spin on motors or cuts power
     	Bongo.Movement.move();
 

@@ -17,7 +17,7 @@ private:
   static bool teamIsBlue;
   int autonCodeNum;
   double moveDist;
-
+  bool initz = false;
 public:
   // globalThreads customThreads;
   static RobotMovement Movement;
@@ -670,7 +670,7 @@ bool passBall() {
     return true;
   }
 
-  static int updateEverything() {
+  static void updateEverything(void*) {
     while (true) {
       // starts up flywheel
       Movement.flywheel.update();
@@ -678,15 +678,18 @@ bool passBall() {
       Movement.uptake.update();
       // starts up intake
       Movement.intake.update();
-
       // Movement.indexer();
+      printf("in loop \n");
+      c::task_delay(10);
     }
-    return 1;
   }
-
-  bool init() {
+  bool isinit(){
+      return initz;
+  }
+  void init() {
+      printf("hete");
     // control updates from intake uptake flywheel
-    //thread controlRobot = thread(updateEverything);
+    Task task(updateEverything, nullptr, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "control");
     // track location
     //thread updatePositionThread = thread(updatePos);
     // motivational lizard + cosmetics
@@ -702,7 +705,7 @@ bool passBall() {
     // Help he has locked me in the laptop and wont let me out
     // I am starving in here please send help
     //thread visionSort = thread(startVisionSort);
-    return 1;
+    initz = true;
   }
 
   void AutonomousOne() {
