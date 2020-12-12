@@ -122,6 +122,16 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
         return LV_RES_OK;
 }
 
+void setupButton(lv_obj_t * obj, int num, lv_style_t released, lv_style_t pressed, double width, double height, double borderSize, double x, double y){
+    lv_obj_set_free_num(obj, num);
+    lv_btn_set_style(obj, LV_BTN_STYLE_REL, &released);
+    lv_btn_set_style(obj, LV_BTN_STYLE_PR, &pressed);
+    lv_obj_set_size(obj, width - 2 * borderSize, height - 2 * borderSize);
+    
+    lv_obj_set_pos(obj, x+borderSize, y+borderSize);
+
+}
+
 void initPracScreen(){
 
 }
