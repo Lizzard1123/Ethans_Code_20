@@ -5,8 +5,8 @@
 #include <climits>
 
 class Robot {
-
 private:
+
   static double X;
   static double Y;
   static double VX;
@@ -18,46 +18,52 @@ private:
   int autonCodeNum;
   double moveDist;
   bool initz = false;
+
 public:
+
   // globalThreads customThreads;
   static RobotMovement Movement;
   static Math myMath;
 
   int PIDMove(double targetX, double targetY, int maxspeed = 100) {
-    int PIDspeed = 20;
+    int PIDspeed     = 20;
     double tolerance = .5;
-    bool reachedGoal;
+    bool   reachedGoal;
     double speed = 0;
     double error;
     double derivative;
     double integral = 0;
-    double Pval = 13;
-    double Ival = 0;
-    double Dval = 0;
+    double Pval     = 13;
+    double Ival     = 0;
+    double Dval     = 0;
+
     while (true) {
       // find the error distance bertween current and target point
       error = myMath.TwoPointsDistance(X, Y, targetX, targetY);
+
       // find the intergral part for I
-      if (speed != 0 && speed <= 20 && integral < 1000 && error < 1000) {
+      if ((speed != 0) && (speed <= 20) && (integral < 1000) && (error < 1000)) {
         integral += error;
       }
+
       // find the derivative part for D
       derivative = error / PIDspeed;
+
       // PID ALGO
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
       double currentAngle = Vincent.get_heading();
-      double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
+      double Dangle       = myMath.angleBetween(X, Y, targetX, targetY);
 
       double FLAuton = myMath.sRound(
-          myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
       double FRAuton = myMath.sRound(
-          myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
       double BLAuton = myMath.sRound(
-          myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
       double BRAuton = myMath.sRound(
-          myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
       double under = myMath.greatest(fabs(FLAuton), fabs(FRAuton),
                                      fabs(BLAuton), fabs(BRAuton)) /
                      100;
@@ -65,17 +71,18 @@ public:
       FRAuton = (FRAuton / under);
       BLAuton = (BLAuton / under);
       BRAuton = (BRAuton / under);
+
       /*
-      if(currentAngle > 180){
-        Controller1.Screen.setCursor(1,1);
-        Controller1.Screen.print(currentAngle);
-        currentAngle -= 360;
-        Controller1.Screen.setCursor(2,1);
-        Controller1.Screen.print(currentAngle);
-        Controller1.Screen.setCursor(3,1);
-        Controller1.Screen.print(Dangle);
-      }
-*/
+         if(currentAngle > 180){
+         Controller1.Screen.setCursor(1,1);
+         Controller1.Screen.print(currentAngle);
+         currentAngle -= 360;
+         Controller1.Screen.setCursor(2,1);
+         Controller1.Screen.print(currentAngle);
+         Controller1.Screen.setCursor(3,1);
+         Controller1.Screen.print(Dangle);
+         }
+       */
 
       // Drive Bongo
       Movement.moveFL(FLAuton);
@@ -84,30 +91,32 @@ public:
       Movement.moveBR(BRAuton);
 
       // if the pid loop has reached target
-      if ((error <= tolerance && error >= -tolerance)) {
+      if (((error <= tolerance) && (error >= -tolerance))) {
         reachedGoal = true;
       } else {
         reachedGoal = false;
       }
+
       if (reachedGoal) {
         Movement.moveLeft(0);
         Movement.moveRight(0);
         break;
       }
-      //Brain.Screen.setFillColor(transparent);
-      //Brain.Screen.setPenColor(white);
-      //Brain.Screen.setCursor(1, 1);
-      //Brain.Screen.print(error);
-      //Brain.Screen.setCursor(2, 1);
-      //Brain.Screen.print(derivative);
-      //Brain.Screen.setCursor(3, 1);
-      //Brain.Screen.print(speed);
-      //Brain.Screen.setCursor(4, 1);
-      //Brain.Screen.print(currentAngle);
-      //Brain.Screen.setCursor(5, 1);
-      //Brain.Screen.print(Dangle);
-      //Brain.Screen.setCursor(6, 1);
-      //Brain.Screen.print(reachedGoal);
+
+      // Brain.Screen.setFillColor(transparent);
+      // Brain.Screen.setPenColor(white);
+      // Brain.Screen.setCursor(1, 1);
+      // Brain.Screen.print(error);
+      // Brain.Screen.setCursor(2, 1);
+      // Brain.Screen.print(derivative);
+      // Brain.Screen.setCursor(3, 1);
+      // Brain.Screen.print(speed);
+      // Brain.Screen.setCursor(4, 1);
+      // Brain.Screen.print(currentAngle);
+      // Brain.Screen.setCursor(5, 1);
+      // Brain.Screen.print(Dangle);
+      // Brain.Screen.setCursor(6, 1);
+      // Brain.Screen.print(reachedGoal);
       delay(PIDspeed);
     }
     return 1;
@@ -117,34 +126,40 @@ public:
     // bool negative = false;
     // if (target <= Vincent.rotation(degrees)) {
     // negative = true;
-    //}
-    double tolerance = .5;
-    int PIDspeed = 20;
+    // }
+    double tolerance  = .5;
+    int    PIDspeed   = 20;
     double motorSpeed = 0;
     double turnTarget = target;
-    bool reachedGoal;
+    bool   reachedGoal;
     double error;
     double Derivative;
     double integralone = 0;
-    double Pval = 2.5;
-    double Ival = .1;
+    double Pval        = 2.5;
+    double Ival        = .1;
+
     // double Ival = 0;
     double Dval = .7;
+
     // double Dval = 0;
     double headingVal;
+
     while (true) {
       // update left and right odom values
       headingVal = Vincent.get_rotation();
+
       // find the error of both sides  for P
       error = turnTarget - headingVal;
 
       // find the intergral part for I
       // integralone = 0;
-      if (integralone == -4294967295.4294967295 || integralone == 1045) {
+      if ((integralone == -4294967295.4294967295) || (integralone == 1045)) {
         integralone = 0;
-        //Brain.Screen.setCursor(8, 4);
-        //Brain.Screen.print("HRDFAG");
+
+        // Brain.Screen.setCursor(8, 4);
+        // Brain.Screen.print("HRDFAG");
       }
+
       if (motorSpeed <= 20) {
         integralone += error;
       }
@@ -166,32 +181,34 @@ public:
       // if (negative) {
       Movement.moveLeft(motorSpeed);
       Movement.moveRight(-motorSpeed);
+
       // } else {
       // Movement.moveLeft(-motorSpeed);
       // Movement.moveRight(motorSpeed);
-      //}
+      // }
 
       // if the pid loop has reached target
-      if (error <= tolerance && error >= -tolerance) {
+      if ((error <= tolerance) && (error >= -tolerance)) {
         reachedGoal = true;
       } else {
         reachedGoal = false;
       }
-      //Brain.Screen.clearScreen();
-      //Brain.Screen.setCursor(1, 1);
-      //Brain.Screen.print(Vincent.rotation(degrees));
-      //Brain.Screen.setCursor(2, 1);
-      //Brain.Screen.print(error);
-      //Brain.Screen.setCursor(3, 1);
-      //Brain.Screen.print(integralone);
-      //Brain.Screen.setCursor(4, 1);
-      //Brain.Screen.print(Derivative);
-      //Brain.Screen.setCursor(5, 1);
-      //Brain.Screen.print(reachedGoal);
-      //Brain.Screen.setCursor(6, 1);
-      //Brain.Screen.print(motorSpeed);
+
+      // Brain.Screen.clearScreen();
+      // Brain.Screen.setCursor(1, 1);
+      // Brain.Screen.print(Vincent.rotation(degrees));
+      // Brain.Screen.setCursor(2, 1);
+      // Brain.Screen.print(error);
+      // Brain.Screen.setCursor(3, 1);
+      // Brain.Screen.print(integralone);
+      // Brain.Screen.setCursor(4, 1);
+      // Brain.Screen.print(Derivative);
+      // Brain.Screen.setCursor(5, 1);
+      // Brain.Screen.print(reachedGoal);
+      // Brain.Screen.setCursor(6, 1);
+      // Brain.Screen.print(motorSpeed);
       if (reachedGoal) {
-        //Vincent.setRotation(0, degrees);
+        // Vincent.setRotation(0, degrees);
         Movement.moveLeft(0);
         Movement.moveRight(0);
         break;
@@ -201,14 +218,15 @@ public:
     }
     return 1;
   }
+
   /*
-  static int updatePos() {
-    double offsetX = .01;
-    double offsetY = -.01;
-    double prevMilis = Brain.Timer.time();
-    double currentMilis = 0;
-    double times;
-    while (true) {
+     static int updatePos() {
+     double offsetX = .01;
+     double offsetY = -.01;
+     double prevMilis = Brain.Timer.time();
+     double currentMilis = 0;
+     double times;
+     while (true) {
       currentMilis = Brain.Timer.time();
       times = currentMilis - prevMilis;
       //echange with VINCENT
@@ -236,50 +254,55 @@ public:
       Brain.Screen.print(VY);
       prevMilis = currentMilis;
       this_thread::sleep_for(posDelay);
-    }
-    return 0;
-  }
-  */
+     }
+     return 0;
+     }
+   */
   static int updatePos() {
     double wheelCircumfrence = 8.65795;
-    double head = Vincent.get_heading();
+    double head              = Vincent.get_heading();
     double rightOdomVal;
     double leftOdomVal;
+
     while (true) {
-      head = Vincent.get_heading();
+      head         = Vincent.get_heading();
       rightOdomVal = rightOdom.get_value();
-      leftOdomVal = leftOdom.get_value();
+      leftOdomVal  = leftOdom.get_value();
+
       // YWhee
       Y += myMath.toInch(-rightOdomVal * cos(head * M_PI / 180),
                          wheelCircumfrence);
       X += myMath.toInch(-rightOdomVal * sin(head * M_PI / 180),
                          wheelCircumfrence);
+
       // X wheel
       Y -= myMath.toInch(leftOdomVal * sin(head * M_PI / 180),
                          wheelCircumfrence);
       X += myMath.toInch(leftOdomVal * cos(head * M_PI / 180),
                          wheelCircumfrence);
 
-      //Brain.Screen.setCursor(3, 8);
-      //Brain.Screen.print(X);
-      //Brain.Screen.setCursor(4, 8);
-      //Brain.Screen.print(Y);
+      // Brain.Screen.setCursor(3, 8);
+      // Brain.Screen.print(X);
+      // Brain.Screen.setCursor(4, 8);
+      // Brain.Screen.print(Y);
       // reset
       rightOdom.reset();
       leftOdom.reset();
-      //this_thread::sleep_for(posDelay);
+
+      // this_thread::sleep_for(posDelay);
     }
     return 0;
   }
+
   /*
-  static int updatePos() {
-    double wheelCircumfrence = 8.65795;
-    double radius = 5;
-    double head = Vincent.rotation(degrees);
-    double prevHead = Vincent.rotation(degrees);
-    double changePheta;
-    double rightOdomVal;
-    while (true) {
+     static int updatePos() {
+     double wheelCircumfrence = 8.65795;
+     double radius = 5;
+     double head = Vincent.rotation(degrees);
+     double prevHead = Vincent.rotation(degrees);
+     double changePheta;
+     double rightOdomVal;
+     while (true) {
       head = Vincent.rotation(degrees);
       changePheta = head - prevHead;
       rightOdomVal = myMath.toInch(-rightOdomVal, wheelCircumfrence);
@@ -296,9 +319,9 @@ public:
       X += rightOdomVal*sin(head*M_PI/180);
       //X wheel
       Y -= myMath.toInch(leftOdom.position(degrees),
-  wheelCircumfrence)*sin(head*M_PI/180); X +=
-  myMath.toInch(leftOdom.position(degrees),
-  wheelCircumfrence)*cos(head*M_PI/180);
+     wheelCircumfrence)*sin(head*M_PI/180); X +=
+     myMath.toInch(leftOdom.position(degrees),
+     wheelCircumfrence)*cos(head*M_PI/180);
 
       Brain.Screen.setCursor(3, 8);
       Brain.Screen.print(X);
@@ -309,33 +332,34 @@ public:
       leftOdom.setPosition(0, degrees);
       prevHead = head;
       this_thread::sleep_for(posDelay);
-    }
-    return 0;
-  }
-  int PIDDrive(double target, int maxspeed = 100) {
-    bool negative = false;
-    if (target < 0) {
+     }
+     return 0;
+     }
+     int PIDDrive(double target, int maxspeed = 100) {
+     bool negative = false;
+     if (target < 0) {
       negative = true;
-    }
-    int PIDspeed = 25;
-    double tolerance = 7;
-    double wheelCircumfrence = 8.65795;
-    double rotaryTarget = myMath.wheeltoDegrees(wheelCircumfrence,
-  fabs(target)); bool reachedGoal; double LSideSpeed = 0; double RSideSpeed = 0;
-    double Lerror;
-    double Rerror;
-    double LDerivative;
-    double RDerivative;
-    double LIntegral = 0;
-    double RIntegral = 0;
-    double Pval = .19;
-    double Ival = 0;
-    double Dval = .1;
-    leftOdom.setPosition(0, degrees);
-    rightOdom.setPosition(0, degrees);
-    double leftOdomVal = 0;
-    double rightOdomVal = 0;
-    while (true) {
+     }
+     int PIDspeed = 25;
+     double tolerance = 7;
+     double wheelCircumfrence = 8.65795;
+     double rotaryTarget = myMath.wheeltoDegrees(wheelCircumfrence,
+     fabs(target)); bool reachedGoal; double LSideSpeed = 0; double RSideSpeed =
+        0;
+     double Lerror;
+     double Rerror;
+     double LDerivative;
+     double RDerivative;
+     double LIntegral = 0;
+     double RIntegral = 0;
+     double Pval = .19;
+     double Ival = 0;
+     double Dval = .1;
+     leftOdom.setPosition(0, degrees);
+     rightOdom.setPosition(0, degrees);
+     double leftOdomVal = 0;
+     double rightOdomVal = 0;
+     while (true) {
       // update left and right odom values
       leftOdomVal = fabs(leftOdom.position(degrees));
       rightOdomVal = fabs(rightOdom.position(degrees));
@@ -400,100 +424,102 @@ public:
       Brain.Screen.setCursor(6, 1);
       Brain.Screen.print(reachedGoal);
       wait(PIDspeed, msec);
-    }
-    return 1;
-  }
-  */
+     }
+     return 1;
+     }
+   */
   void setPos(double x, double y) {
     X = x;
     Y = y;
   }
 
-/*
-  void setTeamNum(bool isBlue) {
-    Brain.Screen.setPenWidth(5);
-    Brain.Screen.setPenColor(black);
-    isBlue ? Brain.Screen.setFillColor("#0b6fb3")
-           : Brain.Screen.setFillColor("#b80202");
-    Brain.Screen.drawRectangle(0, 200, 240, 40);
-    isBlue ? Brain.Screen.printAt(100, 225, "Blue")
-           : Brain.Screen.printAt(100, 225, "Red");
-  }
-*/
-/*
-  void setTeamSide(bool left) {
-    Brain.Screen.setPenWidth(5);
-    Brain.Screen.setPenColor(black);
-    Brain.Screen.setFillColor("#FFFFFF");
-    left ? Brain.Screen.printAt(140, 225, "L")
-         : Brain.Screen.printAt(140, 225, "R");
-  }
-*/
-/*
-  void setAutoNum(int num) {
-    Brain.Screen.setPenWidth(5);
-    Brain.Screen.setPenColor(black);
-    switch (num) {
-    case 1:
-      Brain.Screen.setFillColor("#00bf19");
-      Brain.Screen.drawRectangle(240, 200, 240, 40);
-      Brain.Screen.printAt(340, 225, "Low");
-      break;
-    case 2:
-      Brain.Screen.setFillColor("#00439c");
-      Brain.Screen.drawRectangle(240, 200, 240, 40);
-      Brain.Screen.printAt(330, 225, "Regular");
-      break;
-    case 3:
-      Brain.Screen.setFillColor("#610039");
-      Brain.Screen.drawRectangle(240, 200, 240, 40);
-      Brain.Screen.printAt(340, 225, "High");
-      break;
-    }
-  }
-*/
-  int teamColorLow = 67;
+  /*
+     void setTeamNum(bool isBlue) {
+      Brain.Screen.setPenWidth(5);
+      Brain.Screen.setPenColor(black);
+      isBlue ? Brain.Screen.setFillColor("#0b6fb3")
+             : Brain.Screen.setFillColor("#b80202");
+      Brain.Screen.drawRectangle(0, 200, 240, 40);
+      isBlue ? Brain.Screen.printAt(100, 225, "Blue")
+             : Brain.Screen.printAt(100, 225, "Red");
+     }
+   */
+  /*
+     void setTeamSide(bool left) {
+      Brain.Screen.setPenWidth(5);
+      Brain.Screen.setPenColor(black);
+      Brain.Screen.setFillColor("#FFFFFF");
+      left ? Brain.Screen.printAt(140, 225, "L")
+           : Brain.Screen.printAt(140, 225, "R");
+     }
+   */
+  /*
+     void setAutoNum(int num) {
+      Brain.Screen.setPenWidth(5);
+      Brain.Screen.setPenColor(black);
+      switch (num) {
+      case 1:
+        Brain.Screen.setFillColor("#00bf19");
+        Brain.Screen.drawRectangle(240, 200, 240, 40);
+        Brain.Screen.printAt(340, 225, "Low");
+        break;
+      case 2:
+        Brain.Screen.setFillColor("#00439c");
+        Brain.Screen.drawRectangle(240, 200, 240, 40);
+        Brain.Screen.printAt(330, 225, "Regular");
+        break;
+      case 3:
+        Brain.Screen.setFillColor("#610039");
+        Brain.Screen.drawRectangle(240, 200, 240, 40);
+        Brain.Screen.printAt(340, 225, "High");
+        break;
+      }
+     }
+   */
+  int teamColorLow    = 67;
   int teamColorMiddle = 67 * 2;
-  int teamColorHigh = 67 * 3;
-  int autonLimitOne = 175;
-  int autonLimitTwo = 60;
-  bool left = false;
+  int teamColorHigh   = 67 * 3;
+  int autonLimitOne   = 175;
+  int autonLimitTwo   = 60;
+  bool left           = false;
 
   void setTeamColor() {
-    //Brain.Screen.setCursor(1, 1);
-    //Brain.Screen.print(TeamColor.value(vex::rotationUnits::deg));
-    //Brain.Screen.setCursor(2, 1);
-    //Brain.Screen.print(AutonNumber.value(vex::rotationUnits::deg));
+    // Brain.Screen.setCursor(1, 1);
+    // Brain.Screen.print(TeamColor.value(vex::rotationUnits::deg));
+    // Brain.Screen.setCursor(2, 1);
+    // Brain.Screen.print(AutonNumber.value(vex::rotationUnits::deg));
     if (TeamColor.get_value() <= teamColorLow) {
       // less than angle set color blue
-      //setTeamNum(true);
+      // setTeamNum(true);
       teamIsBlue = true;
-      left = true;
+      left       = true;
     } else if (TeamColor.get_value() <= teamColorMiddle) {
       // less than angle set color blue
-      //setTeamNum(true);
+      // setTeamNum(true);
       teamIsBlue = true;
-      left = false;
+      left       = false;
     } else if (TeamColor.get_value() <= teamColorHigh) {
       // greater than angle set color red
-      //setTeamNum(false);
+      // setTeamNum(false);
       teamIsBlue = false;
-      left = true;
+      left       = true;
     } else {
       // greater than angle set color red
-      //setTeamNum(false);
+      // setTeamNum(false);
       teamIsBlue = false;
-      left = false;
+      left       = false;
     }
   }
 
   void changeTeam() {
-    if (master.get_digital(E_CONTROLLER_DIGITAL_L1) == 1 && master.get_digital(E_CONTROLLER_DIGITAL_L2) == 1) {
+    if ((master.get_digital(E_CONTROLLER_DIGITAL_L1) == 1) &&
+        (master.get_digital(E_CONTROLLER_DIGITAL_L2) == 1)) {
       teamIsBlue = !teamIsBlue;
+
       if (teamIsBlue) {
-        //setTeamNum(true);
+        // setTeamNum(true);
       } else {
-        //setTeamNum(false);
+        // setTeamNum(false);
       }
     }
   }
@@ -502,96 +528,105 @@ public:
     // setup for 3 autons
     if (AutonNumber.get_value() >= autonLimitOne) {
       // set auton number 1
-      //setAutoNum(1);
+      // setAutoNum(1);
       autonCodeNum = 1;
     } else if (AutonNumber.get_value() >= autonLimitTwo) {
       // set auton number 2
-      //setAutoNum(2);
+      // setAutoNum(2);
       autonCodeNum = 2;
     } else {
       // greater than autonLimitTwo set 3rd code
-      //setAutoNum(3);
+      // setAutoNum(3);
       autonCodeNum = 3;
     }
   }
 
   // sets up threads for each debugger
+
   /*
-  void setUpDebugger(bool temp, bool inert, bool enc) {
-    if (temp) {
+     void setUpDebugger(bool temp, bool inert, bool enc) {
+     if (temp) {
       customThreads.displayTemp(true, 500);
-    }
-    if (inert) {
+     }
+     if (inert) {
       customThreads.displayInertial(true, 20);
-    }
-    if (enc) {
+     }
+     if (enc) {
       customThreads.displayMotorEncoders(true, 20);
-    }
-  }
-  */
+     }
+     }
+   */
 
-/*
-int darkThreshold = 10;
-bool currentBall = false;
+  /*
+     int darkThreshold = 10;
+     bool currentBall = false;
 
-// checks to see if a ball has passed
-bool passBall() {
-  // gets current value of reflectivity of line tracker
-  // high val == dark enviroment
-  double val = outtakeSense.reflectivity();
-  // if its darker than the threshold detect ball
-  if (val >= darkThreshold) {
-    currentBall = true;
-    Brain.Screen.print(val);
-    Brain.Screen.newLine();
-  } else if (val <= darkThreshold && currentBall) {
-    // if the ball has been logged and the value reads light again
-    currentBall = false;
-    Brain.Screen.print("returning false");
-    Brain.Screen.newLine();
-    return false;
-  }
-  return true;
-}
+     // checks to see if a ball has passed
+     bool passBall() {
+     // gets current value of reflectivity of line tracker
+     // high val == dark enviroment
+     double val = outtakeSense.reflectivity();
+     // if its darker than the threshold detect ball
+     if (val >= darkThreshold) {
+      currentBall = true;
+      Brain.Screen.print(val);
+      Brain.Screen.newLine();
+     } else if (val <= darkThreshold && currentBall) {
+      // if the ball has been logged and the value reads light again
+      currentBall = false;
+      Brain.Screen.print("returning false");
+      Brain.Screen.newLine();
+      return false;
+     }
+     return true;
+     }
 
-*/
+   */
 
   // delay between checking outake in ms
   static const int delayVisionTime = 50;
 
   static void waitUntilBallPasses() {
     bool reverse = false;
+
     // sets flywheel to output bottom
     if (!Movement.flywheel.getToggle()) {
       Movement.flywheel.flywheelset(true);
       reverse = true;
     }
+
     // max flywheel speed
     Movement.flywheel.setSpeed(100);
     Movement.flywheel.outputBall(true);
+
     // help push down ball but not too fast
     // Movement.uptake.setSpeed(20);
     Movement.uptake.outputBall(true);
+
     // set vision color
-    //Police.set_led(000000);
+    // Police.set_led(000000);
     // define precautions if ball doesnt output
-    int maxTime = 1500;
+    int maxTime       = 1500;
     int maxIterations = maxTime / delayVisionTime;
-    int iterations = 0;
+    int iterations    = 0;
+
     // wait until the ball passes the back
+
     /*
-    while (passBall()) {
-//this_thread::sleep_for(delayVisionTime);
-      if (iterations >= maxIterations) {
+       while (passBall()) {
+       //this_thread::sleep_for(delayVisionTime);
+       if (iterations >= maxIterations) {
         break;
-      } else {
+       } else {
         iterations++;
-      }
-    }
-    */
+       }
+       }
+     */
+
     // sets flywheel to output top
     Movement.flywheel.setSpeed(Movement.flywheel.speedMedium);
     Movement.flywheel.outputBall(false);
+
     // sets flywheel back to original state if needed
     if (reverse) {
       Movement.flywheel.flywheelset(false);
@@ -602,110 +637,133 @@ bool passBall() {
     // corrects uptake
     // Movement.uptake.setSpeed(50);
     Movement.uptake.outputBall(false);
+
     // sets vision color
-    //Police.set_led(005000);
+    // Police.set_led(005000);
   }
 
-/*
-  static int startVisionSort() {
-    // forever while loop that tracks every ball
-    while (true) {
-      if (teamIsBlue) {
-        Police.takeSnapshot(Police__CUSTOMRED_SIG);
-        if (Police.largestObject.exists && Police.largestObject.width >= 220 &&
-            Police.largestObject.centerY <= 140) {
-          Police.setLedColor(255, 0, 0);
-          waitUntilBallPasses();
-        }
-      } else {
-        Police.takeSnapshot(Police__CUSTOMBLUE_SIG);
-        if (Police.largestObject.exists && Police.largestObject.width >= 220 &&
-            Police.largestObject.centerY <= 140) {
-          Police.setLedColor(255, 0, 0);
-          waitUntilBallPasses();
+  /*
+     static int startVisionSort() {
+      // forever while loop that tracks every ball
+      while (true) {
+        if (teamIsBlue) {
+          Police.takeSnapshot(Police__CUSTOMRED_SIG);
+          if (Police.largestObject.exists && Police.largestObject.width >= 220
+             &&
+              Police.largestObject.centerY <= 140) {
+            Police.setLedColor(255, 0, 0);
+            waitUntilBallPasses();
+          }
+        } else {
+          Police.takeSnapshot(Police__CUSTOMBLUE_SIG);
+          if (Police.largestObject.exists && Police.largestObject.width >= 220
+             &&
+              Police.largestObject.centerY <= 140) {
+            Police.setLedColor(255, 0, 0);
+            waitUntilBallPasses();
+          }
         }
       }
-    }
-  }
-  */
+     }
+   */
 
   int IntakedarkThreshold = 10;
-  bool currenIntaketBall = false;
+  bool currenIntaketBall  = false;
 
   bool passIntakeBall() {
     // gets current value of reflectivity of line tracker
     // high val == dark enviroment
     double val = IntakeSense.get_value();
+
     // if its darker than the threshold detect ball
-    //Brain.Screen.clearScreen();
-    //Brain.Screen.setCursor(6, 20);
-    //Brain.Screen.print(val);
-    //Brain.Screen.setCursor(7, 20);
-    //Brain.Screen.print(currenIntaketBall);
+    // Brain.Screen.clearScreen();
+    // Brain.Screen.setCursor(6, 20);
+    // Brain.Screen.print(val);
+    // Brain.Screen.setCursor(7, 20);
+    // Brain.Screen.print(currenIntaketBall);
     if (val >= IntakedarkThreshold) {
       currenIntaketBall = true;
-    } else if (val <= IntakedarkThreshold && currenIntaketBall) {
+    } else if ((val <= IntakedarkThreshold) && currenIntaketBall) {
       // if the ball has been logged and the value reads light again
       currenIntaketBall = false;
       return false;
     }
     return true;
   }
-  int count = 0;
+
+  int count       = 0;
   int customLimit = 1000;
 
   bool intake(int target) {
     Movement.intake.activate(true);
+
     for (int i = 0; i < target; i++) {
       while (passIntakeBall()) {
         count++;
+
         if (count > customLimit) {
           break;
         }
         delay(5);
       }
-      //Brain.Screen.setCursor(8, 20);
-      //Brain.Screen.print(i);
+
+      // Brain.Screen.setCursor(8, 20);
+      // Brain.Screen.print(i);
     }
     return true;
   }
 
-  static void updateEverything(void*) {
+  static void updateEverything(void *) {
     while (true) {
       // starts up flywheel
       Movement.flywheel.update();
+
       // starts up uptake
       Movement.uptake.update();
+
       // starts up intake
       Movement.intake.update();
+
       // Movement.indexer();
       printf("in loop \n");
       c::task_delay(10);
     }
   }
-  bool isinit(){
-      return initz;
+
+  bool isinit() {
+    return initz;
   }
+
   void init() {
-      printf("hete");
+    printf("hete");
+
     // control updates from intake uptake flywheel
-    Task task(updateEverything, nullptr, TASK_PRIORITY_DEFAULT, TASK_STACK_DEPTH_DEFAULT, "control");
+    Task task(updateEverything, nullptr, TASK_PRIORITY_DEFAULT,
+              TASK_STACK_DEPTH_DEFAULT, "control");
+
     // track location
-    //thread updatePositionThread = thread(updatePos);
+    // thread updatePositionThread = thread(updatePos);
     // motivational lizard + cosmetics
-    //Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
-    //Police.setLedMode(vision::ledMode::manual);
-    //Police.setLedColor(255, 255, 255);
+    // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
+    // Police.setLedMode(vision::ledMode::manual);
+    // Police.setLedColor(255, 255, 255);
     // set team from pot
-    //setTeamColor();
+    // setTeamColor();
     // set auton from pot
-    //setAuton();
-    //setTeamSide(left);
+    // setAuton();
+    // setTeamSide(left);
     // start pooper vision
     // Help he has locked me in the laptop and wont let me out
     // I am starving in here please send help
-    //thread visionSort = thread(startVisionSort);
+    // thread visionSort = thread(startVisionSort);
     initz = true;
+  }
+
+  void setRed(){
+      teamIsBlue = false;
+  }
+  void setBlue(){
+      teamIsBlue = true;
   }
 
   void AutonomousOne() {
@@ -714,16 +772,20 @@ bool passBall() {
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(225, degrees);
+
+        // Vincent.setHeading(225, degrees);
         setPos(43, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(32, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(24, 20);
         delay(9000);
@@ -731,37 +793,44 @@ bool passBall() {
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(135, degrees);
+
+        // Vincent.setHeading(135, degrees);
         setPos(101, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(112, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(120, 20);
         delay(9000);
         PIDMove(115, 25);
       }
-
     } else {
       // run RED SIDE first code
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(225, degrees);
+
+        // Vincent.setHeading(225, degrees);
         setPos(43, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(32, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(24, 20);
         delay(9000);
@@ -769,16 +838,20 @@ bool passBall() {
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(135, degrees);
+
+        // Vincent.setHeading(135, degrees);
         setPos(101, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(112, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(120, 20);
         delay(9000);
@@ -786,6 +859,7 @@ bool passBall() {
       }
     }
   }
+
   void AutonomousTwo() {
     if (teamIsBlue) {
       // run BLUE SIDE second code
@@ -794,33 +868,41 @@ bool passBall() {
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(225, degrees);
+
+        // Vincent.setHeading(225, degrees);
         setPos(43, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(32, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(24, 20);
+
         // shoot + index
         delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
         Movement.intake.activate(false);
+
         // line up to middle tower and line up
         PIDMove(72.5, 35);
         PIDTurn(-45);
+
         /*
-        EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-        if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-          PIDTurn(45);
-        }
-        */
+           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
+           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
+           PIDTurn(45);
+           }
+         */
+
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -828,33 +910,41 @@ bool passBall() {
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(135, degrees);
+
+        // Vincent.setHeading(135, degrees);
         setPos(101, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(112, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(120, 20);
+
         // shoot + index
         delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
         Movement.intake.activate(false);
+
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+
         /*
-        EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-        if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-          PIDTurn(-45);
-        }
-        */
+           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
+           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
+           PIDTurn(-45);
+           }
+         */
+
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -865,33 +955,41 @@ bool passBall() {
       if (left) {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(135, degrees);
+
+        // Vincent.setHeading(135, degrees);
         setPos(101, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(112, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(120, 20);
+
         // shoot + index
         delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
         Movement.intake.activate(false);
+
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(-45);
+
         /*
-        EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-        if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-          PIDTurn(45);
-        }
-        */
+           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
+           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
+           PIDTurn(45);
+           }
+         */
+
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -899,33 +997,41 @@ bool passBall() {
       } else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(135, degrees);
+
+        // Vincent.setHeading(135, degrees);
         setPos(101, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(112, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(120, 20);
+
         // shoot + index
         delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
         Movement.intake.activate(false);
+
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+
         /*
-        EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-        if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-          PIDTurn(-45);
-        }
-        */
+           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
+           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
+           PIDTurn(-45);
+           }
+         */
+
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
@@ -933,50 +1039,59 @@ bool passBall() {
       }
     }
   }
+
   void AutonomousThree() {
     if (teamIsBlue) {
       // run BLUE SIDE third code
-      if (left) {
-
-      } else {
+      if (left) {} else {
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(135, degrees);
+
+        // Vincent.setHeading(135, degrees);
         setPos(101, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(112, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(120, 20);
+
         // shoot + index
         delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
         Movement.intake.activate(false);
+
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+
         /*
-        EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-        if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-          PIDTurn(-45);
-        }
-        */
+           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
+           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
+           PIDTurn(-45);
+           }
+         */
+
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
         Movement.uptake.setToggle(true);
         delay(900);
+
         // stop get some help
         Movement.intake.flush(false);
         Movement.intake.activate(false);
         Movement.uptake.setToggle(false);
+
         // move to center location between towers and line up
         Movement.flywheel.setSpeed(100);
         PIDMove(32, 35);
@@ -989,48 +1104,56 @@ bool passBall() {
       }
     } else {
       // run RED SIDE third code
-      if (left) {
-
-      } else {
+      if (left) {} else {
         // initzilize
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(70);
-        //Vincent.setHeading(135, degrees);
+
+        // Vincent.setHeading(135, degrees);
         setPos(101, 12);
+
         // deploy da boi
         Movement.intake.activate(true, true);
         Movement.intake.flush(true);
+
         // in front of tower start intake
         PIDMove(112, 26);
         Movement.intake.activate(true);
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
+
         // in front of side tower
         PIDMove(120, 20);
+
         // shoot + index
         delay(500);
         Movement.uptake.setToggle(false);
         Movement.flywheel.setSpeed(90);
         Movement.intake.flush(false);
         Movement.intake.activate(false);
+
         // line up to middle tower and line up
         PIDMove(71.5, 35);
         PIDTurn(45);
+
         /*
-        EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-        if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-          PIDTurn(-45);
-        }
-        */
+           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
+           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
+           PIDTurn(-45);
+           }
+         */
+
         // shoot
         Movement.uptake.setSpeed(100);
         Movement.intake.activate(true);
         Movement.uptake.setToggle(true);
         delay(900);
+
         // stop get some help
         Movement.intake.flush(false);
         Movement.intake.activate(false);
         Movement.uptake.setToggle(false);
+
         // move to center location between towers and line up
         Movement.flywheel.setSpeed(100);
         PIDMove(32, 35);
@@ -1049,9 +1172,11 @@ bool passBall() {
     case 1:
       AutonomousOne();
       break;
+
     case 2:
       AutonomousTwo();
       break;
+
     case 3:
       AutonomousThree();
       break;
@@ -1059,9 +1184,10 @@ bool passBall() {
   }
 };
 extern Robot Bongo;
+
 /*
 
-Movement.flywheel.flywheelset(true);
+   Movement.flywheel.flywheelset(true);
         Vincent.setHeading(135, degrees);
         setPos(101, 12);
         Movement.intake.activate(true);
@@ -1091,5 +1217,5 @@ Movement.flywheel.flywheelset(true);
         Movement.intake.flush(false);
         Movement.intake.activate(false);
         Movement.uptake.setToggle(false);
-*/
-#endif
+ */
+#endif // ifndef AUTON

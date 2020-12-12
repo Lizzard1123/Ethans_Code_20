@@ -20,39 +20,40 @@
 // AutonNumber          pot           H
 // ---- END VEXCODE CONFIGURED DEVICES ----
 #include "custom/autonomous.h"
-//motors
-Motor FL (FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor FR (FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor BL (BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor BR (BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor LArm (LArmPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor RArm (RArmPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor Flywheel (FlywheelPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
-Motor Lift (LiftPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
-//controllers
-Controller master (E_CONTROLLER_MASTER);
+// motors
+Motor FL(FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor FR(FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor BL(BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor BR(BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor LArm(LArmPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor RArm(RArmPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor Flywheel(FlywheelPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+Motor Lift(LiftPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
-//vision sensors
-Vision Police (20);
-Vision EYES (9);
+// controllers
+Controller master(E_CONTROLLER_MASTER);
 
-//Imu
-Imu Vincent (8);
+// vision sensors
+Vision Police(20);
+Vision EYES(9);
 
-//Odom
-ADIEncoder leftOdom ('C', 'D');
-ADIEncoder rightOdom ('G', 'H');
+// Imu
+Imu Vincent(8);
 
-//pots
-ADIAnalogIn TeamColor ('F');
-ADIAnalogIn AutonNumber ('E');
+// Odom
+ADIEncoder leftOdom('C', 'D');
+ADIEncoder rightOdom('G', 'H');
 
-//line trackers
-ADIAnalogIn IntakeSense ('A');
-ADIAnalogIn outtakeSense ('B');
+// pots
+ADIAnalogIn TeamColor('F');
+ADIAnalogIn AutonNumber('E');
 
-//Staic defines
+// line trackers
+ADIAnalogIn IntakeSense('A');
+ADIAnalogIn outtakeSense('B');
+
+// Staic defines
 RobotMovement Robot::Movement;
 Math Robot::myMath;
 bool Robot::teamIsBlue;
@@ -60,6 +61,7 @@ const int Robot::delayVisionTime;
 
 double Robot::X = 0;
 double Robot::Y = 0;
+
 /*
    double Robot::VX = 0;
    double Robot::VY = 0;
