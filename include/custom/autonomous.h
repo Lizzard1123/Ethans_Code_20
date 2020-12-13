@@ -734,7 +734,7 @@ public:
     return initz;
   }
 
-  void init() {
+  void initThreads() {
     printf("hete");
 
     // control updates from intake uptake flywheel
@@ -747,11 +747,6 @@ public:
     // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
     // Police.setLedMode(vision::ledMode::manual);
     // Police.setLedColor(255, 255, 255);
-    // set team from pot
-    // setTeamColor();
-    // set auton from pot
-    // setAuton();
-    // setTeamSide(left);
     // start pooper vision
     // Help he has locked me in the laptop and wont let me out
     // I am starving in here please send help

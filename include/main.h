@@ -52,6 +52,7 @@
  * namespace.
  */
 using namespace pros;
+//#define LV_COLOR_MAKE(r8, g8, b8) lv_color_t({{b8, g8, r8, 0xff}})
 // using namespace pros::literals;
 // using namespace okapi;
 

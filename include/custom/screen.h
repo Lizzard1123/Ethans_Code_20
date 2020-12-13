@@ -80,9 +80,6 @@
 
 #include "custom/autonomous.h"
 
-//define pages
-extern lv_obj_t * blueBoxLabel;
-extern lv_obj_t * redBoxLabel;
 
 
 

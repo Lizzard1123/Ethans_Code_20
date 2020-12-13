@@ -6,6 +6,7 @@
 #define FRnum 2
 #define BLnum 2
 #define BRnum 1
+const double MPI = 3.14159265359;
 const double G       = 9.80665;
 const double MTOINCH = 39.37;
 class Math {
@@ -107,7 +108,7 @@ public:
   // new algos section
   // to degress from r
   double toDegrees(double r) {
-    return (r * 180) / M_PI;
+    return (r * 180) / MPI;
   }
 
   // returns rounded decimal place
@@ -167,10 +168,10 @@ public:
       check   = -1;
       break;
     }
-    double slopeLineX = sRound(sin(Dangle * M_PI / 180), 5);
-    double slopeLineY = sRound(cos(Dangle * M_PI / 180), 5);
-    double targetX    = sRound(sin(cangle * M_PI / 180), 5);
-    double targetY    = sRound(cos(cangle * M_PI / 180), 5);
+    double slopeLineX = sRound(sin(Dangle * MPI / 180), 5);
+    double slopeLineY = sRound(cos(Dangle * MPI / 180), 5);
+    double targetX    = sRound(sin(cangle * MPI / 180), 5);
+    double targetY    = sRound(cos(cangle * MPI / 180), 5);
     double dist       = findDistance(slope(0, 0, slopeLineX, slopeLineY),
                                      targetX,
                                      targetY);
@@ -223,7 +224,7 @@ public:
     if (targetX < X) {
       check = -1;
     }
-    double solution = acos(Ydist / dist) * 180 / M_PI * check;
+    double solution = acos(Ydist / dist) * 180 / MPI * check;
 
     // Brain.Screen.setCursor(3, 10);
     // Brain.Screen.print(Ydist);

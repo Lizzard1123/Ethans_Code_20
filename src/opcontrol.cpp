@@ -2,7 +2,7 @@
 
 void opcontrol() {
   if (!Bongo.isinit()) {
-    Bongo.init();
+    Bongo.initThreads();
   }
 
   // turn on flywheel
