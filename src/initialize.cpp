@@ -24,10 +24,6 @@ lv_obj_t *rightBox = lv_btn_create(scrSide, NULL);
 
 lv_obj_t *rightBoxLabel = lv_label_create(rightBox, NULL); 
 
-lv_obj_t *backBox = lv_btn_create(scrSide, NULL); 
-
-lv_obj_t *backBoxLabel = lv_label_create(backBox, NULL); 
-
 
 lv_obj_t *scrAuton = lv_obj_create(NULL, NULL);
 
@@ -43,13 +39,84 @@ lv_obj_t *bigBox = lv_btn_create(scrAuton, NULL);
 
 lv_obj_t *bigBoxLabel = lv_label_create(bigBox, NULL); 
 
-lv_obj_t *backBox2 = lv_btn_create(scrAuton, NULL); 
 
-lv_obj_t *backBoxLabel2 = lv_label_create(backBox2, NULL); 
-                                                         
+
+lv_obj_t *scrConf = lv_obj_create(NULL, NULL);
+
+
+lv_obj_t *topBox = lv_btn_create(scrColor, NULL); 
+
+lv_obj_t *topBoxLabel = lv_label_create(topBox, NULL); 
+
+lv_obj_t *topMidBox = lv_btn_create(scrColor, NULL); 
+
+lv_obj_t *topMidBoxLabel = lv_label_create(topMidBox, NULL); 
+
+lv_obj_t *bottomMidBox = lv_btn_create(scrColor, NULL); 
+
+lv_obj_t *bottomMidBoxLabel = lv_label_create(bottomMidBox, NULL); 
+
+lv_obj_t *bottomBox = lv_btn_create(scrColor, NULL); 
+
+lv_obj_t *bottomBoxLabel = lv_label_create(bottomBox, NULL); 
+
+
+
+lv_obj_t *topBox2 = lv_btn_create(scrSide, NULL); 
+
+lv_obj_t *topBoxLabel2 = lv_label_create(topBox2, NULL); 
+
+lv_obj_t *topMidBox2 = lv_btn_create(scrSide, NULL); 
+
+lv_obj_t *topMidBoxLabel2 = lv_label_create(topMidBox2, NULL); 
+
+lv_obj_t *bottomMidBox2 = lv_btn_create(scrSide, NULL); 
+
+lv_obj_t *bottomMidBoxLabel2 = lv_label_create(bottomMidBox2, NULL); 
+
+lv_obj_t *bottomBox2 = lv_btn_create(scrSide, NULL); 
+
+lv_obj_t *bottomBoxLabel2 = lv_label_create(bottomBox2, NULL); 
+
+
+lv_obj_t *topBox3 = lv_btn_create(scrAuton, NULL); 
+
+lv_obj_t *topBoxLabel3 = lv_label_create(topBox3, NULL); 
+
+lv_obj_t *topMidBox3 = lv_btn_create(scrAuton, NULL); 
+
+lv_obj_t *topMidBoxLabel3 = lv_label_create(topMidBox3, NULL); 
+
+lv_obj_t *bottomMidBox3 = lv_btn_create(scrAuton, NULL); 
+
+lv_obj_t *bottomMidBoxLabel3 = lv_label_create(bottomMidBox3, NULL); 
+
+lv_obj_t *bottomBox3 = lv_btn_create(scrAuton, NULL); 
+
+lv_obj_t *bottomBoxLabel3 = lv_label_create(bottomBox3, NULL); 
+
+
+lv_obj_t *topBox4 = lv_btn_create(scrConf, NULL); 
+
+lv_obj_t *topBoxLabel4 = lv_label_create(topBox4, NULL); 
+
+lv_obj_t *topMidBox4 = lv_btn_create(scrConf, NULL); 
+
+lv_obj_t *topMidBoxLabel4 = lv_label_create(topMidBox4, NULL); 
+
+lv_obj_t *bottomMidBox4 = lv_btn_create(scrConf, NULL); 
+
+lv_obj_t *bottomMidBoxLabel4 = lv_label_create(bottomMidBox4, NULL); 
+
+lv_obj_t *bottomBox4 = lv_btn_create(scrConf, NULL); 
+
+lv_obj_t *bottomBoxLabel4 = lv_label_create(bottomBox4, NULL); 
+
+
+
 int current = 0;
-void loadScreen(){
-  switch(current){
+void loadScreen(int num = current){
+  switch(num){
     case 0:
       lv_scr_load(scrColor);
       break;
@@ -103,9 +170,8 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     loadScreen();
     break;
 
-  case 4: // back button side
-    current--;
-    loadScreen();
+  case 4: 
+
     break;
 
   case 5: // small button
@@ -135,13 +201,32 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     loadScreen();
     break;
 
-  case 8: // back button auton
-    current--;
-    loadScreen();
+  case 8: // 
+
     break;
 
   case 9: // red button
 
+    break;
+
+  case 10: // color button
+  current = 0;
+    loadScreen(0);
+    break;
+
+  case 11: // side button
+  current = 1;
+    loadScreen(1);
+    break;
+
+  case 12: // auton button
+  current = 2;
+    loadScreen(2);
+    break;
+
+  case 13: // confirm button
+  current = 3;
+    loadScreen(3);
     break;
   }
   return LV_RES_OK;
@@ -161,7 +246,9 @@ void setupButton(lv_obj_t *obj,
   lv_obj_set_pos(obj, x, y);
 }
 
-void initPrac()
+int offset = 5;
+
+void initColor()
 {
   static lv_style_t buttonBoxStyle;
   lv_style_copy(&buttonBoxStyle, &lv_style_plain);
@@ -185,7 +272,7 @@ void initPrac()
   blueBoxStylePR.body.main_color = LV_COLOR_MAKE(0x00, 0x00, 0x96);
   blueBoxStylePR.body.grad_color = LV_COLOR_MAKE(0x00, 0x00, 0x96);
 
-  setupButton(redBox, 0, LV_HOR_RES / 2, LV_VER_RES, 5, 0, 0);
+  setupButton(redBox, 0, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, LV_HOR_RES / 4 + offset, offset);
 
   // redBoxStyle, redBoxStylePR
   lv_btn_set_style(redBox, LV_BTN_STYLE_REL, &redBoxStyle);
@@ -193,9 +280,10 @@ void initPrac()
 
   lv_label_set_text(redBoxLabel, "RED");
 
-  setupButton(blueBox, 1, LV_HOR_RES / 2, LV_VER_RES, 5, LV_HOR_RES / 2, 0);
 
-  // blueBoxStyle, blueBoxStylePR,
+  setupButton(blueBox, 0, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, (5 * LV_HOR_RES / 8) + offset, offset);
+
+  // redBoxStyle, redBoxStylePR
   lv_btn_set_style(blueBox, LV_BTN_STYLE_REL, &blueBoxStyle);
   lv_btn_set_style(blueBox, LV_BTN_STYLE_PR, &blueBoxStylePR);
 
@@ -226,16 +314,8 @@ void initSide()
   rightBoxStylePR.body.main_color = LV_COLOR_MAKE(0xad, 0x40, 0x96);
   rightBoxStylePR.body.grad_color = LV_COLOR_MAKE(0xad, 0x40, 0x96);
 
-  static lv_style_t backBoxStyle;
-  lv_style_copy(&backBoxStyle, &sideBoxStyle);
-  backBoxStyle.body.main_color = LV_COLOR_MAKE(0x9c, 0x9c, 0x9c);
-  backBoxStyle.body.grad_color = LV_COLOR_MAKE(0x9c, 0x9c, 0x9c);
-  static lv_style_t backBoxStylePR;
-  lv_style_copy(&backBoxStylePR, &sideBoxStyle);
-  backBoxStylePR.body.main_color = LV_COLOR_MAKE(0x5e, 0x5e, 0x5e);
-  backBoxStylePR.body.grad_color = LV_COLOR_MAKE(0x5e, 0x5e, 0x5e);
 
-  setupButton(leftBox, 2, LV_HOR_RES / 2, LV_VER_RES, 5, 0, 0);
+  setupButton(leftBox, 2, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, LV_HOR_RES / 4 + offset, offset);
 
   // redBoxStyle, redBoxStylePR
   lv_btn_set_style(leftBox, LV_BTN_STYLE_REL, &leftBoxStyle);
@@ -243,21 +323,13 @@ void initSide()
 
   lv_label_set_text(leftBoxLabel, "LEFT");
 
-  setupButton(rightBox, 3, LV_HOR_RES / 2, LV_VER_RES, 5, LV_HOR_RES / 2, 0);
+  setupButton(rightBox, 3,(3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, (5 * LV_HOR_RES / 8) + offset, offset);
 
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(rightBox, LV_BTN_STYLE_REL, &rightBoxStyle);
   lv_btn_set_style(rightBox, LV_BTN_STYLE_PR, &rightBoxStylePR);
 
   lv_label_set_text(rightBoxLabel, "RIGHT");
-
-  setupButton(backBox, 4, LV_HOR_RES / 4, LV_VER_RES/6, 5,( 3 * LV_HOR_RES / 8), (LV_VER_RES - LV_VER_RES/6));
-
-  // blueBoxStyle, blueBoxStylePR,
-  lv_btn_set_style(backBox, LV_BTN_STYLE_REL, &backBoxStyle);
-  lv_btn_set_style(backBox, LV_BTN_STYLE_PR, &backBoxStylePR);
-
-  lv_label_set_text(backBoxLabel, "BACK");
 }
 
 
@@ -293,16 +365,7 @@ void initAuton()
   bigBoxStylePR.body.main_color = LV_COLOR_MAKE(0xab, 0x00, 0x00);
   bigBoxStylePR.body.grad_color = LV_COLOR_MAKE(0xab, 0x00, 0x00);
 
-  static lv_style_t backBoxStyle2;
-  lv_style_copy(&backBoxStyle2, &autonBoxStyle);
-  backBoxStyle2.body.main_color = LV_COLOR_MAKE(0x9c, 0x9c, 0x9c);
-  backBoxStyle2.body.grad_color = LV_COLOR_MAKE(0x9c, 0x9c, 0x9c);
-  static lv_style_t backBoxStylePR2;
-  lv_style_copy(&backBoxStylePR2, &autonBoxStyle);
-  backBoxStylePR2.body.main_color = LV_COLOR_MAKE(0x5e, 0x5e, 0x5e);
-  backBoxStylePR2.body.grad_color = LV_COLOR_MAKE(0x5e, 0x5e, 0x5e);
-
-  setupButton(smallBox, 5, LV_HOR_RES / 3, LV_VER_RES, 5, 0, 0);
+  setupButton(smallBox, 5, (LV_HOR_RES / 4) - 2 * offset, LV_VER_RES - 2 * offset, 5, (LV_HOR_RES / 4) + offset, offset);
 
   // redBoxStyle, redBoxStylePR
   lv_btn_set_style(smallBox, LV_BTN_STYLE_REL, &smallBoxStyle);
@@ -310,7 +373,7 @@ void initAuton()
 
   lv_label_set_text(smallBoxLabel, "SMALL");
 
-  setupButton(medBox, 6, LV_HOR_RES / 3, LV_VER_RES, 5, LV_HOR_RES / 3, 0);
+  setupButton(medBox, 6, (LV_HOR_RES / 4) - 2 * offset, LV_VER_RES - 2 * offset, 5, (LV_HOR_RES / 2) + offset, offset);
 
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(medBox, LV_BTN_STYLE_REL, &medBoxStyle);
@@ -318,29 +381,156 @@ void initAuton()
 
   lv_label_set_text(medBoxLabel, "MED");
 
-  setupButton(bigBox, 7, LV_HOR_RES / 3, LV_VER_RES, 5, (2 * LV_HOR_RES / 3), 0);
+  setupButton(bigBox, 7, (LV_HOR_RES / 4) - 2 * offset, LV_VER_RES - 2 * offset, 5, (3 * LV_HOR_RES / 4) + offset, offset);
 
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bigBox, LV_BTN_STYLE_REL, &bigBoxStyle);
   lv_btn_set_style(bigBox, LV_BTN_STYLE_PR, &bigBoxStylePR);
 
   lv_label_set_text(bigBoxLabel, "BIG");
-
-  setupButton(backBox2, 8, LV_HOR_RES / 4, LV_VER_RES/6, 5,( 3 * LV_HOR_RES / 8), (LV_VER_RES - LV_VER_RES/6));
-
-  // blueBoxStyle, blueBoxStylePR,
-  lv_btn_set_style(backBox2, LV_BTN_STYLE_REL, &backBoxStyle2);
-  lv_btn_set_style(backBox2, LV_BTN_STYLE_PR, &backBoxStylePR2);
-
-  lv_label_set_text(backBoxLabel2, "BACK");
 }
+
+void initSideBar(){
+  static lv_style_t sideBarBoxStyle;
+  lv_style_copy(&sideBarBoxStyle, &lv_style_plain);
+  sideBarBoxStyle.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  sideBarBoxStyle.body.border.width = 5;
+  sideBarBoxStyle.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  sideBarBoxStyle.body.main_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  sideBarBoxStyle.body.grad_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  static lv_style_t sideBarBoxStylePR;
+  lv_style_copy(&sideBarBoxStylePR, &lv_style_plain);
+  sideBarBoxStylePR.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  sideBarBoxStylePR.body.border.width = 5;
+  sideBarBoxStylePR.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  sideBarBoxStylePR.body.main_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+  sideBarBoxStylePR.body.grad_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+
+  setupButton(topBox, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topBoxLabel, "Color");
+
+  setupButton(topMidBox, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topMidBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topMidBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topMidBoxLabel, "Side");
+
+  setupButton(bottomMidBox, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomMidBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomMidBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomMidBoxLabel, "Auton");
+
+  setupButton(bottomBox, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomBoxLabel, "Confirm");
+
+
+
+  setupButton(topBox2, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topBoxLabel2, "Color");
+
+  setupButton(topMidBox2, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topMidBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topMidBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topMidBoxLabel2, "Side");
+
+  setupButton(bottomMidBox2, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomMidBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomMidBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomMidBoxLabel2, "Auton");
+
+  setupButton(bottomBox2, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomBoxLabel2, "Confirm");
+
+
+  setupButton(topBox3, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topBoxLabel3, "Color");
+
+  setupButton(topMidBox3, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topMidBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topMidBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topMidBoxLabel3, "Side");
+
+  setupButton(bottomMidBox3, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomMidBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomMidBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomMidBoxLabel3, "Auton");
+
+  setupButton(bottomBox3, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomBoxLabel3, "Confirm");
+
+
+  setupButton(topBox4, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topBoxLabel4, "Color");
+
+  setupButton(topMidBox4, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(topMidBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(topMidBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(topMidBoxLabel4, "Side");
+
+  setupButton(bottomMidBox4, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomMidBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomMidBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomMidBoxLabel4, "Auton");
+
+  setupButton(bottomBox4, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(bottomBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
+  lv_btn_set_style(bottomBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
+
+  lv_label_set_text(bottomBoxLabel4, "Confirm");
+ }
 
 void initialize()
 {
   lv_init();
-  initPrac();
+  initColor();
   initSide();
   initAuton();
+
+  initSideBar();
   loadScreen();
 
   FL.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
