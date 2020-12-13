@@ -81,56 +81,10 @@
 #include "custom/autonomous.h"
 
 //define pages
+extern lv_obj_t * blueBoxLabel;
+extern lv_obj_t * redBoxLabel;
 
 
-static lv_res_t btn_click_action(lv_obj_t *btn)
-{
-        uint8_t id = lv_obj_get_free_num(btn); // id usefull when there are multiple
-        switch(lv_obj_get_free_num(btn)) {
-        case 0: //red button
-                Bongo.setRed();
-                break;
-        case 1://Blue button
-                Bongo.setBlue();
-                break;
-        case 2://red button
-
-                break;
-        case 3://red button
-
-                break;
-        case 4: //red button
-
-                break;
-        case 5://red button
-
-                break;
-        case 6://red button
-
-                break;
-        case 7://red button
-
-                break;
-        case 8://red button
-
-                break;
-        case 9: //red button
-
-                break;
-
-        }
-        return LV_RES_OK;
-}
-
-void setupButton(lv_obj_t * obj, int num, lv_style_t released, lv_style_t pressed, double width, double height, double borderSize, double x, double y){
-    lv_obj_set_free_num(obj, num);
-    lv_btn_set_style(obj, LV_BTN_STYLE_REL, &released);
-    lv_btn_set_style(obj, LV_BTN_STYLE_PR, &pressed);
-    lv_obj_set_size(obj, width - 2 * borderSize, height - 2 * borderSize);
-    
-    lv_obj_set_pos(obj, x+borderSize, y+borderSize);
-
-}
 
 void initPracScreen(){
 

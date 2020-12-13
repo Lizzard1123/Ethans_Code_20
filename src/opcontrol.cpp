@@ -6,7 +6,7 @@ void opcontrol() {
   }
 
   // turn on flywheel
-  Bongo.Movement.flywheel.flywheelset(true);
+  Bongo.Movement.flywheel.flywheelset(false);
 
   while (true) {
     // change teams
