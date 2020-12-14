@@ -285,15 +285,6 @@ public:
     // printf("BL %f\n", BLspeed);
     BL.move_velocity(myMath.toRPM(false, BLspeed, BL.get_gearing()));
 
-    // printf("BR %f\n", BRspeed);
-    // Brain.Screen.setCursor(6, 19);
-    // Brain.Screen.print(FLspeed);
-    // Brain.Screen.setCursor(7, 19);
-    // Brain.Screen.print(FRspeed);
-    // Brain.Screen.setCursor(8, 19);
-    // Brain.Screen.print(BLspeed);
-    // Brain.Screen.setCursor(9, 19);
-    // Brain.Screen.print(BRspeed);
   }
 
   void moveLeft(double speed) {

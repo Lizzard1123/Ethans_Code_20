@@ -226,14 +226,6 @@ public:
     }
     double solution = acos(Ydist / dist) * 180 / MPI * check;
 
-    // Brain.Screen.setCursor(3, 10);
-    // Brain.Screen.print(Ydist);
-    // Brain.Screen.setCursor(4, 10);
-    // Brain.Screen.print(dist);
-    // Brain.Screen.setCursor(5, 10);
-    // Brain.Screen.print(check);
-    // Brain.Screen.setCursor(6, 10);
-    // Brain.Screen.print(solution);
     return solution;
   }
 };

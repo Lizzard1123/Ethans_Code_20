@@ -5,127 +5,247 @@ lv_obj_t *scrColor = lv_obj_create(NULL, NULL);
 
 lv_obj_t *redBox = lv_btn_create(scrColor, NULL);
 
-lv_obj_t *redBoxLabel = lv_label_create(redBox, NULL); 
+lv_obj_t *redBoxLabel = lv_label_create(redBox, NULL);
 
-lv_obj_t *blueBox = lv_btn_create(scrColor, NULL); 
+lv_obj_t *blueBox = lv_btn_create(scrColor, NULL);
 
-lv_obj_t *blueBoxLabel = lv_label_create(blueBox, NULL); 
-
-
-
+lv_obj_t *blueBoxLabel = lv_label_create(blueBox, NULL);
 
 lv_obj_t *scrSide = lv_obj_create(NULL, NULL);
 
 lv_obj_t *leftBox = lv_btn_create(scrSide, NULL);
 
-lv_obj_t *leftBoxLabel = lv_label_create(leftBox, NULL); 
+lv_obj_t *leftBoxLabel = lv_label_create(leftBox, NULL);
 
-lv_obj_t *rightBox = lv_btn_create(scrSide, NULL); 
+lv_obj_t *rightBox = lv_btn_create(scrSide, NULL);
 
-lv_obj_t *rightBoxLabel = lv_label_create(rightBox, NULL); 
-
+lv_obj_t *rightBoxLabel = lv_label_create(rightBox, NULL);
 
 lv_obj_t *scrAuton = lv_obj_create(NULL, NULL);
 
 lv_obj_t *smallBox = lv_btn_create(scrAuton, NULL);
 
-lv_obj_t *smallBoxLabel = lv_label_create(smallBox, NULL); 
+lv_obj_t *smallBoxLabel = lv_label_create(smallBox, NULL);
 
-lv_obj_t *medBox = lv_btn_create(scrAuton, NULL); 
+lv_obj_t *medBox = lv_btn_create(scrAuton, NULL);
 
-lv_obj_t *medBoxLabel = lv_label_create(medBox, NULL); 
+lv_obj_t *medBoxLabel = lv_label_create(medBox, NULL);
 
-lv_obj_t *bigBox = lv_btn_create(scrAuton, NULL); 
+lv_obj_t *bigBox = lv_btn_create(scrAuton, NULL);
 
-lv_obj_t *bigBoxLabel = lv_label_create(bigBox, NULL); 
-
-
+lv_obj_t *bigBoxLabel = lv_label_create(bigBox, NULL);
 
 lv_obj_t *scrConf = lv_obj_create(NULL, NULL);
 
+lv_obj_t *topBox = lv_btn_create(scrColor, NULL);
 
-lv_obj_t *topBox = lv_btn_create(scrColor, NULL); 
+lv_obj_t *topBoxLabel = lv_label_create(topBox, NULL);
 
-lv_obj_t *topBoxLabel = lv_label_create(topBox, NULL); 
+lv_obj_t *topMidBox = lv_btn_create(scrColor, NULL);
 
-lv_obj_t *topMidBox = lv_btn_create(scrColor, NULL); 
+lv_obj_t *topMidBoxLabel = lv_label_create(topMidBox, NULL);
 
-lv_obj_t *topMidBoxLabel = lv_label_create(topMidBox, NULL); 
+lv_obj_t *bottomMidBox = lv_btn_create(scrColor, NULL);
 
-lv_obj_t *bottomMidBox = lv_btn_create(scrColor, NULL); 
+lv_obj_t *bottomMidBoxLabel = lv_label_create(bottomMidBox, NULL);
 
-lv_obj_t *bottomMidBoxLabel = lv_label_create(bottomMidBox, NULL); 
+lv_obj_t *bottomBox = lv_btn_create(scrColor, NULL);
 
-lv_obj_t *bottomBox = lv_btn_create(scrColor, NULL); 
+lv_obj_t *bottomBoxLabel = lv_label_create(bottomBox, NULL);
 
-lv_obj_t *bottomBoxLabel = lv_label_create(bottomBox, NULL); 
+lv_obj_t *topBox2 = lv_btn_create(scrSide, NULL);
 
+lv_obj_t *topBoxLabel2 = lv_label_create(topBox2, NULL);
 
+lv_obj_t *topMidBox2 = lv_btn_create(scrSide, NULL);
 
-lv_obj_t *topBox2 = lv_btn_create(scrSide, NULL); 
+lv_obj_t *topMidBoxLabel2 = lv_label_create(topMidBox2, NULL);
 
-lv_obj_t *topBoxLabel2 = lv_label_create(topBox2, NULL); 
+lv_obj_t *bottomMidBox2 = lv_btn_create(scrSide, NULL);
 
-lv_obj_t *topMidBox2 = lv_btn_create(scrSide, NULL); 
+lv_obj_t *bottomMidBoxLabel2 = lv_label_create(bottomMidBox2, NULL);
 
-lv_obj_t *topMidBoxLabel2 = lv_label_create(topMidBox2, NULL); 
+lv_obj_t *bottomBox2 = lv_btn_create(scrSide, NULL);
 
-lv_obj_t *bottomMidBox2 = lv_btn_create(scrSide, NULL); 
+lv_obj_t *bottomBoxLabel2 = lv_label_create(bottomBox2, NULL);
 
-lv_obj_t *bottomMidBoxLabel2 = lv_label_create(bottomMidBox2, NULL); 
+lv_obj_t *topBox3 = lv_btn_create(scrAuton, NULL);
 
-lv_obj_t *bottomBox2 = lv_btn_create(scrSide, NULL); 
+lv_obj_t *topBoxLabel3 = lv_label_create(topBox3, NULL);
 
-lv_obj_t *bottomBoxLabel2 = lv_label_create(bottomBox2, NULL); 
+lv_obj_t *topMidBox3 = lv_btn_create(scrAuton, NULL);
 
+lv_obj_t *topMidBoxLabel3 = lv_label_create(topMidBox3, NULL);
 
-lv_obj_t *topBox3 = lv_btn_create(scrAuton, NULL); 
+lv_obj_t *bottomMidBox3 = lv_btn_create(scrAuton, NULL);
 
-lv_obj_t *topBoxLabel3 = lv_label_create(topBox3, NULL); 
+lv_obj_t *bottomMidBoxLabel3 = lv_label_create(bottomMidBox3, NULL);
 
-lv_obj_t *topMidBox3 = lv_btn_create(scrAuton, NULL); 
+lv_obj_t *bottomBox3 = lv_btn_create(scrAuton, NULL);
 
-lv_obj_t *topMidBoxLabel3 = lv_label_create(topMidBox3, NULL); 
+lv_obj_t *bottomBoxLabel3 = lv_label_create(bottomBox3, NULL);
 
-lv_obj_t *bottomMidBox3 = lv_btn_create(scrAuton, NULL); 
+lv_obj_t *topBox4 = lv_btn_create(scrConf, NULL);
 
-lv_obj_t *bottomMidBoxLabel3 = lv_label_create(bottomMidBox3, NULL); 
+lv_obj_t *topBoxLabel4 = lv_label_create(topBox4, NULL);
 
-lv_obj_t *bottomBox3 = lv_btn_create(scrAuton, NULL); 
+lv_obj_t *topMidBox4 = lv_btn_create(scrConf, NULL);
 
-lv_obj_t *bottomBoxLabel3 = lv_label_create(bottomBox3, NULL); 
+lv_obj_t *topMidBoxLabel4 = lv_label_create(topMidBox4, NULL);
 
+lv_obj_t *bottomMidBox4 = lv_btn_create(scrConf, NULL);
 
-lv_obj_t *topBox4 = lv_btn_create(scrConf, NULL); 
+lv_obj_t *bottomMidBoxLabel4 = lv_label_create(bottomMidBox4, NULL);
 
-lv_obj_t *topBoxLabel4 = lv_label_create(topBox4, NULL); 
+lv_obj_t *bottomBox4 = lv_btn_create(scrConf, NULL);
 
-lv_obj_t *topMidBox4 = lv_btn_create(scrConf, NULL); 
+lv_obj_t *bottomBoxLabel4 = lv_label_create(bottomBox4, NULL);
 
-lv_obj_t *topMidBoxLabel4 = lv_label_create(topMidBox4, NULL); 
+lv_obj_t *infoBox1 = lv_obj_create(scrConf, NULL);
 
-lv_obj_t *bottomMidBox4 = lv_btn_create(scrConf, NULL); 
+lv_obj_t *infoBoxChild1 = lv_obj_create(infoBox1, NULL);
 
-lv_obj_t *bottomMidBoxLabel4 = lv_label_create(bottomMidBox4, NULL); 
+lv_obj_t *infoBoxLabel1 = lv_label_create(infoBoxChild1, NULL);
 
-lv_obj_t *bottomBox4 = lv_btn_create(scrConf, NULL); 
+lv_obj_t *infoBox2 = lv_obj_create(scrConf, NULL);
 
-lv_obj_t *bottomBoxLabel4 = lv_label_create(bottomBox4, NULL); 
+lv_obj_t *infoBoxChild2 = lv_obj_create(infoBox2, NULL);
 
+lv_obj_t *infoBoxLabel2 = lv_label_create(infoBoxChild2, NULL);
 
+lv_obj_t *infoBox3 = lv_obj_create(scrConf, NULL);
+
+lv_obj_t *infoBoxChild3 = lv_obj_create(infoBox3, NULL);
+
+lv_obj_t *infoBoxLabel3 = lv_label_create(infoBoxChild3, NULL);
+
+lv_obj_t *doneBtn = lv_btn_create(scrConf, NULL);
+
+lv_obj_t *doneBtnLabel = lv_label_create(doneBtn, NULL);
+
+bool colorSelected = false;
+bool sideSelected = false;
+bool autonSelected = false;
+
+void updateConf()
+{
+  if (colorSelected)
+  {
+    bool boolBlue = Bongo.getColor();
+    lv_label_set_text(infoBoxLabel1, boolBlue ? "Blue" : "Red");
+    if (boolBlue)
+    {
+      static lv_style_t infoOneBlue;
+      lv_style_copy(&infoOneBlue, &lv_style_plain);
+      infoOneBlue.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoOneBlue.body.border.width = 5;
+      infoOneBlue.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoOneBlue.body.main_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
+      infoOneBlue.body.grad_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
+      lv_obj_set_style(infoBox1, &infoOneBlue);
+    }
+    else
+    {
+      static lv_style_t infoOneRed;
+      lv_style_copy(&infoOneRed, &lv_style_plain);
+      infoOneRed.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoOneRed.body.border.width = 5;
+      infoOneRed.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoOneRed.body.main_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
+      infoOneRed.body.grad_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
+      lv_obj_set_style(infoBox1, &infoOneRed);
+    }
+  }
+  if (sideSelected)
+  {
+    bool boolLeft = Bongo.getSide();
+    lv_label_set_text(infoBoxLabel2, boolLeft ? "Left" : "Right");
+    if (boolLeft)
+    {
+      static lv_style_t infoTwoLeft;
+      lv_style_copy(&infoTwoLeft, &lv_style_plain);
+      infoTwoLeft.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoTwoLeft.body.border.width = 5;
+      infoTwoLeft.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoTwoLeft.body.main_color = LV_COLOR_MAKE(0x00, 0x96, 0x0f);
+      infoTwoLeft.body.grad_color = LV_COLOR_MAKE(0x00, 0x96, 0x0f);
+      lv_obj_set_style(infoBox2, &infoTwoLeft);
+    }
+    else
+    {
+      static lv_style_t infoTwoRight;
+      lv_style_copy(&infoTwoRight, &lv_style_plain);
+      infoTwoRight.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoTwoRight.body.border.width = 5;
+      infoTwoRight.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoTwoRight.body.main_color = LV_COLOR_MAKE(0xe0, 0x52, 0xc8);
+      infoTwoRight.body.grad_color = LV_COLOR_MAKE(0xe0, 0x52, 0xc8);
+      lv_obj_set_style(infoBox2, &infoTwoRight);
+    }
+  }
+  if (autonSelected)
+  {
+    bool isOne = Bongo.getAutonNum() == 1;
+    bool isTwo = Bongo.getAutonNum() == 2;
+    lv_label_set_text(infoBoxLabel3, isOne ? "Small" : isTwo == 2 ? "Med" : "Big");
+    if (isOne)
+    {
+      static lv_style_t infoThreeSmall;
+      lv_style_copy(&infoThreeSmall, &lv_style_plain);
+      infoThreeSmall.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoThreeSmall.body.border.width = 5;
+      infoThreeSmall.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoThreeSmall.body.main_color = LV_COLOR_MAKE(0xbf, 0xbf, 0x00);
+      infoThreeSmall.body.grad_color = LV_COLOR_MAKE(0xbf, 0xbf, 0x00);
+      lv_obj_set_style(infoBox3, &infoThreeSmall);
+    }
+    else if (isTwo)
+    {
+      static lv_style_t infoThreeMed;
+      lv_style_copy(&infoThreeMed, &lv_style_plain);
+      infoThreeMed.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoThreeMed.body.border.width = 5;
+      infoThreeMed.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoThreeMed.body.main_color = LV_COLOR_MAKE(0xc2, 0x4a, 0x00);
+      infoThreeMed.body.grad_color = LV_COLOR_MAKE(0xc2, 0x4a, 0x00);
+      lv_obj_set_style(infoBox3, &infoThreeMed);
+    }
+    else
+    {
+      static lv_style_t infoThreeBig;
+      lv_style_copy(&infoThreeBig, &lv_style_plain);
+      infoThreeBig.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoThreeBig.body.border.width = 5;
+      infoThreeBig.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+      infoThreeBig.body.main_color = LV_COLOR_MAKE(0xc4, 0x00, 0x00);
+      infoThreeBig.body.grad_color = LV_COLOR_MAKE(0xc4, 0x00, 0x00);
+      lv_obj_set_style(infoBox3, &infoThreeBig);
+    }
+  }
+
+  lv_obj_refresh_style(infoBox1);
+lv_obj_refresh_style(infoBox2);
+  lv_obj_refresh_style(infoBox3);
+}
 
 int current = 0;
-void loadScreen(int num = current){
-  switch(num){
-    case 0:
-      lv_scr_load(scrColor);
-      break;
-    case 1:
-      lv_scr_load(scrSide);
-      break;  
-    case 2:
-      lv_scr_load(scrAuton);
-      break;  
+void loadScreen(int num = current)
+{
+  switch (num)
+  {
+  case 0:
+    lv_scr_load(scrColor);
+    break;
+  case 1:
+    lv_scr_load(scrSide);
+    break;
+  case 2:
+    lv_scr_load(scrAuton);
+    break;
+  case 3:
+  updateConf();
+    lv_scr_load(scrConf);
+    break;
   }
 }
 
@@ -137,6 +257,7 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
   switch (lv_obj_get_free_num(btn))
   {
   case 0: // red button
+    colorSelected = true;
     Bongo.setRed();
     lv_label_set_text(redBoxLabel, "    RED\n(SELECTED)");
     lv_label_set_text(blueBoxLabel, "BLUE");
@@ -146,6 +267,7 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     break;
 
   case 1: // Blue button
+    colorSelected = true;
     Bongo.setBlue();
     lv_label_set_text(blueBoxLabel, "    BLUE \n(SELECTED)");
     lv_label_set_text(redBoxLabel, "RED");
@@ -155,6 +277,8 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     break;
 
   case 2: // left button
+    sideSelected = true;
+    Bongo.sideIsLeft(true);
     lv_label_set_text(leftBoxLabel, "    LEFT \n(SELECTED)");
     lv_label_set_text(rightBoxLabel, "RIGHT");
     delay(interval);
@@ -163,6 +287,8 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     break;
 
   case 3: // right button
+    sideSelected = true;
+    Bongo.sideIsLeft(false);
     lv_label_set_text(rightBoxLabel, "    RIGHT \n(SELECTED)");
     lv_label_set_text(leftBoxLabel, "LEFT");
     delay(interval);
@@ -170,11 +296,13 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     loadScreen();
     break;
 
-  case 4: 
+  case 4:
 
     break;
 
   case 5: // small button
+    autonSelected = true;
+    Bongo.setAutonNum(1);
     lv_label_set_text(smallBoxLabel, "   SMALL \n(SELECTED)");
     lv_label_set_text(medBoxLabel, "MED");
     lv_label_set_text(bigBoxLabel, "BIG");
@@ -184,7 +312,9 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     break;
 
   case 6: // med button
-  lv_label_set_text(medBoxLabel, "    MED \n(SELECTED)");
+    autonSelected = true;
+    Bongo.setAutonNum(2);
+    lv_label_set_text(medBoxLabel, "    MED \n(SELECTED)");
     lv_label_set_text(smallBoxLabel, "SMALL");
     lv_label_set_text(bigBoxLabel, "BIG");
     delay(interval);
@@ -193,7 +323,9 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     break;
 
   case 7: // big button
-  lv_label_set_text(bigBoxLabel, "     BIG \n(SELECTED)");
+    autonSelected = true;
+    Bongo.setAutonNum(3);
+    lv_label_set_text(bigBoxLabel, "     BIG \n(SELECTED)");
     lv_label_set_text(medBoxLabel, "MED");
     lv_label_set_text(smallBoxLabel, "SMALL");
     delay(interval);
@@ -201,7 +333,7 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     loadScreen();
     break;
 
-  case 8: // 
+  case 8: //
 
     break;
 
@@ -210,22 +342,22 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     break;
 
   case 10: // color button
-  current = 0;
+    current = 0;
     loadScreen(0);
     break;
 
   case 11: // side button
-  current = 1;
+    current = 1;
     loadScreen(1);
     break;
 
   case 12: // auton button
-  current = 2;
+    current = 2;
     loadScreen(2);
     break;
 
   case 13: // confirm button
-  current = 3;
+    current = 3;
     loadScreen(3);
     break;
   }
@@ -280,8 +412,7 @@ void initColor()
 
   lv_label_set_text(redBoxLabel, "RED");
 
-
-  setupButton(blueBox, 0, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, (5 * LV_HOR_RES / 8) + offset, offset);
+  setupButton(blueBox, 1, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, (5 * LV_HOR_RES / 8) + offset, offset);
 
   // redBoxStyle, redBoxStylePR
   lv_btn_set_style(blueBox, LV_BTN_STYLE_REL, &blueBoxStyle);
@@ -314,7 +445,6 @@ void initSide()
   rightBoxStylePR.body.main_color = LV_COLOR_MAKE(0xad, 0x40, 0x96);
   rightBoxStylePR.body.grad_color = LV_COLOR_MAKE(0xad, 0x40, 0x96);
 
-
   setupButton(leftBox, 2, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, LV_HOR_RES / 4 + offset, offset);
 
   // redBoxStyle, redBoxStylePR
@@ -323,7 +453,7 @@ void initSide()
 
   lv_label_set_text(leftBoxLabel, "LEFT");
 
-  setupButton(rightBox, 3,(3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, (5 * LV_HOR_RES / 8) + offset, offset);
+  setupButton(rightBox, 3, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES - 2 * offset, 5, (5 * LV_HOR_RES / 8) + offset, offset);
 
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(rightBox, LV_BTN_STYLE_REL, &rightBoxStyle);
@@ -331,7 +461,6 @@ void initSide()
 
   lv_label_set_text(rightBoxLabel, "RIGHT");
 }
-
 
 void initAuton()
 {
@@ -342,8 +471,8 @@ void initAuton()
   autonBoxStyle.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
   static lv_style_t smallBoxStyle;
   lv_style_copy(&smallBoxStyle, &autonBoxStyle);
-  smallBoxStyle.body.main_color = LV_COLOR_MAKE(0xbf,  0xbf, 0x00);
-  smallBoxStyle.body.grad_color = LV_COLOR_MAKE(0xbf,  0xbf, 0x00);
+  smallBoxStyle.body.main_color = LV_COLOR_MAKE(0xbf, 0xbf, 0x00);
+  smallBoxStyle.body.grad_color = LV_COLOR_MAKE(0xbf, 0xbf, 0x00);
   static lv_style_t smallBoxStylePR;
   lv_style_copy(&smallBoxStylePR, &autonBoxStyle);
   smallBoxStylePR.body.main_color = LV_COLOR_MAKE(0x99, 0x99, 0x00);
@@ -390,7 +519,8 @@ void initAuton()
   lv_label_set_text(bigBoxLabel, "BIG");
 }
 
-void initSideBar(){
+void initSideBar()
+{
   static lv_style_t sideBarBoxStyle;
   lv_style_copy(&sideBarBoxStyle, &lv_style_plain);
   sideBarBoxStyle.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
@@ -406,122 +536,196 @@ void initSideBar(){
   sideBarBoxStylePR.body.main_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
   sideBarBoxStylePR.body.grad_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
 
-  setupButton(topBox, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  setupButton(topBox, 10, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 0);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topBoxLabel, "Color");
 
-  setupButton(topMidBox, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  setupButton(topMidBox, 11, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topMidBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topMidBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topMidBoxLabel, "Side");
 
-  setupButton(bottomMidBox, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  setupButton(bottomMidBox, 12, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 2);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomMidBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomMidBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomMidBoxLabel, "Auton");
 
-  setupButton(bottomBox, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  setupButton(bottomBox, 13, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 3 * LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomBox, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomBox, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomBoxLabel, "Confirm");
 
-
-
-  setupButton(topBox2, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  setupButton(topBox2, 10, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 0);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topBoxLabel2, "Color");
 
-  setupButton(topMidBox2, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  setupButton(topMidBox2, 11, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topMidBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topMidBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topMidBoxLabel2, "Side");
 
-  setupButton(bottomMidBox2, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  setupButton(bottomMidBox2, 12, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 2);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomMidBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomMidBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomMidBoxLabel2, "Auton");
 
-  setupButton(bottomBox2, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  setupButton(bottomBox2, 13, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 3 * LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomBox2, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomBox2, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomBoxLabel2, "Confirm");
 
-
-  setupButton(topBox3, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  setupButton(topBox3, 10, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 0);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topBoxLabel3, "Color");
 
-  setupButton(topMidBox3, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  setupButton(topMidBox3, 11, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topMidBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topMidBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topMidBoxLabel3, "Side");
 
-  setupButton(bottomMidBox3, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  setupButton(bottomMidBox3, 12, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 2);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomMidBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomMidBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomMidBoxLabel3, "Auton");
 
-  setupButton(bottomBox3, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  setupButton(bottomBox3, 13, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 3 * LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomBox3, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomBox3, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomBoxLabel3, "Confirm");
 
-
-  setupButton(topBox4, 10, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 0);
+  setupButton(topBox4, 10, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 0);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topBoxLabel4, "Color");
 
-  setupButton(topMidBox4, 11, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 4);
+  setupButton(topMidBox4, 11, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(topMidBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(topMidBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(topMidBoxLabel4, "Side");
 
-  setupButton(bottomMidBox4, 12, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, LV_VER_RES / 2);
+  setupButton(bottomMidBox4, 12, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, LV_VER_RES / 2);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomMidBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomMidBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomMidBoxLabel4, "Auton");
 
-  setupButton(bottomBox4, 13, LV_HOR_RES / 4, LV_VER_RES / 4 , 5, 0, 3 * LV_VER_RES / 4);
+  setupButton(bottomBox4, 13, LV_HOR_RES / 4, LV_VER_RES / 4, 5, 0, 3 * LV_VER_RES / 4);
   // blueBoxStyle, blueBoxStylePR,
   lv_btn_set_style(bottomBox4, LV_BTN_STYLE_REL, &sideBarBoxStyle);
   lv_btn_set_style(bottomBox4, LV_BTN_STYLE_PR, &sideBarBoxStylePR);
 
   lv_label_set_text(bottomBoxLabel4, "Confirm");
- }
+}
+
+
+void initConf()
+{
+  static lv_style_t ConfBoxStylePlain;
+  lv_style_copy(&ConfBoxStylePlain, &lv_style_plain);
+  ConfBoxStylePlain.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  ConfBoxStylePlain.body.border.width = 5;
+  ConfBoxStylePlain.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  static lv_style_t ConfBoxStyle;
+  lv_style_copy(&ConfBoxStyle, &ConfBoxStylePlain);
+  ConfBoxStyle.body.main_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  ConfBoxStyle.body.grad_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  static lv_style_t ConfBoxStylePR;
+  lv_style_copy(&ConfBoxStylePR, &ConfBoxStylePlain);
+  ConfBoxStylePR.body.main_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+  ConfBoxStylePR.body.grad_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+
+  static lv_style_t ConfBoxStylePlainInfo;
+  lv_style_copy(&ConfBoxStylePlainInfo, &lv_style_plain);
+  ConfBoxStylePlain.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+
+  static lv_style_t ConfBoxStyle1;
+  lv_style_copy(&ConfBoxStyle1, &ConfBoxStylePlainInfo);
+  ConfBoxStyle1.body.main_color = LV_COLOR_MAKE(0xdc, 0xe0, 0xe0);
+  ConfBoxStyle1.body.grad_color = LV_COLOR_MAKE(0xdc, 0xe0, 0xe0);
+
+  static lv_style_t ConfBoxStyle2;
+  lv_style_copy(&ConfBoxStyle2, &ConfBoxStylePlainInfo);
+  ConfBoxStyle2.body.main_color = LV_COLOR_MAKE(0xdc, 0xe0, 0xe0);
+  ConfBoxStyle2.body.grad_color = LV_COLOR_MAKE(0xdc, 0xe0, 0xe0);
+
+  static lv_style_t ConfBoxStyle3;
+  lv_style_copy(&ConfBoxStyle3, &ConfBoxStylePlainInfo);
+  ConfBoxStyle3.body.main_color = LV_COLOR_MAKE(0xdc, 0xe0, 0xe0);
+  ConfBoxStyle3.body.grad_color = LV_COLOR_MAKE(0xdc, 0xe0, 0xe0);
+
+  lv_obj_set_size(infoBox1, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES / 2 - 2 * offset);
+  lv_obj_set_pos(infoBox1, LV_HOR_RES / 4 + offset, offset);
+  lv_label_set_text(infoBoxLabel1, "Select Color");
+  lv_obj_set_style(infoBox1, &ConfBoxStyle1);
+
+  lv_obj_set_size(infoBox2, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES / 2 - 2 * offset);
+  lv_obj_set_pos(infoBox2, (5 * LV_HOR_RES / 8) + offset, offset);
+  lv_label_set_text(infoBoxLabel2, "Select Side");
+  lv_obj_set_style(infoBox2, &ConfBoxStyle2);
+
+  lv_obj_set_size(infoBox3, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES / 2 - 2 * offset);
+  lv_obj_set_pos(infoBox3, LV_HOR_RES / 4 + offset, LV_VER_RES / 2 + offset);
+  lv_label_set_text(infoBoxLabel3, "Select Auton");
+  lv_obj_set_style(infoBox3, &ConfBoxStyle3);
+
+  setupButton(doneBtn, 15, (3 * LV_HOR_RES / 8) - 2 * offset, LV_VER_RES / 2 - 2 * offset, 5, (5 * LV_HOR_RES / 8) + offset, LV_VER_RES / 2 + offset);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(doneBtn, LV_BTN_STYLE_REL, &ConfBoxStyle);
+  lv_btn_set_style(doneBtn, LV_BTN_STYLE_PR, &ConfBoxStylePR);
+
+  lv_label_set_text(doneBtnLabel, "Done");
+
+
+static lv_style_t ConfBoxStylelabel;
+  lv_style_copy(&ConfBoxStylelabel, &ConfBoxStylePlainInfo);
+  ConfBoxStylelabel.body.opa  = LV_OPA_TRANSP;
+ConfBoxStylelabel.body.border.width = 0;
+lv_obj_set_style(infoBoxChild1, &ConfBoxStylelabel);
+lv_obj_set_style(infoBoxChild2, &ConfBoxStylelabel);
+lv_obj_set_style(infoBoxChild3, &ConfBoxStylelabel);
+lv_obj_set_size(infoBoxChild1, 80, 20);
+lv_obj_set_size(infoBoxChild2, 80, 20);
+lv_obj_set_size(infoBoxChild3, 80, 20);
+lv_label_set_align(infoBoxLabel1, LV_LABEL_ALIGN_CENTER);
+lv_label_set_align(infoBoxLabel2, LV_LABEL_ALIGN_CENTER);
+lv_label_set_align(infoBoxLabel3, LV_LABEL_ALIGN_CENTER);
+lv_obj_align(infoBoxChild1, NULL, LV_ALIGN_CENTER, 0, 0);
+lv_obj_align(infoBoxChild2, NULL, LV_ALIGN_CENTER, 0, 0);
+lv_obj_align(infoBoxChild3, NULL, LV_ALIGN_CENTER, 0, 0);
+
+}
 
 void initialize()
 {
@@ -529,7 +733,7 @@ void initialize()
   initColor();
   initSide();
   initAuton();
-
+  initConf();
   initSideBar();
   loadScreen();
 
@@ -541,8 +745,6 @@ void initialize()
   Lift.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   LArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
   RArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
-
-
 }
 
 void disabled() {}
