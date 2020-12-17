@@ -30,6 +30,8 @@
 #define RArmPort 18
 #define FlywheelPort 7
 #define LiftPort 3
+#define PolicePort 20
+#define EYESPort 9
 //motors
 extern Motor FL;
 extern Motor FR;
@@ -46,6 +48,13 @@ extern Controller master;
 //vision sensors
 extern Vision Police;
 extern Vision EYES;
+//sigs
+#define Police__CUSTOMRED_SIG_NUM 1
+#define Police__CUSTOMBLUE_SIG_NUM 2
+#define EYES__CUSTOM_GREEN_NUM 1
+extern vision_signature_s_t  Police__CUSTOMRED_SIG;
+extern vision_signature_s_t  Police__CUSTOMBLUE_SIG;
+extern vision_signature_s_t  EYES__CUSTOM_GREEN;
 
 //Imu
 extern Imu Vincent;

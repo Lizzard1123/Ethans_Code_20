@@ -329,56 +329,12 @@
    */
 
   /*
-     int darkThreshold = 10;
-     bool currentBall = false;
-
-     // checks to see if a ball has passed
-     bool passBall() {
-     // gets current value of reflectivity of line tracker
-     // high val == dark enviroment
-     double val = outtakeSense.reflectivity();
-     // if its darker than the threshold detect ball
-     if (val >= darkThreshold) {
-      currentBall = true;
-      Brain.Screen.print(val);
-      Brain.Screen.newLine();
-     } else if (val <= darkThreshold && currentBall) {
-      // if the ball has been logged and the value reads light again
-      currentBall = false;
-      Brain.Screen.print("returning false");
-      Brain.Screen.newLine();
-      return false;
-     }
-     return true;
-     }
+    
 
    */
 
 
-  /*
-     static int startVisionSort() {
-      // forever while loop that tracks every ball
-      while (true) {
-        if (teamIsBlue) {
-          Police.takeSnapshot(Police__CUSTOMRED_SIG);
-          if (Police.largestObject.exists && Police.largestObject.width >= 220
-             &&
-              Police.largestObject.centerY <= 140) {
-            Police.setLedColor(255, 0, 0);
-            waitUntilBallPasses();
-          }
-        } else {
-          Police.takeSnapshot(Police__CUSTOMBLUE_SIG);
-          if (Police.largestObject.exists && Police.largestObject.width >= 220
-             &&
-              Police.largestObject.centerY <= 140) {
-            Police.setLedColor(255, 0, 0);
-            waitUntilBallPasses();
-          }
-        }
-      }
-     }
-   */
+  
 
 
 /*

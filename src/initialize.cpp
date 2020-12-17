@@ -224,7 +224,7 @@ void updateConf()
   }
 
   lv_obj_refresh_style(infoBox1);
-lv_obj_refresh_style(infoBox2);
+  lv_obj_refresh_style(infoBox2);
   lv_obj_refresh_style(infoBox3);
 }
 
@@ -243,12 +243,11 @@ void loadScreen(int num = current)
     lv_scr_load(scrAuton);
     break;
   case 3:
-  updateConf();
+    updateConf();
     lv_scr_load(scrConf);
     break;
   }
 }
-
 
 static lv_res_t btn_click_action(lv_obj_t *btn)
 {
@@ -360,6 +359,7 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     current = 3;
     loadScreen(3);
     break;
+
   }
   return LV_RES_OK;
 }
@@ -649,7 +649,6 @@ void initSideBar()
   lv_label_set_text(bottomBoxLabel4, "Confirm");
 }
 
-
 void initConf()
 {
   static lv_style_t ConfBoxStylePlain;
@@ -707,24 +706,22 @@ void initConf()
 
   lv_label_set_text(doneBtnLabel, "Done");
 
-
-static lv_style_t ConfBoxStylelabel;
+  static lv_style_t ConfBoxStylelabel;
   lv_style_copy(&ConfBoxStylelabel, &ConfBoxStylePlainInfo);
-  ConfBoxStylelabel.body.opa  = LV_OPA_TRANSP;
-ConfBoxStylelabel.body.border.width = 0;
-lv_obj_set_style(infoBoxChild1, &ConfBoxStylelabel);
-lv_obj_set_style(infoBoxChild2, &ConfBoxStylelabel);
-lv_obj_set_style(infoBoxChild3, &ConfBoxStylelabel);
-lv_obj_set_size(infoBoxChild1, 80, 20);
-lv_obj_set_size(infoBoxChild2, 80, 20);
-lv_obj_set_size(infoBoxChild3, 80, 20);
-lv_label_set_align(infoBoxLabel1, LV_LABEL_ALIGN_CENTER);
-lv_label_set_align(infoBoxLabel2, LV_LABEL_ALIGN_CENTER);
-lv_label_set_align(infoBoxLabel3, LV_LABEL_ALIGN_CENTER);
-lv_obj_align(infoBoxChild1, NULL, LV_ALIGN_CENTER, 0, 0);
-lv_obj_align(infoBoxChild2, NULL, LV_ALIGN_CENTER, 0, 0);
-lv_obj_align(infoBoxChild3, NULL, LV_ALIGN_CENTER, 0, 0);
-
+  ConfBoxStylelabel.body.opa = LV_OPA_TRANSP;
+  ConfBoxStylelabel.body.border.width = 0;
+  lv_obj_set_style(infoBoxChild1, &ConfBoxStylelabel);
+  lv_obj_set_style(infoBoxChild2, &ConfBoxStylelabel);
+  lv_obj_set_style(infoBoxChild3, &ConfBoxStylelabel);
+  lv_obj_set_size(infoBoxChild1, 80, 20);
+  lv_obj_set_size(infoBoxChild2, 80, 20);
+  lv_obj_set_size(infoBoxChild3, 80, 20);
+  lv_label_set_align(infoBoxLabel1, LV_LABEL_ALIGN_CENTER);
+  lv_label_set_align(infoBoxLabel2, LV_LABEL_ALIGN_CENTER);
+  lv_label_set_align(infoBoxLabel3, LV_LABEL_ALIGN_CENTER);
+  lv_obj_align(infoBoxChild1, NULL, LV_ALIGN_CENTER, 0, 0);
+  lv_obj_align(infoBoxChild2, NULL, LV_ALIGN_CENTER, 0, 0);
+  lv_obj_align(infoBoxChild3, NULL, LV_ALIGN_CENTER, 0, 0);
 }
 
 void initialize()
@@ -745,6 +742,10 @@ void initialize()
   Lift.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   LArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
   RArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+
+  Police.set_signature(1, &Police__CUSTOMRED_SIG);
+  Police.set_signature(2, &Police__CUSTOMBLUE_SIG);
+  EYES.set_signature(1, &EYES__CUSTOM_GREEN);
 }
 
 void disabled() {}

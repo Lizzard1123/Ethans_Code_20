@@ -38,6 +38,13 @@ Controller master(E_CONTROLLER_MASTER);
 Vision Police(20);
 Vision EYES(9);
 
+//sigs
+vision_signature_s_t Police__CUSTOMRED_SIG = Vision::signature_from_utility(Police__CUSTOMRED_SIG_NUM, 5441, 7935, 6688, -895, -95, -494, 3.2, 0);
+vision_signature_s_t Police__CUSTOMBLUE_SIG = Vision::signature_from_utility(Police__CUSTOMBLUE_SIG_NUM, -3155, -2037, -2596, 7041, 11265, 9154, 2.5, 0);
+vision_signature_s_t EYES__CUSTOM_GREEN = Vision::signature_from_utility(EYES__CUSTOM_GREEN_NUM, -3789, -3137, -3464, -5845, -5055, -5450, 2.5, 0);
+
+
+
 // Imu
 Imu Vincent(8);
 

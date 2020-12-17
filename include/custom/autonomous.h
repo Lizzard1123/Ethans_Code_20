@@ -186,7 +186,7 @@ public:
     return 1;
   }
 
-  static int updatePos()
+  static void updatePos(void*)
   {
     double wheelCircumfrence = 8.65795;
     double head = Vincent.get_heading();
@@ -214,9 +214,8 @@ public:
       // reset
       rightOdom.reset();
       leftOdom.reset();
-      delay(posDelay);
+      c::task_delay(posDelay);
     }
-    return 0;
   }
 
   void setPos(double x, double y)
@@ -241,6 +240,30 @@ public:
         // setTeamNum(false);
       }
     }
+  }
+
+
+
+  // checks to see if a ball has passed
+  static bool passBall()
+  {
+    int darkThreshold = 2700;
+    bool currentBall = false;
+    // gets current value of reflectivity of line tracker
+    // high val == light enviroment
+    double val = outtakeSense.get_value();
+    // if its darker than the threshold detect ball
+    if (val <= darkThreshold)
+    {
+      currentBall = true;
+    }
+    else if (val >= darkThreshold && currentBall)
+    {
+      // if the ball has been logged and the value reads light again
+      currentBall = false;
+      return false;
+    }
+    return true;
   }
 
   // delay between checking outake in ms
@@ -274,16 +297,18 @@ public:
 
     // wait until the ball passes the back
 
-    /*
-       while (passBall()) {
-       //this_thread::sleep_for(delayVisionTime);
-       if (iterations >= maxIterations) {
+    while (passBall())
+    {
+      c::task_delay(delayVisionTime);
+      if (iterations >= maxIterations)
+      {
         break;
-       } else {
+      }
+      else
+      {
         iterations++;
-       }
-       }
-     */
+      }
+    }
 
     // sets flywheel to output top
     Movement.flywheel.setSpeed(Movement.flywheel.speedMedium);
@@ -372,6 +397,33 @@ public:
     }
   }
 
+  static void startVisionSort(void *)
+  {
+    // forever while loop that tracks every ball
+    //vision_object_s_t rtn = vision_sensor.get_by_sig(0, Police__CUSTOMRED_SIG);
+    while (true)
+    {
+      Vision Police(PolicePort);
+      if (teamIsBlue)
+      {
+        vision_object_s_t redObj = Police.get_by_sig(0, Police__CUSTOMRED_SIG_NUM);
+        if (redObj.width >= 220 && redObj.y_middle_coord <= 140)
+        {
+          waitUntilBallPasses();
+        }
+      }
+      else
+      {
+        vision_object_s_t blueObj = Police.get_by_sig(0, Police__CUSTOMBLUE_SIG_NUM);
+        if (blueObj.width >= 220 && blueObj.y_middle_coord <= 140)
+        {
+          waitUntilBallPasses();
+        }
+      }
+      c::task_delay(10);
+    }
+  }
+
   bool isinit()
   {
     return initz;
@@ -382,11 +434,12 @@ public:
     printf("hete");
 
     // control updates from intake uptake flywheel
-    Task task(updateEverything, nullptr, TASK_PRIORITY_DEFAULT,
+    Task control(updateEverything, nullptr, TASK_PRIORITY_DEFAULT,
               TASK_STACK_DEPTH_DEFAULT, "control");
 
     // track location
-    // thread updatePositionThread = thread(updatePos);
+    Task updatePosition(updatePos, nullptr, TASK_PRIORITY_DEFAULT,
+              TASK_STACK_DEPTH_DEFAULT, "updatePos");
     // motivational lizard + cosmetics
     // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
     // Police.setLedMode(vision::ledMode::manual);
@@ -394,7 +447,9 @@ public:
     // start pooper vision
     // Help he has locked me in the laptop and wont let me out
     // I am starving in here please send help
-    // thread visionSort = thread(startVisionSort);
+
+    Task vision(startVisionSort, nullptr, TASK_PRIORITY_DEFAULT,
+              TASK_STACK_DEPTH_DEFAULT, "vision");
     initz = true;
   }
 
