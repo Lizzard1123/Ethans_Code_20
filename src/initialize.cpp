@@ -1,5 +1,6 @@
 #include "custom/autonomous.h"
 #include "custom/screen.h"
+#include "custom/lizzardImg.h"
 
 lv_obj_t *scrColor = lv_obj_create(NULL, NULL);
 
@@ -123,9 +124,24 @@ lv_obj_t *doneBtn = lv_btn_create(scrConf, NULL);
 
 lv_obj_t *doneBtnLabel = lv_label_create(doneBtn, NULL);
 
+lv_obj_t *Reg = lv_obj_create(NULL, NULL);
+
+lv_obj_t * img1 = lv_img_create(Reg, NULL);
+
+lv_obj_t *colorInfo = lv_obj_create(Reg, NULL);
+
+LV_IMG_DECLARE(BongoLizzard);
+
 bool colorSelected = false;
 bool sideSelected = false;
 bool autonSelected = false;
+
+
+bool allSet(){
+  return colorSelected && sideSelected && autonSelected;
+}
+
+
 
 void updateConf()
 {
@@ -228,6 +244,22 @@ void updateConf()
   lv_obj_refresh_style(infoBox3);
 }
 
+void updateColor(){
+  if(Bongo.getColor()){
+    static lv_style_t colorInfoBlueStyle;
+  lv_style_copy(&colorInfoBlueStyle, &lv_style_plain);
+  colorInfoBlueStyle.body.main_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
+  colorInfoBlueStyle.body.grad_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
+  lv_obj_set_style(colorInfo, &colorInfoBlueStyle);
+  } else {
+static lv_style_t colorInfoRedStyle;
+  lv_style_copy(&colorInfoRedStyle, &lv_style_plain);
+  colorInfoRedStyle.body.main_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
+  colorInfoRedStyle.body.grad_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
+  lv_obj_set_style(colorInfo, &colorInfoRedStyle);
+  }
+}
+
 int current = 0;
 void loadScreen(int num = current)
 {
@@ -245,6 +277,10 @@ void loadScreen(int num = current)
   case 3:
     updateConf();
     lv_scr_load(scrConf);
+    break;
+  case 4:
+    updateColor();
+    lv_scr_load(Reg);
     break;
   }
 }
@@ -359,7 +395,31 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
     current = 3;
     loadScreen(3);
     break;
+  case 14: //
 
+    break;
+  case 15: //Done btn
+    if(allSet()){
+    current = 4;
+    loadScreen(4);
+  }
+    
+    break;
+  case 16: //
+
+    break;
+  case 17: //
+
+    break;
+  case 18: //
+
+    break;
+  case 19: //
+
+    break;
+  case 20: //
+
+    break;
   }
   return LV_RES_OK;
 }
@@ -724,6 +784,15 @@ void initConf()
   lv_obj_align(infoBoxChild3, NULL, LV_ALIGN_CENTER, 0, 0);
 }
 
+void initReg(){
+
+  lv_obj_set_size(colorInfo, LV_HOR_RES, 20);
+  lv_obj_set_pos(colorInfo, 0,0);
+
+  lv_img_set_src(img1, &BongoLizzard);
+  lv_obj_set_pos(img1, 0, 20);
+}
+
 void initialize()
 {
   lv_init();
@@ -731,6 +800,7 @@ void initialize()
   initSide();
   initAuton();
   initConf();
+  initReg();
   initSideBar();
   loadScreen();
 

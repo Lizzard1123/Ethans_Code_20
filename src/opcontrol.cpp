@@ -77,9 +77,9 @@ void opcontrol() {
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedMedium);
     }
 
-    // if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
-    // Bongo.Movement.lineUp();
-    // }
+    if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
+      Bongo.Movement.lineUp();
+    }
     // starts the spin on motors or cuts power
     Bongo.Movement.move();
 

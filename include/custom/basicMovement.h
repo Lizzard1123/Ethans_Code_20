@@ -4,9 +4,9 @@
 #include "intake.h"
 #include "uptake.h"
 #include "math.h"
-class RobotMovement {
+class RobotMovement
+{
 private:
-
   // how much the encodervaleues change the speed
   // one means for every encoder value different add to speed
   double headingScale = .5;
@@ -17,8 +17,8 @@ private:
   double RYaxis = 0;
 
   // experimental turn value down
-  double tune             = 1.5;
-  double flushspeed       = 60;
+  double tune = 1.5;
+  double flushspeed = 60;
   bool currenttoggleState = false;
 
   // takes in inputs and makes final speed
@@ -34,7 +34,6 @@ private:
   double cardinalspeed = 30;
 
 public:
-
   // parts of the bot
   flywheelClass flywheel;
   intakeClass intake;
@@ -42,15 +41,15 @@ public:
   Math myMath;
 
   // speedcontrol variables
-  double mediummultiplier  = .75;
+  double mediummultiplier = .75;
   double regularmultiplier = 1;
-  double slowmultiplier    = .5;
+  double slowmultiplier = .5;
 
   // true if negative
-  bool upDirections[4]    = { false, false, false, false };
-  bool rightDirections[4] = { false, true, true, false };
-  bool downDirections[4]  = { true, true, true, true };
-  bool leftDirections[4]  = { true, false, false, true };
+  bool upDirections[4] = {false, false, false, false};
+  bool rightDirections[4] = {false, true, true, false};
+  bool downDirections[4] = {true, true, true, true};
+  bool leftDirections[4] = {true, false, false, true};
 
   double prevFLenc;
   double prevFRenc;
@@ -58,7 +57,8 @@ public:
   double prevBRenc;
 
   // clears rotations for encoders
-  void clearRotations() {
+  void clearRotations()
+  {
     c::motor_set_zero_position(FLPort, 0);
     c::motor_set_zero_position(FRPort, 0);
     c::motor_set_zero_position(BLPort, 0);
@@ -72,70 +72,63 @@ public:
   double CX;
   double width;
   double Pval = .4;
+  double widthLimit = 20;
 
-  /*
-     void lineUp() {
-     EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-     if (EYES.largestObject.exists) {
-      width = EYES.largestObject.width;
+  void lineUp()
+  {
+    vision_object_s_t tower = EYES.get_by_sig(0, EYES__CUSTOM_GREEN_NUM);
+    if (tower.width >= widthLimit)
+    {
+      width = tower.width;
       // neg right pos left
-      CX = EYES.largestObject.centerX;
+      CX = tower.x_middle_coord;
       targetCX = -1.3286 * width + 140.619 + offset;
       error = CX - targetCX;
       FLspeed += Pval * error;
       FRspeed -= Pval * error;
       BLspeed += Pval * error;
       BRspeed -= Pval * error;
-      //Brain.Screen.setCursor(1, 15);
-      //Brain.Screen.print(width);
-      //Brain.Screen.setCursor(2, 15);
-      //Brain.Screen.print(CX);
-      //Brain.Screen.setCursor(3, 15);
-      //Brain.Screen.print(targetCX);
-      //Brain.Screen.setCursor(4, 15);
-      //Brain.Screen.print(error);
-     } else {
-      //Brain.Screen.setCursor(6, 12);
-      //Brain.Screen.print("Fail");
-     }
-     }
-   */
+    }
+  }
 
   // helper func that returns number of encoder pos away from average scaled
   // from global var
-  double scale(double av, double part) {
+  double scale(double av, double part)
+  {
     return (av - part) * headingScale;
   }
 
   double deadZone = 5;
 
   // moves in cardinal directions
-  void cardinalMove(bool forward[]) {
+  void cardinalMove(bool forward[])
+  {
     double FLcurrent = c::motor_get_position(FLPort);
     double FRcurrent = c::motor_get_position(FRPort);
     double BLcurrent = c::motor_get_position(BLPort);
     double BRcurrent = c::motor_get_position(BRPort);
-    double average   = myMath.getAverage(fabs(FLcurrent), fabs(FRcurrent),
-                                         fabs(BLcurrent), fabs(BRcurrent));
+    double average = myMath.getAverage(fabs(FLcurrent), fabs(FRcurrent),
+                                       fabs(BLcurrent), fabs(BRcurrent));
     double FLscale = scale(average, fabs(FLcurrent));
     double FRscale = scale(average, fabs(FRcurrent));
     double BLscale = scale(average, fabs(BLcurrent));
     double BRscale = scale(average, fabs(BRcurrent));
 
     FLspeed =
-      forward[0] ? -(cardinalspeed + FLscale) : (cardinalspeed + FLscale);
+        forward[0] ? -(cardinalspeed + FLscale) : (cardinalspeed + FLscale);
     FRspeed =
-      forward[1] ? -(cardinalspeed + FRscale) : (cardinalspeed + FRscale);
+        forward[1] ? -(cardinalspeed + FRscale) : (cardinalspeed + FRscale);
     BLspeed =
-      forward[2] ? -(cardinalspeed + BLscale) : (cardinalspeed + BLscale);
+        forward[2] ? -(cardinalspeed + BLscale) : (cardinalspeed + BLscale);
     BRspeed =
-      forward[3] ? -(cardinalspeed + BRscale) : (cardinalspeed + BRscale);
+        forward[3] ? -(cardinalspeed + BRscale) : (cardinalspeed + BRscale);
 
     // delay(10);
   }
 
   // upadate controller vars for bongo orientation
-  void catieControll() {
+  void catieControll()
+  {
     LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X));
     printf("LXaxis %f\n", LXaxis);
     LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y));
@@ -152,7 +145,8 @@ public:
     // set speeds in order to move bongo in target agle taken into account
     // current angle
     if (((LXaxis > deadZone) || (LXaxis < -deadZone)) ||
-        ((LYaxis > deadZone) || (LYaxis < -deadZone))) {
+        ((LYaxis > deadZone) || (LYaxis < -deadZone)))
+    {
       // updates
       double speed = myMath.TwoPointsDistance(0, 0, LXaxis, LYaxis);
 
@@ -163,20 +157,21 @@ public:
       double Dangle = acos(LYaxis / speed) * 180 / M_PI;
 
       // negative if the x axis is on left or neg
-      if (LXaxis < 0) {
+      if (LXaxis < 0)
+      {
         Dangle *= -1;
       }
 
       // current angle
       double currentAngle = Vincent.get_heading();
       FLspeed += myMath.sRound(
-        myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
+          myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
       FRspeed += myMath.sRound(
-        myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
+          myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
       BLspeed += myMath.sRound(
-        myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
+          myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
       BRspeed += myMath.sRound(
-        myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
+          myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
     }
 
     double under = myMath.greatest(fabs(FLspeed), fabs(FRspeed), fabs(BLspeed),
@@ -190,10 +185,11 @@ public:
   }
 
   // upadate controller vars for bongo orientation
-  void updateControllerAxis() {
-    LXaxis  = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X));
-    LYaxis  = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y));
-    RXaxis  = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) / tune; // updates
+  void updateControllerAxis()
+  {
+    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X));
+    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y));
+    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) / tune; // updates
     FLspeed = LYaxis + LXaxis + RXaxis;
     FRspeed = LYaxis - LXaxis - RXaxis;
     BLspeed = LYaxis - LXaxis + RXaxis;
@@ -210,7 +206,8 @@ public:
   }
 
   // upadate controller vars
-  void moveRelative() {
+  void moveRelative()
+  {
     // current controller axis values in %
     LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127 * 100);
     LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127 * 100);
@@ -226,7 +223,8 @@ public:
     double Dangle = acos(LYaxis / speed) * 180 / M_PI;
 
     // negative if the x axis is on left or neg
-    if (LXaxis < 0) {
+    if (LXaxis < 0)
+    {
       Dangle *= -1;
     }
 
@@ -236,13 +234,13 @@ public:
     // set speeds in order to move bongo in target agle taken into account
     // current angle
     FLspeed = myMath.sRound(
-      myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
     FRspeed = myMath.sRound(
-      myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
     BLspeed = myMath.sRound(
-      myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
     BRspeed = myMath.sRound(
-      myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
+        myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
 
     // turn whilst doing so
     FLspeed += RXaxis;
@@ -262,7 +260,8 @@ public:
   }
 
   // alter the speed
-  void alterSpeed(double speed) {
+  void alterSpeed(double speed)
+  {
     under = myMath.greatest(fabs(FLspeed), fabs(FRspeed), fabs(BLspeed),
                             fabs(BRspeed)) /
             100;
@@ -273,7 +272,8 @@ public:
   }
 
   // drives motors from private vars
-  void move() {
+  void move()
+  {
     FR.move_velocity(myMath.toRPM(false, FRspeed, FR.get_gearing()));
 
     // printf("FL %f\n", FLspeed);
@@ -284,43 +284,50 @@ public:
 
     // printf("BL %f\n", BLspeed);
     BL.move_velocity(myMath.toRPM(false, BLspeed, BL.get_gearing()));
-
   }
 
-  void moveLeft(double speed) {
+  void moveLeft(double speed)
+  {
     FL.move_velocity(myMath.toRPM(false, speed, FL.get_gearing()));
     BL.move_velocity(myMath.toRPM(false, speed, BL.get_gearing()));
   }
 
-  void moveRight(double speed) {
+  void moveRight(double speed)
+  {
     FR.move_velocity(myMath.toRPM(false, speed, FR.get_gearing()));
     BR.move_velocity(myMath.toRPM(false, speed, BR.get_gearing()));
   }
 
-  void moveFL(double speed) {
+  void moveFL(double speed)
+  {
     FL.move_velocity(myMath.toRPM(false, speed, FL.get_gearing()));
   }
 
-  void moveFR(double speed) {
+  void moveFR(double speed)
+  {
     FR.move_velocity(myMath.toRPM(false, speed, FR.get_gearing()));
   }
 
-  void moveBL(double speed) {
+  void moveBL(double speed)
+  {
     BL.move_velocity(myMath.toRPM(false, speed, BL.get_gearing()));
   }
 
-  void moveBR(double speed) {
+  void moveBR(double speed)
+  {
     BR.move_velocity(myMath.toRPM(false, speed, BR.get_gearing()));
   }
 
   // reverses motors to get a ball out front
-  void flush(bool setting) {
+  void flush(bool setting)
+  {
     intake.flush(setting);
     uptake.flush(setting);
   }
 
   // stops all functions
-  void stopAll() {
+  void stopAll()
+  {
     intake.stopBoth();
     uptake.setToggle(false);
     flywheel.flywheelset(false);
