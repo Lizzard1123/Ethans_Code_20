@@ -25,6 +25,40 @@ public:
   static RobotMovement Movement;
   static Math myMath;
 
+    void setRed()
+  {
+    teamIsBlue = false;
+  }
+  void setBlue()
+  {
+    teamIsBlue = true;
+  }
+
+  void setAutonNum(int num)
+  {
+    autonCodeNum = num;
+  }
+
+  void sideIsLeft(bool yes)
+  {
+    left = yes;
+  }
+
+  bool getColor()
+  {
+    return teamIsBlue;
+  }
+
+  int getAutonNum()
+  {
+    return autonCodeNum;
+  }
+
+  bool getSide()
+  {
+    return left;
+  }
+
   int PIDMove(double targetX, double targetY, int maxspeed = 100)
   {
     int PIDspeed = 20;
@@ -258,19 +292,10 @@ public:
 
   void changeTeam()
   {
-    if ((master.get_digital(E_CONTROLLER_DIGITAL_L1) == 1) &&
-        (master.get_digital(E_CONTROLLER_DIGITAL_L2) == 1))
+    if ((master.get_digital(E_CONTROLLER_DIGITAL_L1)) &&
+        (master.get_digital(E_CONTROLLER_DIGITAL_L2)))
     {
       teamIsBlue = !teamIsBlue;
-
-      if (teamIsBlue)
-      {
-        // setTeamNum(true);
-      }
-      else
-      {
-        // setTeamNum(false);
-      }
     }
   }
 
@@ -482,39 +507,7 @@ public:
     initz = true;
   }
 
-  void setRed()
-  {
-    teamIsBlue = false;
-  }
-  void setBlue()
-  {
-    teamIsBlue = true;
-  }
 
-  void setAutonNum(int num)
-  {
-    autonCodeNum = num;
-  }
-
-  void sideIsLeft(bool yes)
-  {
-    left = yes;
-  }
-
-  bool getColor()
-  {
-    return teamIsBlue;
-  }
-
-  int getAutonNum()
-  {
-    return autonCodeNum;
-  }
-
-  bool getSide()
-  {
-    return left;
-  }
   void AutonomousOne()
   {
     if (teamIsBlue)
