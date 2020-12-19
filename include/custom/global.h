@@ -60,8 +60,8 @@ extern vision_signature_s_t  EYES__CUSTOM_GREEN;
 extern Imu Vincent;
 
 //Odom
-extern ADIEncoder leftOdom;
-extern ADIEncoder rightOdom;
+extern okapi::ADIEncoder  leftOdom;
+extern okapi::ADIEncoder  rightOdom;
 
 //pots
 extern ADIAnalogIn TeamColor;
@@ -71,6 +71,8 @@ extern ADIAnalogIn AutonNumber;
 extern ADIAnalogIn IntakeSense;
 extern ADIAnalogIn outtakeSense;
 
-//vars
+//labels debug
+extern lv_obj_t *debugXLabel;
+extern lv_obj_t *debugYLabel;
 
 #endif

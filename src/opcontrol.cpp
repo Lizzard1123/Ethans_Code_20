@@ -6,14 +6,19 @@ void opcontrol() {
   if (!Bongo.isinit()) {
     Bongo.initThreads();
   }
-
+  
   // turn on flywheel
   Bongo.Movement.flywheel.flywheelset(false);
 
   while (true) {
+    Bongo.debugPos();
     // change teams
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
+    }
+
+    if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)) {
+      Bongo.PIDTurn(360);
     }
 
     // toggle flywheel

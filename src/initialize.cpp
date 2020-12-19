@@ -124,24 +124,40 @@ lv_obj_t *doneBtn = lv_btn_create(scrConf, NULL);
 
 lv_obj_t *doneBtnLabel = lv_label_create(doneBtn, NULL);
 
-lv_obj_t *Reg = lv_obj_create(NULL, NULL);
+lv_obj_t *scrReg = lv_obj_create(NULL, NULL);
 
-lv_obj_t * img1 = lv_img_create(Reg, NULL);
-
-lv_obj_t *colorInfo = lv_obj_create(Reg, NULL);
+lv_obj_t *img1 = lv_img_create(scrReg, NULL);
 
 LV_IMG_DECLARE(BongoLizzard);
+
+lv_obj_t *colorInfo = lv_obj_create(scrReg, NULL);
+
+lv_obj_t *debugBtn = lv_btn_create(scrReg, NULL);
+
+lv_obj_t *debugBtnLabel = lv_label_create(debugBtn, NULL);
+
+lv_obj_t *scrDebug = lv_obj_create(NULL, NULL);
+
+lv_obj_t *returnBtn = lv_btn_create(scrDebug, NULL);
+
+lv_obj_t *returnBtnLabel = lv_label_create(returnBtn, NULL);
+
+lv_obj_t *debugX = lv_obj_create(scrDebug, NULL);
+
+lv_obj_t *debugXLabel = lv_label_create(debugX, NULL);
+
+lv_obj_t *debugY = lv_obj_create(scrDebug, NULL);
+
+lv_obj_t *debugYLabel = lv_label_create(debugY, NULL);
 
 bool colorSelected = false;
 bool sideSelected = false;
 bool autonSelected = false;
 
-
-bool allSet(){
+bool allSet()
+{
   return colorSelected && sideSelected && autonSelected;
 }
-
-
 
 void updateConf()
 {
@@ -244,19 +260,23 @@ void updateConf()
   lv_obj_refresh_style(infoBox3);
 }
 
-void updateColor(){
-  if(Bongo.getColor()){
+void updateColor()
+{
+  if (Bongo.getColor())
+  {
     static lv_style_t colorInfoBlueStyle;
-  lv_style_copy(&colorInfoBlueStyle, &lv_style_plain);
-  colorInfoBlueStyle.body.main_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
-  colorInfoBlueStyle.body.grad_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
-  lv_obj_set_style(colorInfo, &colorInfoBlueStyle);
-  } else {
-static lv_style_t colorInfoRedStyle;
-  lv_style_copy(&colorInfoRedStyle, &lv_style_plain);
-  colorInfoRedStyle.body.main_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
-  colorInfoRedStyle.body.grad_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
-  lv_obj_set_style(colorInfo, &colorInfoRedStyle);
+    lv_style_copy(&colorInfoBlueStyle, &lv_style_plain);
+    colorInfoBlueStyle.body.main_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
+    colorInfoBlueStyle.body.grad_color = LV_COLOR_MAKE(0x00, 0x00, 0xc8);
+    lv_obj_set_style(colorInfo, &colorInfoBlueStyle);
+  }
+  else
+  {
+    static lv_style_t colorInfoRedStyle;
+    lv_style_copy(&colorInfoRedStyle, &lv_style_plain);
+    colorInfoRedStyle.body.main_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
+    colorInfoRedStyle.body.grad_color = LV_COLOR_MAKE(0xc8, 0x00, 0x00);
+    lv_obj_set_style(colorInfo, &colorInfoRedStyle);
   }
 }
 
@@ -280,7 +300,10 @@ void loadScreen(int num = current)
     break;
   case 4:
     updateColor();
-    lv_scr_load(Reg);
+    lv_scr_load(scrReg);
+    break;
+  case 5:
+    lv_scr_load(scrDebug);
     break;
   }
 }
@@ -399,17 +422,20 @@ static lv_res_t btn_click_action(lv_obj_t *btn)
 
     break;
   case 15: //Done btn
-    if(allSet()){
+    if (allSet())
+    {
+      current = 4;
+      loadScreen(4);
+    }
+
+    break;
+  case 16: // debug screen
+    current = 5;
+    loadScreen(5);
+    break;
+  case 17: // return btn
     current = 4;
     loadScreen(4);
-  }
-    
-    break;
-  case 16: //
-
-    break;
-  case 17: //
-
     break;
   case 18: //
 
@@ -784,24 +810,102 @@ void initConf()
   lv_obj_align(infoBoxChild3, NULL, LV_ALIGN_CENTER, 0, 0);
 }
 
-void initReg(){
+void initReg()
+{
+  static lv_style_t debugBtnStyle;
+  lv_style_copy(&debugBtnStyle, &lv_style_plain);
+  debugBtnStyle.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  debugBtnStyle.body.border.width = 5;
+  debugBtnStyle.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  debugBtnStyle.body.main_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  debugBtnStyle.body.grad_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  static lv_style_t debugBtnStylePR;
+  lv_style_copy(&debugBtnStylePR, &lv_style_plain);
+  debugBtnStylePR.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  debugBtnStylePR.body.border.width = 5;
+  debugBtnStylePR.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  debugBtnStylePR.body.main_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+  debugBtnStylePR.body.grad_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+
+  setupButton(debugBtn, 16, LV_VER_RES / 3, LV_VER_RES / 4, 5, LV_HOR_RES - LV_VER_RES / 3, 3 * LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(debugBtn, LV_BTN_STYLE_REL, &debugBtnStyle);
+  lv_btn_set_style(debugBtn, LV_BTN_STYLE_PR, &debugBtnStylePR);
+
+  lv_label_set_text(debugBtnLabel, "Debug");
 
   lv_obj_set_size(colorInfo, LV_HOR_RES, 20);
-  lv_obj_set_pos(colorInfo, 0,0);
+  lv_obj_set_pos(colorInfo, 0, 0);
 
   lv_img_set_src(img1, &BongoLizzard);
   lv_obj_set_pos(img1, 0, 20);
 }
 
+void initDebug(){
+  static lv_style_t returnBtnStyle;
+  lv_style_copy(&returnBtnStyle, &lv_style_plain);
+  returnBtnStyle.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  returnBtnStyle.body.border.width = 5;
+  returnBtnStyle.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  returnBtnStyle.body.main_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  returnBtnStyle.body.grad_color = LV_COLOR_MAKE(0x8a, 0x8a, 0x8a);
+  static lv_style_t returnBtnStylePR;
+  lv_style_copy(&returnBtnStylePR, &lv_style_plain);
+  returnBtnStylePR.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  returnBtnStylePR.body.border.width = 5;
+  returnBtnStylePR.body.border.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  returnBtnStylePR.body.main_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+  returnBtnStylePR.body.grad_color = LV_COLOR_MAKE(0x52, 0x52, 0x52);
+
+  setupButton(returnBtn, 17, LV_VER_RES / 3, LV_VER_RES / 4, 5, LV_HOR_RES - LV_VER_RES / 3, 3 * LV_VER_RES / 4);
+  // blueBoxStyle, blueBoxStylePR,
+  lv_btn_set_style(returnBtn, LV_BTN_STYLE_REL, &returnBtnStyle);
+  lv_btn_set_style(returnBtn, LV_BTN_STYLE_PR, &returnBtnStylePR);
+
+  lv_label_set_text(returnBtnLabel, "Return");
+  static lv_style_t debugPlain;
+  lv_style_copy(&debugPlain, &lv_style_plain);
+  debugPlain.text.color = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+  debugPlain.body.main_color = LV_COLOR_MAKE(0xd1, 0xd1, 0xd1);
+  debugPlain.body.grad_color = LV_COLOR_MAKE(0xd1, 0xd1, 0xd1);
+  lv_obj_set_style(debugX, &debugPlain);
+  lv_obj_set_style(debugY, &debugPlain);
+  //debugs
+  //four collums with 8 sections each
+  lv_obj_set_size(debugX, LV_HOR_RES/4, LV_VER_RES/8);
+  lv_obj_set_pos(debugX, 0, 0);
+  lv_obj_set_size(debugY, LV_HOR_RES/4, LV_VER_RES/8);
+  lv_obj_set_pos(debugY, 0, LV_VER_RES/8);
+}
+
+void blackBack(){
+  static lv_style_t backgroundStyle;
+  lv_style_copy(&backgroundStyle, &lv_style_plain);
+  backgroundStyle.body.main_color = LV_COLOR_MAKE(0x38, 0x38, 0x38);
+  backgroundStyle.body.grad_color = LV_COLOR_MAKE(0x38, 0x38, 0x38);
+  backgroundStyle.body.border.width = 0;
+  backgroundStyle.body.border.color = LV_COLOR_MAKE(0x38, 0x38, 0x38);
+
+  lv_obj_set_style(scrColor, &backgroundStyle);
+  lv_obj_set_style(scrSide, &backgroundStyle);
+  lv_obj_set_style(scrAuton, &backgroundStyle);
+  lv_obj_set_style(scrConf, &backgroundStyle);
+  lv_obj_set_style(scrReg, &backgroundStyle);
+  lv_obj_set_style(scrDebug, &backgroundStyle);
+}
+
 void initialize()
 {
+
   lv_init();
   initColor();
   initSide();
   initAuton();
   initConf();
   initReg();
+  initDebug();
   initSideBar();
+  blackBack();
   loadScreen();
 
   FL.set_brake_mode(E_MOTOR_BRAKE_BRAKE);

@@ -185,33 +185,53 @@ public:
     }
     return 1;
   }
-
-  static void updatePos(void*)
+  static void updatePos(void *)
   {
     double wheelCircumfrence = 8.65795;
-    double head = Vincent.get_heading();
+    double head = Vincent.get_rotation();
     double rightOdomVal;
     double leftOdomVal;
-
+    //0.055
+    double radius = 3.12;
+    double prev = 0;
+    double tolerance = 0.01;
     while (true)
     {
-      head = Vincent.get_heading();
-      rightOdomVal = rightOdom.get_value();
-      leftOdomVal = leftOdom.get_value();
+      if (isnan(X))
+      {
+        X = 0;
+      }
+      if (isnan(Y))
+      {
+        Y = 0;
+      }
+      head = Vincent.get_rotation();
+      double changePheta = (head - prev);
+      double correction = ((changePheta<tolerance)?0:changePheta) * radius;
+      double initialVal = -rightOdom.get() - correction;
+      rightOdomVal = myMath.toInch(initialVal,wheelCircumfrence);
+      printf("h %f \n", head);
+      printf("P %f \n", prev);
+      printf("CP %f \n", changePheta);
+      printf("c %f  \n", correction);
+      printf("i %f  \n", initialVal);
+      printf("v %f \n", rightOdomVal);
+      
+      leftOdomVal = leftOdom.get();
 
       // YWhee
-      Y += myMath.toInch(-rightOdomVal * cos(head * M_PI / 180),
-                         wheelCircumfrence);
-      X += myMath.toInch(-rightOdomVal * sin(head * M_PI / 180),
-                         wheelCircumfrence);
+      Y +=  rightOdomVal * cos(head * M_PI / 180);
+      X += rightOdomVal * sin(head * M_PI / 180);
 
       // X wheel
       Y -= myMath.toInch(leftOdomVal * sin(head * M_PI / 180),
                          wheelCircumfrence);
       X += myMath.toInch(leftOdomVal * cos(head * M_PI / 180),
                          wheelCircumfrence);
+      //debug
 
       // reset
+      prev = head;
       rightOdom.reset();
       leftOdom.reset();
       c::task_delay(posDelay);
@@ -222,6 +242,18 @@ public:
   {
     X = x;
     Y = y;
+  }
+
+  void debugPos()
+  {
+    std::string xPos = "X: " + std::to_string(X);
+    std::string yPos = "Y: " + std::to_string(Y);
+    lv_label_set_text(debugXLabel, xPos.c_str());
+    lv_label_set_text(debugYLabel, yPos.c_str());
+
+    //printf("current x %f \n", X);
+    //printf("current y %f \n", Y);
+    //delay(1000);
   }
 
   void changeTeam()
@@ -241,8 +273,6 @@ public:
       }
     }
   }
-
-
 
   // checks to see if a ball has passed
   static bool passBall()
@@ -392,7 +422,6 @@ public:
       Movement.intake.update();
 
       // Movement.indexer();
-      printf("in loop \n");
       c::task_delay(10);
     }
   }
@@ -435,11 +464,11 @@ public:
 
     // control updates from intake uptake flywheel
     Task control(updateEverything, nullptr, TASK_PRIORITY_DEFAULT,
-              TASK_STACK_DEPTH_DEFAULT, "control");
+                 TASK_STACK_DEPTH_DEFAULT, "control");
 
     // track location
     Task updatePosition(updatePos, nullptr, TASK_PRIORITY_DEFAULT,
-              TASK_STACK_DEPTH_DEFAULT, "updatePos");
+                        TASK_STACK_DEPTH_DEFAULT, "updatePos");
     // motivational lizard + cosmetics
     // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
     // Police.setLedMode(vision::ledMode::manual);
@@ -449,7 +478,7 @@ public:
     // I am starving in here please send help
 
     Task vision(startVisionSort, nullptr, TASK_PRIORITY_DEFAULT,
-              TASK_STACK_DEPTH_DEFAULT, "vision");
+                TASK_STACK_DEPTH_DEFAULT, "vision");
     initz = true;
   }
 

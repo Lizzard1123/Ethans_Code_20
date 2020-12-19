@@ -49,8 +49,8 @@ vision_signature_s_t EYES__CUSTOM_GREEN = Vision::signature_from_utility(EYES__C
 Imu Vincent(8);
 
 // Odom
-ADIEncoder leftOdom('C', 'D');
-ADIEncoder rightOdom('G', 'H');
+okapi::ADIEncoder  leftOdom('c', 'd', false);
+okapi::ADIEncoder  rightOdom('g', 'h', false);
 
 // pots
 ADIAnalogIn TeamColor('F');
@@ -76,3 +76,4 @@ double Robot::Y = 0;
    double Robot::Yacceleration = 0;
  */
 double Robot::posDelay = 20;
+//20
