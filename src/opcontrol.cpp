@@ -13,6 +13,11 @@ void opcontrol() {
   while (true) {
     Bongo.debugPos();
     // change teams
+    if (master.get_digital(E_CONTROLLER_DIGITAL_X)) {
+      Bongo.Movement.customFlush();
+    } else {
+      Bongo.Movement.customFlushRev();
+    }
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
     }

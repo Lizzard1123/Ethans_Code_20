@@ -325,6 +325,15 @@ public:
     uptake.flush(setting);
   }
 
+  void customFlush(){
+    uptake.flush(true);
+    flywheel.outputBall(true);
+  }
+  void customFlushRev(){
+    uptake.flush(false);
+    flywheel.outputBall(false);
+  }
+
   // stops all functions
   void stopAll()
   {
