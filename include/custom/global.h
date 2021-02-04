@@ -82,5 +82,8 @@ extern ADIAnalogIn outtakeSense;
 extern lv_obj_t *debugXLabel;
 extern lv_obj_t *debugYLabel;
 
+//global teamcolor
+extern bool teamIsBlue;
+
 #endif
 

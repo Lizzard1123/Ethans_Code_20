@@ -403,6 +403,7 @@ public:
       printf("triggered");
       waitUntilBallPasses();
     }
+    c::task_delay(15);
   }
 
   void changeTeam()
@@ -417,6 +418,7 @@ public:
   int count = 0;
   int customLimit = 1000;
 
+//not used
   bool intake(int target)
   {
     Movement.intake.activate(true);
