@@ -916,10 +916,9 @@ void initialize()
   Lift.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   LArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
   RArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
-
-  Police.set_signature(1, &Police__CUSTOMRED_SIG);
-  Police.set_signature(2, &Police__CUSTOMBLUE_SIG);
-  EYES.set_signature(1, &EYES__CUSTOM_GREEN);
+  EYES.set_signature(EYES__CUSTOM_GREEN_NUM, &EYES__CUSTOM_GREEN);
+  Big_Brother.set_signature(Big_Brother_CUSTOMRED_SIG_NUM, &Big_Brother_CUSTOMRED_SIG);
+  Big_Brother.set_signature(Big_Brother_CUSTOMBLUE_SIG_NUM, &Big_Brother_CUSTOMBLUE_SIG);
 }
 
 void disabled() {}

@@ -26,12 +26,14 @@
 #define FRPort 19
 #define BLPort 2
 #define BRPort 1
-#define LArmPort 5
+#define LArmPort 6
 #define RArmPort 18
 #define FlywheelPort 7
 #define LiftPort 3
 #define PolicePort 20
 #define EYESPort 9
+#define Big_BrotherPort 5
+#define IMUPort 8
 //motors
 extern Motor FL;
 extern Motor FR;
@@ -46,15 +48,20 @@ extern Motor Lift;
 extern Controller master;
 
 //vision sensors
-extern Vision Police;
 extern Vision EYES;
+extern Vision Big_Brother;
+
 //sigs
-#define Police__CUSTOMRED_SIG_NUM 1
-#define Police__CUSTOMBLUE_SIG_NUM 2
 #define EYES__CUSTOM_GREEN_NUM 1
-extern vision_signature_s_t  Police__CUSTOMRED_SIG;
-extern vision_signature_s_t  Police__CUSTOMBLUE_SIG;
+#define Big_Brother_CUSTOMRED_SIG_NUM 1
+#define Big_Brother_CUSTOMBLUE_SIG_NUM 2
+
+extern vision_signature_s_t  Big_Brother_CUSTOMRED_SIG;
+extern vision_signature_s_t  Big_Brother_CUSTOMBLUE_SIG;
 extern vision_signature_s_t  EYES__CUSTOM_GREEN;
+
+//opical sensor
+extern Optical Police;
 
 //Imu
 extern Imu Vincent;
@@ -76,3 +83,4 @@ extern lv_obj_t *debugXLabel;
 extern lv_obj_t *debugYLabel;
 
 #endif
+

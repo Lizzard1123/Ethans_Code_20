@@ -13,7 +13,7 @@ private:
   static double VY;
   static double Xacceleration;
   static double Yacceleration;
-  static double posDelay;
+  static const double posDelay;
   static bool teamIsBlue;
   int autonCodeNum;
   double moveDist;
@@ -25,7 +25,7 @@ public:
   static RobotMovement Movement;
   static Math myMath;
 
-    void setRed()
+  void setRed()
   {
     teamIsBlue = false;
   }
@@ -241,20 +241,20 @@ public:
       }
       head = Vincent.get_rotation();
       double changePheta = (head - prev);
-      double correction = ((changePheta<tolerance)?0:changePheta) * radius;
+      double correction = ((changePheta < tolerance) ? 0 : changePheta) * radius;
       double initialVal = -rightOdom.get() - correction;
-      rightOdomVal = myMath.toInch(initialVal,wheelCircumfrence);
-      printf("h %f \n", head);
-      printf("P %f \n", prev);
-      printf("CP %f \n", changePheta);
-      printf("c %f  \n", correction);
-      printf("i %f  \n", initialVal);
-      printf("v %f \n", rightOdomVal);
-      
+      rightOdomVal = myMath.toInch(initialVal, wheelCircumfrence);
+      //printf("h %f \n", head);
+      //printf("P %f \n", prev);
+      //printf("CP %f \n", changePheta);
+      //printf("c %f  \n", correction);
+      //printf("i %f  \n", initialVal);
+      //printf("v %f \n", rightOdomVal);
+
       leftOdomVal = leftOdom.get();
 
       // YWhee
-      Y +=  rightOdomVal * cos(head * M_PI / 180);
+      Y += rightOdomVal * cos(head * M_PI / 180);
       X += rightOdomVal * sin(head * M_PI / 180);
 
       // X wheel
@@ -290,35 +290,45 @@ public:
     //delay(1000);
   }
 
-  void changeTeam()
-  {
-    if ((master.get_digital(E_CONTROLLER_DIGITAL_L1)) &&
-        (master.get_digital(E_CONTROLLER_DIGITAL_L2)))
-    {
-      teamIsBlue = !teamIsBlue;
-    }
-  }
-
   // checks to see if a ball has passed
   static bool passBall()
   {
-    int darkThreshold = 2700;
+    // define precautions if ball doesnt output
+    int maxTime = 1500; //time in ms before shutoff
+    int maxIterations = maxTime / delayVisionTime;
+    int iterations = 0;
+    const int darkThreshold = 2700;
     bool currentBall = false;
-    // gets current value of reflectivity of line tracker
-    // high val == light enviroment
-    double val = outtakeSense.get_value();
-    // if its darker than the threshold detect ball
-    if (val <= darkThreshold)
+
+    while (true)
     {
-      currentBall = true;
+      // gets current value of reflectivity of line tracker
+      // high val == light enviroment
+      double val = outtakeSense.get_value();
+
+      if (iterations >= maxIterations)
+      {
+        break;
+      }
+      else
+      {
+        iterations++;
+      }
+      
+      //sensor is dark, ball is there
+      if (val <= darkThreshold)
+      {
+        currentBall = true;
+      }
+      else if (val >= darkThreshold && currentBall)
+      {
+        // if the ball has been logged and the value reads light again
+        currentBall = false;
+        return false;
+      }
     }
-    else if (val >= darkThreshold && currentBall)
-    {
-      // if the ball has been logged and the value reads light again
-      currentBall = false;
-      return false;
-    }
-    return true;
+
+    delay(delayVisionTime);
   }
 
   // delay between checking outake in ms
@@ -335,35 +345,16 @@ public:
       reverse = true;
     }
 
+    //uptake has to go down to output now
+    Movement.uptake.setSpeed(30);
+    Movement.uptake.flush(true);
+
     // max flywheel speed
     Movement.flywheel.setSpeed(100);
     Movement.flywheel.outputBall(true);
 
-    // help push down ball but not too fast
-    // Movement.uptake.setSpeed(20);
-    Movement.uptake.outputBall(true);
-
-    // set vision color
-    // Police.set_led(000000);
-    // define precautions if ball doesnt output
-    int maxTime = 1500;
-    int maxIterations = maxTime / delayVisionTime;
-    int iterations = 0;
-
     // wait until the ball passes the back
-
-    while (passBall())
-    {
-      c::task_delay(delayVisionTime);
-      if (iterations >= maxIterations)
-      {
-        break;
-      }
-      else
-      {
-        iterations++;
-      }
-    }
+    passBall();
 
     // sets flywheel to output top
     Movement.flywheel.setSpeed(Movement.flywheel.speedMedium);
@@ -375,21 +366,17 @@ public:
       Movement.flywheel.flywheelset(false);
     }
 
-    // this_thread::sleep_for(2000);
-
     // corrects uptake
-    // Movement.uptake.setSpeed(50);
-    Movement.uptake.outputBall(false);
-
-    // sets vision color
-    // Police.set_led(005000);
+    Movement.uptake.setSpeed(Movement.uptake.getSpeed());
+    Movement.uptake.flush(false);
   }
 
-  int IntakedarkThreshold = 10;
-  bool currenIntaketBall = false;
+  static const int IntakedarkThreshold = 10;
 
-  bool passIntakeBall()
+  //not used atm
+  static bool passIntakeBall()
   {
+    bool currenIntaketBall = false;
     // gets current value of reflectivity of line tracker
     // high val == dark enviroment
     double val = IntakeSense.get_value();
@@ -405,6 +392,26 @@ public:
       return false;
     }
     return true;
+  }
+
+  //handle outake
+  static void handleOutake(void *)
+  {
+    // printf("here");
+    if (Police.get_proximity() < 100)
+    {
+      printf("triggered");
+      waitUntilBallPasses();
+    }
+  }
+
+  void changeTeam()
+  {
+    if ((master.get_digital(E_CONTROLLER_DIGITAL_L1)) &&
+        (master.get_digital(E_CONTROLLER_DIGITAL_L2)))
+    {
+      teamIsBlue = !teamIsBlue;
+    }
   }
 
   int count = 0;
@@ -451,33 +458,6 @@ public:
     }
   }
 
-  static void startVisionSort(void *)
-  {
-    // forever while loop that tracks every ball
-    //vision_object_s_t rtn = vision_sensor.get_by_sig(0, Police__CUSTOMRED_SIG);
-    while (true)
-    {
-      Vision Police(PolicePort);
-      if (teamIsBlue)
-      {
-        vision_object_s_t redObj = Police.get_by_sig(0, Police__CUSTOMRED_SIG_NUM);
-        if (redObj.width >= 220 && redObj.y_middle_coord <= 140)
-        {
-          waitUntilBallPasses();
-        }
-      }
-      else
-      {
-        vision_object_s_t blueObj = Police.get_by_sig(0, Police__CUSTOMBLUE_SIG_NUM);
-        if (blueObj.width >= 220 && blueObj.y_middle_coord <= 140)
-        {
-          waitUntilBallPasses();
-        }
-      }
-      c::task_delay(10);
-    }
-  }
-
   bool isinit()
   {
     return initz;
@@ -496,17 +476,13 @@ public:
                         TASK_STACK_DEPTH_DEFAULT, "updatePos");
     // motivational lizard + cosmetics
     // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
-    // Police.setLedMode(vision::ledMode::manual);
-    // Police.setLedColor(255, 255, 255);
     // start pooper vision
     // Help he has locked me in the laptop and wont let me out
     // I am starving in here please send help
-
-    Task vision(startVisionSort, nullptr, TASK_PRIORITY_DEFAULT,
-                TASK_STACK_DEPTH_DEFAULT, "vision");
+    Task sort(handleOutake, nullptr, TASK_PRIORITY_DEFAULT,
+              TASK_STACK_DEPTH_DEFAULT, "sort");
     initz = true;
   }
-
 
   void AutonomousOne()
   {

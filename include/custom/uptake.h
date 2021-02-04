@@ -7,7 +7,6 @@ private:
   int liftspeed = 50;
   bool toggled  = false;
   bool isflush  = false;
-  bool output   = false;
 
 public:
 
@@ -17,9 +16,7 @@ public:
   }
 
   void update() {
-    if (output) {
-      stopBoth();
-    } else if (toggled && !isflush) {
+    if (toggled && !isflush) {
       Lift.move_velocity(myMath.toRPM(true, liftspeed, Lift.get_gearing()));
     } else if (isflush) {
       Lift.move_velocity(myMath.toRPM(false, liftspeed, Lift.get_gearing()));
@@ -32,16 +29,16 @@ public:
     toggled = setting;
   }
 
-  void outputBall(bool setting) {
-    output = setting;
-  }
-
   void toggle() {
     toggled = !toggled;
   }
 
   bool getToggle() {
     return toggled;
+  }
+
+  int getSpeed(){
+    return liftspeed;
   }
 
   // sets flush

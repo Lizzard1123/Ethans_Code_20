@@ -35,18 +35,21 @@ Motor Lift(LiftPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 Controller master(E_CONTROLLER_MASTER);
 
 // vision sensors
-Vision Police(20);
-Vision EYES(9);
+Vision EYES(EYESPort);
+Vision Big_Brother(Big_BrotherPort);
 
 //sigs
-vision_signature_s_t Police__CUSTOMRED_SIG = Vision::signature_from_utility(Police__CUSTOMRED_SIG_NUM, 5441, 7935, 6688, -895, -95, -494, 3.2, 0);
-vision_signature_s_t Police__CUSTOMBLUE_SIG = Vision::signature_from_utility(Police__CUSTOMBLUE_SIG_NUM, -3155, -2037, -2596, 7041, 11265, 9154, 2.5, 0);
 vision_signature_s_t EYES__CUSTOM_GREEN = Vision::signature_from_utility(EYES__CUSTOM_GREEN_NUM, -3789, -3137, -3464, -5845, -5055, -5450, 2.5, 0);
 
+//sigs two
+vision_signature_s_t Big_Brother_CUSTOMBLUE_SIG = Vision::signature_from_utility(Big_Brother_CUSTOMBLUE_SIG_NUM, -2849, -1711, -2280, 7819, 12369, 10094, 3.000, 0);
+vision_signature_s_t Big_Brother_CUSTOMRED_SIG = Vision::signature_from_utility(Big_Brother_CUSTOMRED_SIG_NUM, 7141, 9513, 8327, -799, 1, -399, 3.000, 0);
 
+//Optical sensor
+Optical Police(PolicePort);
 
 // Imu
-Imu Vincent(8);
+Imu Vincent(IMUPort);
 
 // Odom
 okapi::ADIEncoder  leftOdom('c', 'd', false);
@@ -65,6 +68,8 @@ RobotMovement Robot::Movement;
 Math Robot::myMath;
 bool Robot::teamIsBlue;
 const int Robot::delayVisionTime;
+const int Robot::IntakedarkThreshold; 
+const double Robot::posDelay = 1000;
 
 double Robot::X = 0;
 double Robot::Y = 0;
@@ -75,5 +80,6 @@ double Robot::Y = 0;
    double Robot::Xacceleration = 0;
    double Robot::Yacceleration = 0;
  */
-double Robot::posDelay = 20;
+
+
 //20

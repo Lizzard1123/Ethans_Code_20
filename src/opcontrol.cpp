@@ -8,31 +8,35 @@ void opcontrol() {
   }
   
   // turn on flywheel
-  Bongo.Movement.flywheel.flywheelset(false);
+  Bongo.Movement.flywheel.flywheelset(true);
 
   while (true) {
     Bongo.debugPos();
     // change teams
-    if (master.get_digital(E_CONTROLLER_DIGITAL_X)) {
-      Bongo.Movement.customFlush();
-    } else {
-      Bongo.Movement.customFlushRev();
-    }
+    
+    //testing new flush
+    //if (master.get_digital(E_CONTROLLER_DIGITAL_X)) {
+      //Bongo.Movement.customFlush();
+    //} else {
+      //Bongo.Movement.customFlushRev();
+    //}
+
+    //change team
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
     }
 
-    if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)) {
-      Bongo.PIDTurn(360);
-    }
+    //testing turn 360
+    //if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)) {
+      //Bongo.PIDTurn(360);
+    //}
 
-    // toggle flywheel
+    // toggle flywheel why do i need this delete?
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_B)) {
       Bongo.Movement.flywheel.flywheeltoggleswitch();
     }
 
-    // updates controler values
-    // bongo orientation
+    // updates controler values (tyler drive)
     Bongo.Movement.updateControllerAxis();
 
     // catie control
@@ -88,8 +92,12 @@ void opcontrol() {
     }
 
     if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
-      Bongo.Movement.lineUp();
+      Bongo.Movement.lineUpTower();
     }
+    if(master.get_digital(E_CONTROLLER_DIGITAL_Y)){
+      Bongo.Movement.lineUpBall();
+    }
+
     // starts the spin on motors or cuts power
     Bongo.Movement.move();
 

@@ -74,7 +74,7 @@ public:
   double Pval = .4;
   double widthLimit = 20;
 
-  void lineUp()
+  void lineUpTower()
   {
     vision_object_s_t tower = EYES.get_by_sig(0, EYES__CUSTOM_GREEN_NUM);
     if (tower.width >= widthLimit)
@@ -88,6 +88,51 @@ public:
       FRspeed -= Pval * error;
       BLspeed += Pval * error;
       BRspeed -= Pval * error;
+    }
+  }
+
+  // neg right pos left
+  // more goes o the right
+  double ball_offset = 100;
+  double ball_error;
+  double ball_targetCX;
+  double ball_CX;
+  double ball_width;
+  double ball_Pval = .3;
+  double ball_widthLimit = 20;
+
+  void lineUpBall()
+  {
+    printf("Finding");
+    vision_object_s_t BLUEBALL = Big_Brother.get_by_sig(0, Big_Brother_CUSTOMBLUE_SIG_NUM);
+    vision_object_s_t REDBALL = Big_Brother.get_by_sig(0, Big_Brother_CUSTOMRED_SIG_NUM);
+    if (REDBALL.width >= ball_widthLimit)
+    {
+      printf("Found Red Ball");
+      ball_width = REDBALL.width;
+      // neg right pos left
+      ball_CX = REDBALL.x_middle_coord;
+      //ball_targetCX = -1.3286 * ball_width + 140.619 + ball_offset;
+      ball_targetCX = 158 - ball_CX + ball_offset;
+      ball_error = ball_CX - ball_targetCX;
+      FLspeed += ball_Pval * ball_error;
+      FRspeed -= ball_Pval * ball_error;
+      BLspeed += ball_Pval * ball_error;
+      BRspeed -= ball_Pval * ball_error;
+    }
+    else if (BLUEBALL.width >= ball_widthLimit)
+    {
+      printf("Found Blue Ball");
+      ball_width = BLUEBALL.width;
+      // neg right pos left
+      ball_CX = BLUEBALL.x_middle_coord;
+      //ball_targetCX = -1.3286 * ball_width + 140.619 + ball_offset;
+      ball_targetCX = 158 - ball_CX + ball_offset;
+      ball_error = ball_CX - ball_targetCX;
+      FLspeed += ball_Pval * ball_error;
+      FRspeed -= ball_Pval * ball_error;
+      BLspeed += ball_Pval * ball_error;
+      BRspeed -= ball_Pval * ball_error;
     }
   }
 
@@ -130,11 +175,11 @@ public:
   void catieControll()
   {
     LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X));
-    printf("LXaxis %f\n", LXaxis);
+    //printf("LXaxis %f\n", LXaxis);
     LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y));
-    printf("LYaxis %f\n", LYaxis);
+    //printf("LYaxis %f\n", LYaxis);
     RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X)) / tune;
-    printf("RXaxis %f\n", RXaxis);
+    //printf("RXaxis %f\n", RXaxis);
     RYaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_Y));
 
     FLspeed = RYaxis + RXaxis;
