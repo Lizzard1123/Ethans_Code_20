@@ -12,27 +12,19 @@ const double MTOINCH = 39.37;
 class Math {
 public:
 
+  // takes in reverse, speed in %, and gear ratio and returns RPM
   double toRPM(bool reverse, double speed, int gear) {
     int check     = (reverse) ? -1 : 1;
     int gearRatio = 10;
-
     switch (gear) {
     case E_MOTOR_GEARSET_36:
       gearRatio = 100;
-
-      // printf("Torq");
       break;
-
     case E_MOTOR_GEARSET_18:
       gearRatio = 200;
-
-      // printf("Reg");
       break;
-
     case E_MOTOR_GEARSET_06:
       gearRatio = 600;
-
-      // printf("Speed");
       break;
     }
     return check * (speed / 100) * gearRatio;
@@ -49,7 +41,6 @@ public:
   }
 
   // params circumfrence of wheel, distance to go returns rotary pos of that
-  // point
   double wheeltoDegrees(double cir, double dist) {
     return round((dist / cir) * 360);
   }
@@ -66,6 +57,7 @@ public:
     return average;
   }
 
+  // returns distance between 2 points
   double TwoPointsDistance(double xone, double yone, double xtwo, double ytwo) {
     double Xdifference = fabs((xone - xtwo));
     double Ydifference = fabs((yone - ytwo));
@@ -73,22 +65,19 @@ public:
     return sqrt(pow(Xdifference, 2) + pow(Ydifference, 2));
   }
 
+  // returns greatest value of 4 numbers with 100 default if all are less than 100
   double greatest(double FL, double FR, double BL, double BR) {
     if ((FL >= 100) || (FR >= 100) || (BL >= 100) || (BR >= 100)) {
       double finalnum = FL;
-
       if (finalnum <= FR) {
         finalnum = FR;
       }
-
       if (finalnum <= BL) {
         finalnum = BL;
       }
-
       if (finalnum <= BR) {
         finalnum = BR;
       }
-
       if (finalnum != 0) {
         return finalnum;
       } else {
@@ -99,14 +88,12 @@ public:
     }
   }
 
+  // converts Gs to acceleration in m/s
   double convert(double g) {
-    double G = 9.80665;
-
     return G * g;
   }
 
-  // new algos section
-  // to degress from r
+  // to degress from radians
   double toDegrees(double r) {
     return (r * 180) / MPI;
   }
@@ -118,8 +105,7 @@ public:
     return round(num * mult) / mult;
   }
 
-  // returns slope, if denom is 0 then striaght line up, if numer is 0 then
-  // slope of 0
+  // returns slope, if denom is 0 then striaght line up, if numerator is 0 then slope is 0
   double slope(double Xone, double Yone, double Xtwo, double Ytwo) {
     if ((Xtwo - Xone) == 0) {
       return LONG_MAX;
@@ -129,7 +115,7 @@ public:
     return (Ytwo - Yone) / (Xtwo - Xone);
   }
 
-  // takes in degress andd wheel circulmfrwenqslen and reuturns inches moved
+  // takes in degrees and wheel circulmfrwenqslen (did i have a stroke wtf) and returns inches moved
   double toInch(double degrees, double wheelCircumfrence) {
     return degrees / 360 * wheelCircumfrence;
   }
@@ -146,7 +132,7 @@ public:
     return ((PX - Xone) * (Ytwo - Yone) - (PY - Yone) * (Xtwo - Xone)) > 0;
   }
 
-  // returns distance from point to line
+  // returns perpendicular distance from point to line
   double findDistance(double thisSlope, double PX, double PY) {
     return fabs((-thisSlope * PX + PY)) / sqrt(1 + pow(thisSlope, 2));
   }
@@ -184,7 +170,7 @@ public:
     return dist;
   }
 
-  // get new velocity
+  // return new velocity
   double updateV(double Vo, double A, double T) {
     if (motorsNotMoving()) {
       return 0;
@@ -192,12 +178,13 @@ public:
     return Vo + A * (T / 1000);
   }
 
-  // return the Acc in m/s^2
+  // returns true if none of the motors are moving
   bool motorsNotMoving() {
     return (FL.get_target_velocity() == 0) && (FR.get_target_velocity() == 0) &&
            (BL.get_target_velocity() == 0) && (BR.get_target_velocity() == 0);
   }
 
+  // filtering some of the readings from the accelerometer
   double normalize(double acc) {
     if ((acc < 0.01) && (acc > -0.01)) {
       return 0;
@@ -209,13 +196,13 @@ public:
     return acc * G;
   }
 
-  // Input current accelartion and velocity
-  // Outputs change in position
+  // Input current accelartion and velocity | Outputs change in position
   double update_position(double accel, double velo, double timeinSec) {
     timeinSec /= 1000;
     return (timeinSec * velo + .5 * accel * pow(timeinSec, 2)) * MTOINCH;
   }
 
+  //returns the angle between two points relative to zero using acos
   double angleBetween(double X, double Y, double targetX, double targetY) {
     double Ydist = targetY - Y;
     double dist  = TwoPointsDistance(X, Y, targetX, targetY);
@@ -225,15 +212,14 @@ public:
       check = -1;
     }
     double solution = acos(Ydist / dist) * 180 / MPI * check;
-
     return solution;
   }
 
   // helper func that returns number of encoder pos away from average scaled
-  // from global var
   double scale(double av, double part, double headingScale)
   {
     return (av - part) * headingScale;
   }
+
 };
 #endif // ifndef MATH
