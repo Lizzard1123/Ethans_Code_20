@@ -1,8 +1,62 @@
 //backup for old / outdated / unused code
-//if 0 means dont compile inside 
+//if 0 means dont compile inside
 #if 0
-    //newer at top
+//newer at top
+    // motivational lizard + cosmetics
+    // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
+    // start pooper vision
+    // Help he has locked me in the laptop and wont let me out
+    // I am starving in here please send help
+/*
+  //not used atm
+  static bool passIntakeBall()
+  {
+    bool currenIntaketBall = false;
+    // gets current value of reflectivity of line tracker
+    // high val == dark enviroment
+    double val = IntakeSense.get_value();
 
+    if (val >= IntakedarkThreshold)
+    {
+      currenIntaketBall = true;
+    }
+    else if ((val <= IntakedarkThreshold) && currenIntaketBall)
+    {
+      // if the ball has been logged and the value reads light again
+      currenIntaketBall = false;
+      return false;
+    }
+    return true;
+  }
+    */
+/*
+ int count = 0;
+  int customLimit = 1000;
+
+//not used
+  bool intake(int target)
+  {
+    Movement.intake.activate(true);
+
+    for (int i = 0; i < target; i++)
+    {
+      while (passIntakeBall())
+      {
+        count++;
+
+        if (count > customLimit)
+        {
+          break;
+        }
+        delay(5);
+      }
+
+      // Brain.Screen.setCursor(8, 20);
+      // Brain.Screen.print(i);
+    }
+    return true;
+  }
+  */
 /*
 if reimplimented global vars for speeds that take in number less than 1
 // alter the speed
@@ -20,7 +74,7 @@ if reimplimented global vars for speeds that take in number less than 1
 
 */
 
-    /*
+/*
     // upadate controller vars
   void moveRelative()
   {
@@ -76,9 +130,7 @@ if reimplimented global vars for speeds that take in number less than 1
   }
 */
 
-
-
-      /*
+/*
          if(currentAngle > 180){
          Controller1.Screen.setCursor(1,1);
          Controller1.Screen.print(currentAngle);
@@ -89,38 +141,36 @@ if reimplimented global vars for speeds that take in number less than 1
          Controller1.Screen.print(Dangle);
          }
        */
-      // Brain.Screen.setFillColor(transparent);
-      // Brain.Screen.setPenColor(white);
-      // Brain.Screen.setCursor(1, 1);
-      // Brain.Screen.print(error);
-      // Brain.Screen.setCursor(2, 1);
-      // Brain.Screen.print(derivative);
-      // Brain.Screen.setCursor(3, 1);
-      // Brain.Screen.print(speed);
-      // Brain.Screen.setCursor(4, 1);
-      // Brain.Screen.print(currentAngle);
-      // Brain.Screen.setCursor(5, 1);
-      // Brain.Screen.print(Dangle);
-      // Brain.Screen.setCursor(6, 1);
-      // Brain.Screen.print(reachedGoal);
+// Brain.Screen.setFillColor(transparent);
+// Brain.Screen.setPenColor(white);
+// Brain.Screen.setCursor(1, 1);
+// Brain.Screen.print(error);
+// Brain.Screen.setCursor(2, 1);
+// Brain.Screen.print(derivative);
+// Brain.Screen.setCursor(3, 1);
+// Brain.Screen.print(speed);
+// Brain.Screen.setCursor(4, 1);
+// Brain.Screen.print(currentAngle);
+// Brain.Screen.setCursor(5, 1);
+// Brain.Screen.print(Dangle);
+// Brain.Screen.setCursor(6, 1);
+// Brain.Screen.print(reachedGoal);
 
+// Brain.Screen.clearScreen();
+// Brain.Screen.setCursor(1, 1);
+// Brain.Screen.print(Vincent.rotation(degrees));
+// Brain.Screen.setCursor(2, 1);
+// Brain.Screen.print(error);
+// Brain.Screen.setCursor(3, 1);
+// Brain.Screen.print(integralone);
+// Brain.Screen.setCursor(4, 1);
+// Brain.Screen.print(Derivative);
+// Brain.Screen.setCursor(5, 1);
+// Brain.Screen.print(reachedGoal);
+// Brain.Screen.setCursor(6, 1);
+// Brain.Screen.print(motorSpeed);
 
-
-      // Brain.Screen.clearScreen();
-      // Brain.Screen.setCursor(1, 1);
-      // Brain.Screen.print(Vincent.rotation(degrees));
-      // Brain.Screen.setCursor(2, 1);
-      // Brain.Screen.print(error);
-      // Brain.Screen.setCursor(3, 1);
-      // Brain.Screen.print(integralone);
-      // Brain.Screen.setCursor(4, 1);
-      // Brain.Screen.print(Derivative);
-      // Brain.Screen.setCursor(5, 1);
-      // Brain.Screen.print(reachedGoal);
-      // Brain.Screen.setCursor(6, 1);
-      // Brain.Screen.print(motorSpeed);
-
-  /*
+/*
      static int updatePos() {
      double offsetX = .01;
      double offsetY = -.01;
@@ -159,9 +209,9 @@ if reimplimented global vars for speeds that take in number less than 1
      return 0;
      }
    */
-// Hi Ethan 
+// Hi Ethan
 
-  /*
+/*
      static int updatePos() {
      double wheelCircumfrence = 8.65795;
      double radius = 5;
@@ -296,8 +346,7 @@ if reimplimented global vars for speeds that take in number less than 1
      }
    */
 
-
-  /*
+/*
      void setTeamNum(bool isBlue) {
       Brain.Screen.setPenWidth(5);
       Brain.Screen.setPenColor(black);
@@ -308,7 +357,7 @@ if reimplimented global vars for speeds that take in number less than 1
              : Brain.Screen.printAt(100, 225, "Red");
      }
    */
-  /*
+/*
      void setTeamSide(bool left) {
       Brain.Screen.setPenWidth(5);
       Brain.Screen.setPenColor(black);
@@ -317,7 +366,7 @@ if reimplimented global vars for speeds that take in number less than 1
            : Brain.Screen.printAt(140, 225, "R");
      }
    */
-  /*
+/*
      void setAutoNum(int num) {
       Brain.Screen.setPenWidth(5);
       Brain.Screen.setPenColor(black);
@@ -389,9 +438,9 @@ if reimplimented global vars for speeds that take in number less than 1
     }
   }
 */
-  // sets up threads for each debugger
+// sets up threads for each debugger
 
-  /*
+/*
      void setUpDebugger(bool temp, bool inert, bool enc) {
      if (temp) {
       customThreads.displayTemp(true, 500);
@@ -405,14 +454,10 @@ if reimplimented global vars for speeds that take in number less than 1
      }
    */
 
-  /*
+/*
     
 
    */
-
-
-  
-
 
 /*
 
@@ -447,6 +492,5 @@ if reimplimented global vars for speeds that take in number less than 1
         Movement.intake.activate(false);
         Movement.uptake.setToggle(false);
  */
-
 
 #endif

@@ -7,61 +7,80 @@
 class Robot
 {
 private:
+  // global X pos of bongo declared in global.cpp
   static double X;
+  // global Y pos of bongo declared in global.cpp
   static double Y;
-  static double VX;
-  static double VY;
-  static double Xacceleration;
-  static double Yacceleration;
+  // global position update delay for bongo declared in global.cpp
   static const double posDelay;
+  // global team color of bongo declared in global.cpp
   static bool teamIsBlue;
+  // auton selector num
   int autonCodeNum;
-  double moveDist;
+  // bongo has been initialized
   bool initz = false;
+  // true if bongo is on left for auton
   bool left = false;
+  // threshold for detecting ball passing through back
+  static const int IntakedarkThreshold = 10;
+  // delay between checking outake in ms
+  static const int delayVisionTime = 50;
 
 public:
-  // globalThreads customThreads;
+  /*robot subsytems*/
+  // class handler for movement + other funtions
   static RobotMovement Movement;
+  // custom math reference
   static Math myMath;
 
+  // sets team color to red
   void setRed()
   {
     teamIsBlue = false;
   }
+
+  // sets team color to blue
   void setBlue()
   {
     teamIsBlue = true;
   }
 
+  // sets auton number
   void setAutonNum(int num)
   {
     autonCodeNum = num;
   }
 
+  // sets auton side, true is left
   void sideIsLeft(bool yes)
   {
     left = yes;
   }
 
+  // returns true if team is blue
   bool getColor()
   {
     return teamIsBlue;
   }
 
+  // returns auton num
   int getAutonNum()
   {
     return autonCodeNum;
   }
 
+  // returns if bongo is on left during auton
   bool getSide()
   {
     return left;
   }
 
+  // PID syncronous movement from current location to target X , Y set speed along the way
   int PIDMove(double targetX, double targetY, int maxspeed = 100)
   {
+    // in ms
     int PIDspeed = 20;
+    // tolerance in inches
     double tolerance = .5;
     bool reachedGoal;
     double speed = 0;
@@ -93,6 +112,7 @@ public:
       double currentAngle = Vincent.get_heading();
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
+      // fancy algo
       double FLAuton = myMath.sRound(
           myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
       double FRAuton = myMath.sRound(
@@ -137,6 +157,7 @@ public:
     return 1;
   }
 
+  // PID syncronous turning TODO merge with movement
   int PIDTurn(double target)
   {
     double tolerance = .5;
@@ -219,8 +240,14 @@ public:
     }
     return 1;
   }
+
+  //update bongo current pos
   static void updatePos(void *)
   {
+    /*
+    TODO
+    reduce movement whilst turning
+    */
     double wheelCircumfrence = 8.65795;
     double head = Vincent.get_rotation();
     double rightOdomVal;
@@ -272,12 +299,15 @@ public:
     }
   }
 
+
+  // set current position of bongo
   void setPos(double x, double y)
   {
     X = x;
     Y = y;
   }
 
+  // prints to debug screen current position of bongo
   void debugPos()
   {
     std::string xPos = "X: " + std::to_string(X);
@@ -290,7 +320,7 @@ public:
     //delay(1000);
   }
 
-  // checks to see if a ball has passed
+  // checks to see if a ball has passed TODO make async
   static bool passBall()
   {
     // define precautions if ball doesnt output
@@ -330,10 +360,8 @@ public:
 
     delay(delayVisionTime);
   }
-
-  // delay between checking outake in ms
-  static const int delayVisionTime = 50;
-
+  
+  //handler for the outake process
   static void waitUntilBallPasses()
   {
     bool reverse = false;
@@ -371,30 +399,7 @@ public:
     Movement.uptake.flush(false);
   }
 
-  static const int IntakedarkThreshold = 10;
-
-  //not used atm
-  static bool passIntakeBall()
-  {
-    bool currenIntaketBall = false;
-    // gets current value of reflectivity of line tracker
-    // high val == dark enviroment
-    double val = IntakeSense.get_value();
-
-    if (val >= IntakedarkThreshold)
-    {
-      currenIntaketBall = true;
-    }
-    else if ((val <= IntakedarkThreshold) && currenIntaketBall)
-    {
-      // if the ball has been logged and the value reads light again
-      currenIntaketBall = false;
-      return false;
-    }
-    return true;
-  }
-
-  //handle outake
+  //handle outake checking
   static void handleOutake(void *)
   {
     // printf("here");
@@ -406,6 +411,7 @@ public:
     c::task_delay(15);
   }
 
+  // change current team (swap) pressing L1 and L2 at same time when called
   void changeTeam()
   {
     if ((master.get_digital(E_CONTROLLER_DIGITAL_L1)) &&
@@ -415,60 +421,31 @@ public:
     }
   }
 
-  int count = 0;
-  int customLimit = 1000;
 
-//not used
-  bool intake(int target)
-  {
-    Movement.intake.activate(true);
-
-    for (int i = 0; i < target; i++)
-    {
-      while (passIntakeBall())
-      {
-        count++;
-
-        if (count > customLimit)
-        {
-          break;
-        }
-        delay(5);
-      }
-
-      // Brain.Screen.setCursor(8, 20);
-      // Brain.Screen.print(i);
-    }
-    return true;
-  }
-
+  //calls upon subsystems and updates them
   static void updateEverything(void *)
   {
     while (true)
     {
-      // starts up flywheel
+      // updates flywheel
       Movement.flywheel.update();
-
-      // starts up uptake
+      // updates uptake
       Movement.uptake.update();
-
-      // starts up intake
+      // updates intake
       Movement.intake.update();
-
-      // Movement.indexer();
       c::task_delay(10);
     }
   }
 
+  //returns true if bongo has initialized
   bool isinit()
   {
     return initz;
   }
 
+  //starts up threads
   void initThreads()
   {
-    printf("hete");
-
     // control updates from intake uptake flywheel
     Task control(updateEverything, nullptr, TASK_PRIORITY_DEFAULT,
                  TASK_STACK_DEPTH_DEFAULT, "control");
@@ -476,16 +453,18 @@ public:
     // track location
     Task updatePosition(updatePos, nullptr, TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "updatePos");
-    // motivational lizard + cosmetics
-    // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
-    // start pooper vision
-    // Help he has locked me in the laptop and wont let me out
-    // I am starving in here please send help
+
+    //handler for outake 
     Task sort(handleOutake, nullptr, TASK_PRIORITY_DEFAULT,
               TASK_STACK_DEPTH_DEFAULT, "sort");
     initz = true;
   }
 
+/*
+
+ AUTON MESS
+
+*/
   void AutonomousOne()
   {
     if (teamIsBlue)
