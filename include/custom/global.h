@@ -1,38 +1,17 @@
 #ifndef GLOBAL
 #define GLOBAL
 #include "main.h"
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// FL                   motor         6
-// FR                   motor         4
-// BL                   motor         1
-// BR                   motor         10
-// LArm                 motor         11
-// RArm                 motor         20
-// Flywheel             motor         7
-// Lift                 motor         8
-// Vincent              inertial      5
-// Vision               vision        21
-// Controller1          controller
-// leftOdom             encoder       A, B
-// rightOdom            encoder       C, D
-// IntakeSense          line          E
-// outtakeSense         line          F
-// TeamColor            pot           G
-// AutonNumber          pot           H
-// ---- END VEXCODE CONFIGURED DEVICES ----
-#define FLPort 4
-#define FRPort 19
-#define BLPort 2
-#define BRPort 1
-#define LArmPort 6
-#define RArmPort 18
+#define FLPort 20
+#define FRPort 16
+#define BLPort 17
+#define BRPort 18
+#define LArmPort 1
+#define RArmPort 13
 #define FlywheelPort 7
-#define LiftPort 3
+#define LiftPort 19
 #define PolicePort 20
-#define EYESPort 9
-#define Big_BrotherPort 5
+#define EYESPort 10
+#define Big_BrotherPort 6
 #define IMUPort 8
 //motors
 extern Motor FL;
