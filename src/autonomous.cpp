@@ -1,6 +1,5 @@
 #include "custom/autonomous.h"
 
-// hello
 Robot Bongo;
 void autonomous() {
   while (Vincent.is_calibrating()) {

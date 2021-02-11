@@ -1,24 +1,3 @@
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// FL                   motor         6
-// FR                   motor         4
-// BL                   motor         1
-// BR                   motor         10
-// LArm                 motor         11
-// RArm                 motor         20
-// Flywheel             motor         7
-// Lift                 motor         8
-// Vincent              inertial      5
-// Vision               vision        21
-// Controller1          controller
-// leftOdom             encoder       A, B
-// rightOdom            encoder       C, D
-// IntakeSense          line          E
-// outtakeSense         line          F
-// TeamColor            pot           G
-// AutonNumber          pot           H
-// ---- END VEXCODE CONFIGURED DEVICES ----
 #include "custom/autonomous.h"
 
 // motors
