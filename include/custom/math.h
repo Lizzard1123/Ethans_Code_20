@@ -228,5 +228,12 @@ public:
 
     return solution;
   }
+
+  // helper func that returns number of encoder pos away from average scaled
+  // from global var
+  double scale(double av, double part, double headingScale)
+  {
+    return (av - part) * headingScale;
+  }
 };
 #endif // ifndef MATH

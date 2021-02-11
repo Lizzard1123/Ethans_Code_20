@@ -1,6 +1,83 @@
 //backup for old / outdated / unused code
 //if 0 means dont compile inside 
 #if 0
+    //newer at top
+
+/*
+if reimplimented global vars for speeds that take in number less than 1
+// alter the speed
+  void alterSpeed(double speed)
+  {
+    under = myMath.greatest(fabs(FLspeed), fabs(FRspeed), fabs(BLspeed),
+                            fabs(BRspeed)) /
+            100;
+    FLspeed = (FLspeed / under) * speed;
+    FRspeed = (FRspeed / under) * speed;
+    BLspeed = (BLspeed / under) * speed;
+    BRspeed = (BRspeed / under) * speed;
+  }
+
+
+*/
+
+    /*
+    // upadate controller vars
+  void moveRelative()
+  {
+    // current controller axis values in %
+    LXaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) / 127 * 100);
+    LYaxis = (master.get_analog(E_CONTROLLER_ANALOG_LEFT_Y) / 127 * 100);
+    RXaxis = (master.get_analog(E_CONTROLLER_ANALOG_RIGHT_X) / 127 * 100) / tune;
+
+    // speed is distance from 0
+    double speed = myMath.TwoPointsDistance(0, 0, LXaxis, LYaxis);
+
+    // offset so it drives at 100% going forward
+    // speed *= 1.5;
+
+    // find the angle between straight forward
+    double Dangle = acos(LYaxis / speed) * 180 / M_PI;
+
+    // negative if the x axis is on left or neg
+    if (LXaxis < 0)
+    {
+      Dangle *= -1;
+    }
+
+    // current angle
+    double currentAngle = Vincent.get_heading();
+
+    // set speeds in order to move bongo in target agle taken into account
+    // current angle
+    FLspeed = myMath.sRound(
+        myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
+    FRspeed = myMath.sRound(
+        myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
+    BLspeed = myMath.sRound(
+        myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
+    BRspeed = myMath.sRound(
+        myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
+
+    // turn whilst doing so
+    FLspeed += RXaxis;
+    FRspeed -= RXaxis;
+    BLspeed += RXaxis;
+    BRspeed -= RXaxis;
+
+    // proportion it all
+    double under = myMath.greatest(fabs(FLspeed), fabs(FRspeed), fabs(BLspeed),
+                                   fabs(BRspeed)) /
+                   100;
+
+    FLspeed = (FLspeed / under);
+    FRspeed = (FRspeed / under);
+    BLspeed = (BLspeed / under);
+    BRspeed = (BRspeed / under);
+  }
+*/
+
+
+
       /*
          if(currentAngle > 180){
          Controller1.Screen.setCursor(1,1);
