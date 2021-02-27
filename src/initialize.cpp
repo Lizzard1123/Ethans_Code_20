@@ -896,7 +896,10 @@ void blackBack(){
 
 void initialize()
 {
-
+  Vincent.reset();
+  while(Vincent.is_calibrating()){
+    delay(10);
+  }
   lv_init();
   initColor();
   initSide();

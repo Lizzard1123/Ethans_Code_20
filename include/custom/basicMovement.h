@@ -36,12 +36,12 @@ private:
 
   //tower PID vars
   // neg right pos left angle
-  double offset = -16;
+  double offset = -25;
   double error;
   double targetCX;
   double CX;
   double width;
-  double Pval = .4;
+  double Pval = .55;
   double widthLimit = 20;
 
   //ball PID vars
@@ -51,7 +51,7 @@ private:
   double ball_targetCX;
   double ball_CX;
   double ball_width;
-  double ball_Pval = .3;
+  double ball_Pval = .29;
   double ball_widthLimit = 20;
 
   //deadzone : min num to be detected from joystick
@@ -92,7 +92,7 @@ public:
   }
 
   //async PID for changing angle to tower green
-  void lineUpTower()
+  double lineUpTower(bool set = false)
   {
     // take signature
     vision_object_s_t tower = EYES.get_by_sig(0, EYES__CUSTOM_GREEN_NUM);
@@ -101,17 +101,26 @@ public:
       width = tower.width;
       CX = tower.x_middle_coord;
       //custom formula for dist turn
+      printf("Error: %f", error);
       targetCX = -1.3286 * width + 140.619 + offset;
       error = CX - targetCX;
       FLspeed += Pval * error;
       FRspeed -= Pval * error;
       BLspeed += Pval * error;
       BRspeed -= Pval * error;
+      if (set)
+      {
+        moveFL(Pval * error);
+        moveFR(Pval * -error);
+        moveBL(Pval * error);
+        moveBR(Pval * -error);
+      }
     }
+    return error;
   }
 
   //async PID for lining up with ball
-  void lineUpBall()
+  double lineUpBall(bool set = false)
   {
     printf("Finding");
     vision_object_s_t BLUEBALL = Big_Brother.get_by_sig(0, Big_Brother_CUSTOMBLUE_SIG_NUM);
@@ -125,10 +134,18 @@ public:
       //ball_targetCX = -1.3286 * ball_width + 140.619 + ball_offset;
       ball_targetCX = 158 - ball_CX + ball_offset;
       ball_error = ball_CX - ball_targetCX;
+      printf("ball_error: %f \n", ball_error);
       FLspeed += ball_Pval * ball_error;
       FRspeed -= ball_Pval * ball_error;
       BLspeed += ball_Pval * ball_error;
       BRspeed -= ball_Pval * ball_error;
+      if (set)
+      {
+        moveFL(ball_Pval * ball_error);
+        moveFR(ball_Pval * -ball_error);
+        moveBL(ball_Pval * ball_error);
+        moveBR(ball_Pval * -ball_error);
+      }
     }
     else if (BLUEBALL.width >= ball_widthLimit)
     {
@@ -139,10 +156,61 @@ public:
       //ball_targetCX = -1.3286 * ball_width + 140.619 + ball_offset;
       ball_targetCX = 158 - ball_CX + ball_offset;
       ball_error = ball_CX - ball_targetCX;
+      printf("ball_error: %f \n", ball_error);
       FLspeed += ball_Pval * ball_error;
       FRspeed -= ball_Pval * ball_error;
       BLspeed += ball_Pval * ball_error;
       BRspeed -= ball_Pval * ball_error;
+      if (set)
+      {
+        moveFL(ball_Pval * ball_error);
+        moveFR(ball_Pval * -ball_error);
+        moveBL(ball_Pval * ball_error);
+        moveBR(ball_Pval * -ball_error);
+      }
+    }
+    return ball_error;
+  }
+
+  void autonLineUpBall()
+  {
+    int val = 0;
+    int count = 0;
+    int tolerance = 3;
+    while (true)
+    {
+      val = lineUpBall(true);
+      if (val < tolerance && val > -tolerance)
+      {
+        count++;
+      }
+
+      if (count > 6)
+      {
+        break;
+      }
+      delay(10);
+    }
+  }
+
+  void autonLineUpTower()
+  {
+    int val = 0;
+    int count = 5;
+    int tolerance = 10;
+    while (true)
+    {
+      val = lineUpTower(true);
+      if (val < tolerance && val > -tolerance)
+      {
+        count++;
+      }
+
+      if (count > 6)
+      {
+        break;
+      }
+      delay(10);
     }
   }
 
@@ -322,6 +390,5 @@ public:
     uptake.setToggle(false);
     flywheel.flywheelset(false);
   }
-  
 };
 #endif // ifndef MOVE

@@ -18,11 +18,11 @@ Vision EYES(EYESPort);
 Vision Big_Brother(Big_BrotherPort);
 
 //sigs
-vision_signature_s_t EYES__CUSTOM_GREEN = Vision::signature_from_utility(EYES__CUSTOM_GREEN_NUM, -3789, -3137, -3464, -5845, -5055, -5450, 2.5, 0);
-
+vision_signature_s_t EYES__CUSTOM_GREEN = Vision::signature_from_utility(EYES__CUSTOM_GREEN_NUM, -4949, -4509, -4729, -5669, -5035, -5352, 9.400, 0);
+//vision_signature_s_t EYES__CUSTOM_GREEN = Vision::signature_from_utility(EYES__CUSTOM_GREEN_NUM, -3789, -3137, -3464, -5845, -5055, -5450, 2.5, 0);
 //sigs two
-vision_signature_s_t Big_Brother_CUSTOMBLUE_SIG = Vision::signature_from_utility(Big_Brother_CUSTOMBLUE_SIG_NUM, -2849, -1711, -2280, 7819, 12369, 10094, 3.000, 0);
-vision_signature_s_t Big_Brother_CUSTOMRED_SIG = Vision::signature_from_utility(Big_Brother_CUSTOMRED_SIG_NUM, 7141, 9513, 8327, -799, 1, -399, 3.000, 0);
+vision_signature_s_t Big_Brother_CUSTOMRED_SIG = Vision::signature_from_utility(Big_Brother_CUSTOMRED_SIG_NUM, -2849, -1711, -2280, 7819, 12369, 10094, 3.000, 0);
+vision_signature_s_t Big_Brother_CUSTOMBLUE_SIG = Vision::signature_from_utility(Big_Brother_CUSTOMBLUE_SIG_NUM, 7141, 9513, 8327, -799, 1, -399, 3.000, 0);
 
 //Optical sensor
 Optical Police(PolicePort);
@@ -33,7 +33,7 @@ Imu Vincent(IMUPort);
 //
 // Odom
 okapi::ADIEncoder  leftOdom('a', 'b', false);
-okapi::ADIEncoder  rightOdom('c', 'd', false);
+okapi::ADIEncoder  rightOdom('c', 'd', true);
 
 // Staic defines
 RobotMovement Robot::Movement;

@@ -79,15 +79,15 @@ public:
   int PIDMove(double targetX, double targetY, int maxspeed = 100)
   {
     // in ms
-    int PIDspeed = 20;
+    int PIDspeed = 10;
     // tolerance in inches
-    double tolerance = .5;
+    double tolerance = 1;
     bool reachedGoal;
     double speed = 0;
     double error;
     double derivative;
     double integral = 0;
-    double Pval = 13;
+    double Pval = 3;
     double Ival = 0;
     double Dval = 0;
 
@@ -109,7 +109,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Vincent.get_heading();
+      double currentAngle = Vincent.get_heading() + 45;
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       // fancy algo
@@ -128,7 +128,15 @@ public:
       FRAuton = (FRAuton / under);
       BLAuton = (BLAuton / under);
       BRAuton = (BRAuton / under);
-
+      printf("FLAuton %f \n", FLAuton);
+      printf("FRAuton %f \n", FRAuton);
+      printf("BLAuton %f \n", BLAuton);
+      printf("BRAuton %f  \n", BRAuton);
+      printf("currentAngle %f  \n", currentAngle);
+      printf("Dangle %f \n", Dangle);
+      printf("error %f \n", error);
+      printf("X:  %f \n", X);
+      printf("Y:  %f \n", Y);
       // Drive Bongo
       Movement.moveFL(FLAuton);
       Movement.moveFR(FRAuton);
@@ -161,18 +169,20 @@ public:
   int PIDTurn(double target)
   {
     double tolerance = .5;
-    int PIDspeed = 20;
+    int PIDspeed = 10;
     double motorSpeed = 0;
     double turnTarget = target;
     bool reachedGoal;
     double error;
-    double Derivative;
+    double Derivative = 0;
     double integralone = 0;
     double Pval = 2.5;
-    double Ival = .1;
+    //double Ival = .1;
 
     // double Ival = 0;
-    double Dval = .7;
+    //double Dval = .7;
+    double Ival = 0;
+    double Dval = 0;
 
     // double Dval = 0;
     double headingVal;
@@ -181,24 +191,25 @@ public:
     {
       // update left and right odom values
       headingVal = Vincent.get_rotation();
+      printf("Heading: %f", headingVal);
 
       // find the error of both sides  for P
       error = turnTarget - headingVal;
 
       // find the intergral part for I
       // integralone = 0;
-      if ((integralone == -4294967295.4294967295) || (integralone == 1045))
-      {
-        integralone = 0;
-      }
+      //if ((integralone == -4294967295.4294967295) || (integralone == 1045))
+      //{
+      //  integralone = 0;
+      //}
 
-      if (motorSpeed <= 20)
-      {
-        integralone += error;
-      }
+      //if (motorSpeed <= 20)
+      //{
+      //  integralone += error;
+      //}
 
       // find the derivative part for D
-      Derivative = error / PIDspeed;
+      //Derivative = error / PIDspeed;
 
       // PID ALGO
       motorSpeed = (error * Pval) + (integralone * Ival) + (Derivative * Dval);
@@ -241,6 +252,151 @@ public:
     return 1;
   }
 
+  //PID turnMove turns and moves
+  int PIDMoveTurn(double targetX, double targetY, double target, int maxspeed = 100)
+  {
+    // in ms
+    int PIDspeed = 20;
+    // tolerance in inches
+    double tolerance = .5;
+    bool reachedGoal;
+    double speed = 0;
+    double error;
+    double derivative;
+    double integral = 0;
+    double Pval = 13;
+    double Ival = 0;
+    double Dval = 0;
+
+    double t_tolerance = .5;
+    int t_PIDspeed = 20;
+    double t_motorSpeed = 0;
+    double t_turnTarget = target;
+    bool t_reachedGoal;
+    double t_error;
+    double t_Derivative;
+    double t_integralone = 0;
+    double t_Pval = 2.5;
+    double t_Ival = .1;
+    // double Ival = 0;
+    double t_Dval = .7;
+    // double Dval = 0;
+    double t_headingVal;
+
+    while (true)
+    {
+      // find the error distance bertween current and target point
+      error = myMath.TwoPointsDistance(X, Y, targetX, targetY);
+
+      // find the intergral part for I
+      if ((speed != 0) && (speed <= 20) && (integral < 1000) && (error < 1000))
+      {
+        integral += error;
+      }
+
+      // find the derivative part for D
+      derivative = error / PIDspeed;
+
+      // PID ALGO
+      speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
+
+      // get current angle
+      double currentAngle = Vincent.get_heading();
+      double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
+
+      // fancy algo
+      double FLAuton = myMath.sRound(
+          myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
+      double FRAuton = myMath.sRound(
+          myMath.multiplier(FRnum, currentAngle, Dangle) * speed, 3);
+      double BLAuton = myMath.sRound(
+          myMath.multiplier(BLnum, currentAngle, Dangle) * speed, 3);
+      double BRAuton = myMath.sRound(
+          myMath.multiplier(BRnum, currentAngle, Dangle) * speed, 3);
+      double under = myMath.greatest(fabs(FLAuton), fabs(FRAuton),
+                                     fabs(BLAuton), fabs(BRAuton)) /
+                     100;
+      FLAuton = (FLAuton / under);
+      FRAuton = (FRAuton / under);
+      BLAuton = (BLAuton / under);
+      BRAuton = (BRAuton / under);
+
+      /*
+      TURNN
+      */
+
+      // update left and right odom values
+      t_headingVal = Vincent.get_rotation();
+
+      // find the error of both sides  for P
+      error = t_turnTarget - t_headingVal;
+
+      // find the intergral part for I
+      // integralone = 0;
+      if ((t_integralone == -4294967295.4294967295) || (t_integralone == 1045))
+      {
+        t_integralone = 0;
+      }
+
+      if (t_motorSpeed <= 20)
+      {
+        t_integralone += t_error;
+      }
+
+      // find the derivative part for D
+      t_Derivative = t_error / t_PIDspeed;
+
+      // PID ALGO
+      t_motorSpeed = (t_error * t_Pval) + (t_integralone * t_Ival) + (t_Derivative * t_Dval);
+
+      // if its above 100%
+      if (t_motorSpeed > 100)
+      {
+        t_motorSpeed = 100;
+      }
+      else if (t_motorSpeed < -100)
+      {
+        t_motorSpeed = -100;
+      }
+
+      // if the pid loop has reached target
+      if ((t_error <= t_tolerance) && (t_error >= -t_tolerance))
+      {
+        t_reachedGoal = true;
+      }
+      else
+      {
+        t_reachedGoal = false;
+      }
+
+      // Drive Bongo
+      Movement.moveFL(FLAuton + t_motorSpeed);
+      Movement.moveFR(FRAuton + t_motorSpeed);
+      Movement.moveBL(BLAuton - t_motorSpeed);
+      Movement.moveBR(BRAuton - t_motorSpeed);
+
+      // if the pid loop has reached target
+      if (((error <= tolerance) && (error >= -tolerance)))
+      {
+        reachedGoal = true;
+      }
+      else
+      {
+        reachedGoal = false;
+      }
+
+      if (reachedGoal && t_reachedGoal)
+      {
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
+        break;
+      }
+
+      delay(PIDspeed);
+    }
+    return 1;
+  }
+
   //update bongo current pos
   static void updatePos(void *)
   {
@@ -249,13 +405,14 @@ public:
     reduce movement whilst turning
     */
     double wheelCircumfrence = 8.65795;
-    double head = Vincent.get_rotation();
+    //offset for auton starting pos
+    double head = Vincent.get_rotation() + 45;
     double rightOdomVal;
     double leftOdomVal;
     //0.055
     double radius = 3.12;
-    double prev = 0;
-    double tolerance = 0.01;
+    //double prev = 0;
+    //double tolerance = 0.01;
     while (true)
     {
       if (isnan(X))
@@ -266,18 +423,18 @@ public:
       {
         Y = 0;
       }
-      head = Vincent.get_rotation();
-      double changePheta = (head - prev);
-      double correction = ((changePheta < tolerance) ? 0 : changePheta) * radius;
-      double initialVal = -rightOdom.get() - correction;
+      //head = Vincent.get_rotation();
+      //double changePheta = (head - prev);
+      //double correction = ((changePheta < tolerance) ? 0 : changePheta) * radius;
+      //double initialVal = -rightOdom.get() - correction;
+      double initialVal = -rightOdom.get();
       rightOdomVal = myMath.toInch(initialVal, wheelCircumfrence);
-      //printf("h %f \n", head);
+      printf("h %f \n", head);
       //printf("P %f \n", prev);
       //printf("CP %f \n", changePheta);
       //printf("c %f  \n", correction);
       //printf("i %f  \n", initialVal);
       //printf("v %f \n", rightOdomVal);
-
       leftOdomVal = leftOdom.get();
 
       // YWhee
@@ -292,9 +449,10 @@ public:
       //debug
 
       // reset
-      prev = head;
+      //prev = head;
       rightOdom.reset();
       leftOdom.reset();
+      head = Vincent.get_rotation() + 45;
       c::task_delay(posDelay);
     }
   }
@@ -472,106 +630,14 @@ public:
 */
   void AutonomousOne()
   {
-    if (teamIsBlue)
-    {
-      // run BLUE SIDE first code
-      if (left)
-      {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(225, degrees);
-        setPos(43, 12);
-
+    Movement.flywheel.flywheelset(true);
+        Movement.flywheel.setSpeed(100);
         // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(32, 26);
         Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(24, 20);
-        delay(9000);
-        PIDMove(28, 24);
-      }
-      else
-      {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(135, degrees);
-        setPos(101, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
         Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(112, 26);
-        Movement.intake.activate(true);
+        delay(1000);
+        //inward
         Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(120, 20);
-        delay(9000);
-        PIDMove(115, 25);
-      }
-    }
-    else
-    {
-      // run RED SIDE first code
-      if (left)
-      {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(225, degrees);
-        setPos(43, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(32, 26);
-        Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(24, 20);
-        delay(9000);
-        PIDMove(28, 24);
-      }
-      else
-      {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(135, degrees);
-        setPos(101, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(112, 26);
-        Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(120, 20);
-        delay(9000);
-        PIDMove(115, 25);
-      }
-    }
   }
 
   void AutonomousTwo()
@@ -583,91 +649,9 @@ public:
       // me hes coming run
       if (left)
       {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(225, degrees);
-        setPos(43, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(32, 26);
-        Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(24, 20);
-
-        // shoot + index
-        delay(500);
-        Movement.uptake.setToggle(false);
-        Movement.flywheel.setSpeed(90);
-        Movement.intake.flush(false);
-        Movement.intake.activate(false);
-
-        // line up to middle tower and line up
-        PIDMove(72.5, 35);
-        PIDTurn(-45);
-
-        /*
-           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-           PIDTurn(45);
-           }
-         */
-
-        // shoot
-        Movement.uptake.setSpeed(100);
-        Movement.intake.activate(true);
-        Movement.uptake.setToggle(true);
       }
       else
       {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(135, degrees);
-        setPos(101, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(112, 26);
-        Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(120, 20);
-
-        // shoot + index
-        delay(500);
-        Movement.uptake.setToggle(false);
-        Movement.flywheel.setSpeed(90);
-        Movement.intake.flush(false);
-        Movement.intake.activate(false);
-
-        // line up to middle tower and line up
-        PIDMove(71.5, 35);
-        PIDTurn(45);
-
-        /*
-           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-           PIDTurn(-45);
-           }
-         */
-
-        // shoot
-        Movement.uptake.setSpeed(100);
-        Movement.intake.activate(true);
-        Movement.uptake.setToggle(true);
       }
     }
     else
@@ -675,91 +659,9 @@ public:
       // run RED SIDE second code
       if (left)
       {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(135, degrees);
-        setPos(101, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(112, 26);
-        Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(120, 20);
-
-        // shoot + index
-        delay(500);
-        Movement.uptake.setToggle(false);
-        Movement.flywheel.setSpeed(90);
-        Movement.intake.flush(false);
-        Movement.intake.activate(false);
-
-        // line up to middle tower and line up
-        PIDMove(71.5, 35);
-        PIDTurn(-45);
-
-        /*
-           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-           PIDTurn(45);
-           }
-         */
-
-        // shoot
-        Movement.uptake.setSpeed(100);
-        Movement.intake.activate(true);
-        Movement.uptake.setToggle(true);
       }
       else
       {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(135, degrees);
-        setPos(101, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(112, 26);
-        Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(120, 20);
-
-        // shoot + index
-        delay(500);
-        Movement.uptake.setToggle(false);
-        Movement.flywheel.setSpeed(90);
-        Movement.intake.flush(false);
-        Movement.intake.activate(false);
-
-        // line up to middle tower and line up
-        PIDMove(71.5, 35);
-        PIDTurn(45);
-
-        /*
-           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-           PIDTurn(-45);
-           }
-         */
-
-        // shoot
-        Movement.uptake.setSpeed(100);
-        Movement.intake.activate(true);
-        Movement.uptake.setToggle(true);
       }
     }
   }
@@ -774,63 +676,6 @@ public:
       }
       else
       {
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(135, degrees);
-        setPos(101, 12);
-
-        // deploy da boi
-        Movement.intake.activate(true, true);
-        Movement.intake.flush(true);
-
-        // in front of tower start intake
-        PIDMove(112, 26);
-        Movement.intake.activate(true);
-        Movement.intake.flush(false);
-        Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(120, 20);
-
-        // shoot + index
-        delay(500);
-        Movement.uptake.setToggle(false);
-        Movement.flywheel.setSpeed(90);
-        Movement.intake.flush(false);
-        Movement.intake.activate(false);
-
-        // line up to middle tower and line up
-        PIDMove(71.5, 35);
-        PIDTurn(45);
-
-        /*
-           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-           PIDTurn(-45);
-           }
-         */
-
-        // shoot
-        Movement.uptake.setSpeed(100);
-        Movement.intake.activate(true);
-        Movement.uptake.setToggle(true);
-        delay(900);
-
-        // stop get some help
-        Movement.intake.flush(false);
-        Movement.intake.activate(false);
-        Movement.uptake.setToggle(false);
-
-        // move to center location between towers and line up
-        Movement.flywheel.setSpeed(100);
-        PIDMove(32, 35);
-        PIDTurn(45);
-        Movement.intake.activate(true);
-        Movement.uptake.setToggle(true);
-        PIDMove(24, 24);
-        PIDTurn(6);
-        Movement.flywheel.setSpeed(40);
       }
     }
     else
@@ -841,64 +686,53 @@ public:
       }
       else
       {
-        // initzilize
+        while (Vincent.is_calibrating())
+        {
+          delay(10);
+        }
         Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(70);
-
-        // Vincent.setHeading(135, degrees);
-        setPos(101, 12);
-
+        Movement.flywheel.setSpeed(100);
         // deploy da boi
-        Movement.intake.activate(true, true);
+        Movement.intake.activate(true);
+        delay(200);
         Movement.intake.flush(true);
 
-        // in front of tower start intake
-        PIDMove(112, 26);
-        Movement.intake.activate(true);
+        //inward
+        Movement.intake.flush(false);
+
+        //set pos middle facing 45 right
+        setPos(82, 18);
+        //halfway inbetween 2 right towers with someadded space
+        PIDMove(108, 32);
+        //turn 90 relative to orgin to tower
+        PIDTurn(90);
+        //go to tower but not in
+        PIDMove(126, 18);
+        //line up
+        Movement.autonLineUpTower();
+        //shoot
         Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
-
-        // in front of side tower
-        PIDMove(120, 20);
-
-        // shoot + index
-        delay(500);
+        delay(3000);
         Movement.uptake.setToggle(false);
-        Movement.flywheel.setSpeed(90);
+        //go to other side of feild
+        PIDMove(36, 48);
+        //turn to opposite tower
+        PIDTurn(180);
+        //go to tower corner
+        PIDMove(18, 18);
+        //line up
+        Movement.autonLineUpTower();
+        //shoot
         Movement.intake.flush(false);
-        Movement.intake.activate(false);
-
-        // line up to middle tower and line up
-        PIDMove(71.5, 35);
-        PIDTurn(45);
-
-        /*
-           EYES.takeSnapshot(EYES__CUSTOM_GREEN);
-           if (!EYES.largestObject.exists && EYES.largestObject.width > 10) {
-           PIDTurn(-45);
-           }
-         */
-
-        // shoot
-        Movement.uptake.setSpeed(100);
-        Movement.intake.activate(true);
         Movement.uptake.setToggle(true);
-        delay(900);
-
-        // stop get some help
-        Movement.intake.flush(false);
-        Movement.intake.activate(false);
+        delay(3000);
+        //get out
         Movement.uptake.setToggle(false);
-
-        // move to center location between towers and line up
-        Movement.flywheel.setSpeed(100);
-        PIDMove(32, 35);
-        PIDTurn(45);
-        Movement.intake.activate(true);
-        Movement.uptake.setToggle(true);
-        PIDMove(24, 24);
-        PIDTurn(6);
-        Movement.flywheel.setSpeed(40);
+        Movement.intake.activate(false);
+        PIDMove(36, 32);
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
       }
     }
   }

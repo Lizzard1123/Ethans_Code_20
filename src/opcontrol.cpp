@@ -19,8 +19,10 @@ void opcontrol() {
     //  Bongo.Movement.customFlush();
     //} else {
     //  Bongo.Movement.customFlushRev();
+    //} AutonomousOne
+    //if (master.get_digital(E_CONTROLLER_DIGITAL_X)) {
+    //  Bongo.AutonomousOne();
     //}
-//
     //change team
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
@@ -28,7 +30,7 @@ void opcontrol() {
 
     //testing turn 360
     //if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_Y)) {
-      //Bongo.PIDTurn(360);
+    //  Bongo.PIDTurn(360);
     //}
 
     // toggle flywheel why do i need this delete?
