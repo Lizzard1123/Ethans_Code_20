@@ -16,7 +16,7 @@ private:
   // global team color of bongo declared in global.cpp
   static bool teamIsBlue;
   // auton selector num
-  int autonCodeNum;
+  int autonCodeNum = 0;
   // bongo has been initialized
   bool initz = false;
   // true if bongo is on left for auton
@@ -24,7 +24,7 @@ private:
   // threshold for detecting ball passing through back
   static const int IntakedarkThreshold = 10;
   // delay between checking outake in ms
-  static const int delayVisionTime = 50;
+  static const int delayVisionTime;
 
 public:
   /*robot subsytems*/
@@ -299,7 +299,6 @@ public:
     }
   }
 
-
   // set current position of bongo
   void setPos(double x, double y)
   {
@@ -324,91 +323,98 @@ public:
   static bool passBall()
   {
     // define precautions if ball doesnt output
-    int maxTime = 1500; //time in ms before shutoff
+    int maxTime = 5000; //time in ms before shutoff
     int maxIterations = maxTime / delayVisionTime;
     int iterations = 0;
-    const int darkThreshold = 2700;
+    const int darkThreshold = 100;
     bool currentBall = false;
 
     while (true)
     {
       // gets current value of reflectivity of line tracker
       // high val == light enviroment
-      double val = outtakeSense.get_value();
-
+      double val = outtakeSense.get_proximity();
+      //printf("value: %d \n", val);
       if (iterations >= maxIterations)
       {
+        printf("end \n");
         break;
       }
       else
       {
         iterations++;
       }
-      
-      //sensor is dark, ball is there
-      if (val <= darkThreshold)
+
+      if (val >= darkThreshold)
       {
         currentBall = true;
       }
-      else if (val >= darkThreshold && currentBall)
+      else if (val <= darkThreshold && currentBall)
       {
         // if the ball has been logged and the value reads light again
         currentBall = false;
+        printf("found \n");
         return false;
       }
-    }
 
-    delay(delayVisionTime);
+      delay(delayVisionTime);
+    }
   }
-  
+
   //handler for the outake process
   static void waitUntilBallPasses()
   {
-    bool reverse = false;
-
-    // sets flywheel to output bottom
-    if (!Movement.flywheel.getToggle())
-    {
-      Movement.flywheel.flywheelset(true);
-      reverse = true;
-    }
-
+    printf("werhg");
+    Movement.flywheel.flywheelset(true);
     //uptake has to go down to output now
     Movement.uptake.setSpeed(30);
-    Movement.uptake.flush(true);
 
     // max flywheel speed
-    Movement.flywheel.setSpeed(100);
-    Movement.flywheel.outputBall(true);
+    //Movement.flywheel.setSpeed(100);
+    Flywheel.move_velocity(myMath.toRPM(true, 100,
+                                        Flywheel.get_gearing()));
+    Movement.customFlush();
 
     // wait until the ball passes the back
     passBall();
 
     // sets flywheel to output top
     Movement.flywheel.setSpeed(Movement.flywheel.speedMedium);
-    Movement.flywheel.outputBall(false);
-
-    // sets flywheel back to original state if needed
-    if (reverse)
-    {
-      Movement.flywheel.flywheelset(false);
-    }
 
     // corrects uptake
-    Movement.uptake.setSpeed(Movement.uptake.getSpeed());
-    Movement.uptake.flush(false);
+    Movement.uptake.setSpeed(100);
+
+    Movement.customFlushRev();
   }
 
   //handle outake checking
   static void handleOutake(void *)
   {
-    // printf("here");
-    if (Police.get_proximity() < 100)
+    int offset = 50;
+    int redTarget = 360;
+    int blueTarget = 200;
+    while (true)
     {
-      printf("triggered");
-      waitUntilBallPasses();
+      // red
+      if (!teamIsBlue)
+      {
+        if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset && Police.get_proximity() > 100)
+        {
+          printf("triggered");
+          waitUntilBallPasses();
+        }
+      }
+      else
+      {
+        if (Police.get_hue() >= blueTarget - offset && Police.get_hue() <= blueTarget + offset && Police.get_proximity() > 100)
+        {
+          printf("triggered");
+          waitUntilBallPasses();
+        }
+      }
+
+      c::task_delay(15);
     }
-    c::task_delay(15);
   }
 
   // change current team (swap) pressing L1 and L2 at same time when called
@@ -420,7 +426,6 @@ public:
       teamIsBlue = !teamIsBlue;
     }
   }
-
 
   //calls upon subsystems and updates them
   static void updateEverything(void *)
@@ -454,13 +459,13 @@ public:
     Task updatePosition(updatePos, nullptr, TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "updatePos");
 
-    //handler for outake 
+    //handler for outake
     Task sort(handleOutake, nullptr, TASK_PRIORITY_DEFAULT,
               TASK_STACK_DEPTH_DEFAULT, "sort");
     initz = true;
   }
 
-/*
+  /*
 
  AUTON MESS
 

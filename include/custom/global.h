@@ -9,10 +9,11 @@
 #define RArmPort 13
 #define FlywheelPort 7
 #define LiftPort 19
-#define PolicePort 20
+#define PolicePort 9
 #define EYESPort 10
 #define Big_BrotherPort 6
 #define IMUPort 8
+#define outtakeSensePort 15
 //motors
 extern Motor FL;
 extern Motor FR;
@@ -41,6 +42,7 @@ extern vision_signature_s_t  EYES__CUSTOM_GREEN;
 
 //opical sensor
 extern Optical Police;
+extern Optical outtakeSense;
 
 //Imu
 extern Imu Vincent;
@@ -52,10 +54,6 @@ extern okapi::ADIEncoder  rightOdom;
 //pots
 extern ADIAnalogIn TeamColor;
 extern ADIAnalogIn AutonNumber;
-
-//line trackers
-extern ADIAnalogIn IntakeSense;
-extern ADIAnalogIn outtakeSense;
 
 //labels debug
 extern lv_obj_t *debugXLabel;

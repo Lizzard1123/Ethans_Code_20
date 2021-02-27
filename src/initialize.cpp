@@ -1,6 +1,5 @@
 // there is no way in hell this is gonna get clean
 #include "custom/autonomous.h"
-#include "custom/screen.h"
 #include "custom/lizzardImg.h"
 
 lv_obj_t *scrColor = lv_obj_create(NULL, NULL);
@@ -917,6 +916,8 @@ void initialize()
   Lift.set_brake_mode(E_MOTOR_BRAKE_HOLD);
   LArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
   RArm.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
+  outtakeSense.set_led_pwm(100);
+  Police.set_led_pwm(100);
   EYES.set_signature(EYES__CUSTOM_GREEN_NUM, &EYES__CUSTOM_GREEN);
   Big_Brother.set_signature(Big_Brother_CUSTOMRED_SIG_NUM, &Big_Brother_CUSTOMRED_SIG);
   Big_Brother.set_signature(Big_Brother_CUSTOMBLUE_SIG_NUM, &Big_Brother_CUSTOMBLUE_SIG);

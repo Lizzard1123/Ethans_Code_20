@@ -16,11 +16,11 @@ void opcontrol() {
     
     //testing new flush
     //if (master.get_digital(E_CONTROLLER_DIGITAL_X)) {
-      //Bongo.Movement.customFlush();
+    //  Bongo.Movement.customFlush();
     //} else {
-      //Bongo.Movement.customFlushRev();
+    //  Bongo.Movement.customFlushRev();
     //}
-
+//
     //change team
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
@@ -55,34 +55,27 @@ void opcontrol() {
       Bongo.Movement.clearRotations();
     }
 
-    if (master.get_digital(E_CONTROLLER_DIGITAL_R1) &&
-        master.get_digital(E_CONTROLLER_DIGITAL_L1)) { // intake
-      Bongo.Movement.uptake.setToggle(true);
-      Bongo.Movement.intake.activate(true);
 
-      // printf("both");
-    } else if (master.get_digital(E_CONTROLLER_DIGITAL_L1)) {
-      Bongo.Movement.intake.activate(true);
-      Bongo.Movement.uptake.setToggle(false);
-
-      // printf("inta");
-    } else if (master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
-      Bongo.Movement.uptake.setToggle(true);
-      Bongo.Movement.intake.activate(false);
-
-      // printf("uptake");
-    } else if (master.get_digital(E_CONTROLLER_DIGITAL_L2)) { // flush
-      Bongo.Movement.flush(true);
-
-      // printf("flush");
-    } else { // nothing
-      Bongo.Movement.flush(false);
-      Bongo.Movement.uptake.setToggle(false);
-      Bongo.Movement.intake.activate(false);
-
-      // printf("none");
+    // intake control
+    if(master.get_digital(E_CONTROLLER_DIGITAL_L1)){
+       Bongo.Movement.intake.activate(true);
+    } else {
+       Bongo.Movement.intake.activate(false);
     }
 
+    // uptake control
+    if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)){
+       Bongo.Movement.uptake.toggle();
+    }
+
+    // flush?
+    if(master.get_digital(E_CONTROLLER_DIGITAL_L2)){
+       Bongo.Movement.intake.flush(true);
+    } else {
+       Bongo.Movement.intake.flush(false);
+    }
+
+    // Flywheel control speed
     if (master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedHigh);
     } else if (master.get_digital(E_CONTROLLER_DIGITAL_Y)) {
@@ -91,9 +84,12 @@ void opcontrol() {
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedMedium);
     }
 
+    //line up with the tower
     if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
       Bongo.Movement.lineUpTower();
     }
+
+    //Line up with the ball
     if(master.get_digital(E_CONTROLLER_DIGITAL_Y)){
       Bongo.Movement.lineUpBall();
     }

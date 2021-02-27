@@ -11,7 +11,7 @@ private:
 public:
 
   double speedLow    = 50;
-  double speedMedium = 45;
+  double speedMedium = 60;
   double speedHigh   = 100;
   Math myMath;
 
@@ -28,6 +28,7 @@ public:
   void update() {
     if (flywheeltoggle) { // change flywheel % in double
       if (currentOutputBall) {
+        printf("Back?");
         Flywheel.move_velocity(myMath.toRPM(true, flywheelspeed,
                                             Flywheel.get_gearing()));
       } else {

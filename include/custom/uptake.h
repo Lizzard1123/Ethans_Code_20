@@ -4,7 +4,7 @@
 class uptakeClass {
 private:
 
-  int liftspeed = 50;
+  int liftspeed = 100;
   bool toggled  = false;
   bool isflush  = false;
 

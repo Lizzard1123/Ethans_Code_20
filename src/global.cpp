@@ -26,27 +26,20 @@ vision_signature_s_t Big_Brother_CUSTOMRED_SIG = Vision::signature_from_utility(
 
 //Optical sensor
 Optical Police(PolicePort);
+Optical outtakeSense(outtakeSensePort);
 
 // Imu
 Imu Vincent(IMUPort);
-
+//
 // Odom
-okapi::ADIEncoder  leftOdom('c', 'd', false);
-okapi::ADIEncoder  rightOdom('g', 'h', false);
-
-// pots
-ADIAnalogIn TeamColor('F');
-ADIAnalogIn AutonNumber('E');
-
-// line trackers
-ADIAnalogIn IntakeSense('A');
-ADIAnalogIn outtakeSense('B');
+okapi::ADIEncoder  leftOdom('a', 'b', false);
+okapi::ADIEncoder  rightOdom('c', 'd', false);
 
 // Staic defines
 RobotMovement Robot::Movement;
 Math Robot::myMath;
-bool Robot::teamIsBlue;
-const int Robot::delayVisionTime;
+bool Robot::teamIsBlue = true;
+const int Robot::delayVisionTime = 50;
 const int Robot::IntakedarkThreshold; 
 const double Robot::posDelay = 1000;
 
