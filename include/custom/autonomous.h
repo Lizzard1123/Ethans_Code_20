@@ -7,12 +7,15 @@
 class Robot
 {
 private:
+  static const double angleOffset;
   // global X pos of bongo declared in global.cpp
   static double X;
   // global Y pos of bongo declared in global.cpp
   static double Y;
   // global position update delay for bongo declared in global.cpp
   static const double posDelay;
+  // global record position state declared in global.cpp
+  static bool recordLocation;
   // global team color of bongo declared in global.cpp
   static bool teamIsBlue;
   // auton selector num
@@ -69,6 +72,16 @@ public:
     return autonCodeNum;
   }
 
+  //returns x variable
+  double getX()
+  {
+    return X;
+  }
+  //returns y variable
+  double getY()
+  {
+    return Y;
+  }
   // returns if bongo is on left during auton
   bool getSide()
   {
@@ -79,7 +92,7 @@ public:
   int PIDMove(double targetX, double targetY, int maxspeed = 100)
   {
     // in ms
-    int PIDspeed = 10;
+    int PIDspeed = 100;
     // tolerance in inches
     double tolerance = 1;
     bool reachedGoal;
@@ -87,7 +100,7 @@ public:
     double error;
     double derivative;
     double integral = 0;
-    double Pval = 3;
+    double Pval = 13;
     double Ival = 0;
     double Dval = 0;
 
@@ -109,7 +122,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Vincent.get_heading() + 45;
+      double currentAngle = Vincent.get_rotation() + angleOffset;
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       // fancy algo
@@ -168,6 +181,7 @@ public:
   // PID syncronous turning TODO merge with movement
   int PIDTurn(double target)
   {
+    recordLocation = false;
     double tolerance = .5;
     int PIDspeed = 10;
     double motorSpeed = 0;
@@ -190,7 +204,7 @@ public:
     while (true)
     {
       // update left and right odom values
-      headingVal = Vincent.get_rotation();
+      headingVal = Vincent.get_rotation() + angleOffset;
       printf("Heading: %f", headingVal);
 
       // find the error of both sides  for P
@@ -244,6 +258,7 @@ public:
         // Vincent.setRotation(0, degrees);
         Movement.moveLeft(0);
         Movement.moveRight(0);
+        recordLocation = true;
         break;
       }
 
@@ -301,7 +316,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Vincent.get_heading();
+      double currentAngle = Vincent.get_heading() + angleOffset;
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       // fancy algo
@@ -326,7 +341,7 @@ public:
       */
 
       // update left and right odom values
-      t_headingVal = Vincent.get_rotation();
+      t_headingVal = Vincent.get_rotation() + angleOffset;
 
       // find the error of both sides  for P
       error = t_turnTarget - t_headingVal;
@@ -396,7 +411,26 @@ public:
     }
     return 1;
   }
-
+  bool untilColorFound(bool isBlue){
+    int offset = 50;
+    int redTarget = 360;
+    int blueTarget = 200;
+    if (!isBlue)
+      {
+        if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset)
+        {
+          return false;
+        }
+      }
+      else
+      {
+        if (Police.get_hue() >= blueTarget - offset && Police.get_hue() <= blueTarget + offset)
+        {
+          return false;
+        }
+      }
+      return true;
+  }
   //update bongo current pos
   static void updatePos(void *)
   {
@@ -406,7 +440,7 @@ public:
     */
     double wheelCircumfrence = 8.65795;
     //offset for auton starting pos
-    double head = Vincent.get_rotation() + 45;
+    double head = Vincent.get_rotation() + angleOffset;
     double rightOdomVal;
     double leftOdomVal;
     //0.055
@@ -436,23 +470,26 @@ public:
       //printf("i %f  \n", initialVal);
       //printf("v %f \n", rightOdomVal);
       leftOdomVal = leftOdom.get();
+      if (recordLocation)
+      {
+        // YWhee
+        Y += rightOdomVal * cos(head * M_PI / 180);
+        X += rightOdomVal * sin(head * M_PI / 180);
 
-      // YWhee
-      Y += rightOdomVal * cos(head * M_PI / 180);
-      X += rightOdomVal * sin(head * M_PI / 180);
+        // X wheel
+        Y -= myMath.toInch(leftOdomVal * sin(head * M_PI / 180),
+                           wheelCircumfrence);
+        X += myMath.toInch(leftOdomVal * cos(head * M_PI / 180),
+                           wheelCircumfrence);
+      }
 
-      // X wheel
-      Y -= myMath.toInch(leftOdomVal * sin(head * M_PI / 180),
-                         wheelCircumfrence);
-      X += myMath.toInch(leftOdomVal * cos(head * M_PI / 180),
-                         wheelCircumfrence);
       //debug
 
       // reset
       //prev = head;
       rightOdom.reset();
       leftOdom.reset();
-      head = Vincent.get_rotation() + 45;
+      head = Vincent.get_rotation() + angleOffset;
       c::task_delay(posDelay);
     }
   }
@@ -471,9 +508,6 @@ public:
     std::string yPos = "Y: " + std::to_string(Y);
     lv_label_set_text(debugXLabel, xPos.c_str());
     lv_label_set_text(debugYLabel, yPos.c_str());
-
-    //printf("current x %f \n", X);
-    //printf("current y %f \n", Y);
     //delay(1000);
   }
 
@@ -631,13 +665,13 @@ public:
   void AutonomousOne()
   {
     Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(100);
-        // deploy da boi
-        Movement.intake.activate(true);
-        Movement.intake.flush(true);
-        delay(1000);
-        //inward
-        Movement.intake.flush(false);
+    Movement.flywheel.setSpeed(100);
+    // deploy da boi
+    Movement.intake.activate(true);
+    Movement.intake.open(true);
+    delay(1000);
+    //inward
+    Movement.intake.open(false);
   }
 
   void AutonomousTwo()
@@ -695,42 +729,49 @@ public:
         // deploy da boi
         Movement.intake.activate(true);
         delay(200);
-        Movement.intake.flush(true);
+        Movement.intake.open(true);
 
         //inward
-        Movement.intake.flush(false);
+        Movement.intake.open(false);
 
-        //set pos middle facing 45 right
-        setPos(82, 18);
+        //set pos right facing inward
+        setPos(122, 10);
         //halfway inbetween 2 right towers with someadded space
-        PIDMove(108, 32);
+        PIDMove(78, 34);
         //turn 90 relative to orgin to tower
-        PIDTurn(90);
-        //go to tower but not in
-        PIDMove(126, 18);
+        PIDTurn(-180);
         //line up
         Movement.autonLineUpTower();
-        //shoot
-        Movement.intake.flush(false);
+        //go to tower but not in
+        Movement.moveLeft(100);
+        Movement.moveRight(100);
+        delay(1000);
+        //cycle
+        Movement.intake.open(false);
         Movement.uptake.setToggle(true);
-        delay(3000);
+        while(untilColorFound(!teamIsBlue)){
+          delay(10);
+        }
+        Movement.intake.open(true);
+        delay(1000);
         Movement.uptake.setToggle(false);
         //go to other side of feild
-        PIDMove(36, 48);
+        PIDMove(42, 42);
         //turn to opposite tower
-        PIDTurn(180);
-        //go to tower corner
-        PIDMove(18, 18);
-        //line up
+        PIDTurn(-135);
+        Movement.intake.open(false);
         Movement.autonLineUpTower();
+        //go to tower corner
+        Movement.moveLeft(100);
+        Movement.moveRight(100);
+        delay(2500);
         //shoot
-        Movement.intake.flush(false);
         Movement.uptake.setToggle(true);
         delay(3000);
         //get out
         Movement.uptake.setToggle(false);
         Movement.intake.activate(false);
-        PIDMove(36, 32);
+        PIDMove(42, 42);
         Movement.moveLeft(0);
         Movement.moveRight(0);
       }

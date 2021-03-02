@@ -10,7 +10,7 @@ private:
   // how much the encodervaleues change the speed
   // one means for every encoder value different add to speed
   double headingScale = .5;
-
+  double angleOffsetMove = -90;
   double LXaxis = 0;
   double LYaxis = 0;
   double RXaxis = 0;
@@ -269,7 +269,7 @@ public:
       }
 
       // current angle
-      double currentAngle = Vincent.get_heading();
+      double currentAngle = Vincent.get_rotation() + angleOffsetMove;
       FLspeed += myMath.sRound(
           myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
       FRspeed += myMath.sRound(
@@ -365,7 +365,7 @@ public:
   // sets intake and uptake to flush if true
   void flush(bool setting)
   {
-    intake.flush(setting);
+    intake.open(setting);
     uptake.flush(setting);
   }
 

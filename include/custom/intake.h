@@ -49,7 +49,7 @@ public:
   }
 
   // sets flush
-  void flush(bool setting) {
+  void open(bool setting) {
     isflush = setting;
   }
 };

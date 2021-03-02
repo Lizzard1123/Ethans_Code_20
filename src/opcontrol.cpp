@@ -26,6 +26,7 @@ void opcontrol() {
     //change team
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
+      Bongo.Autonomous();
     }
 
     //testing turn 360
@@ -72,9 +73,9 @@ void opcontrol() {
 
     // flush?
     if(master.get_digital(E_CONTROLLER_DIGITAL_L2)){
-       Bongo.Movement.intake.flush(true);
+       Bongo.Movement.intake.open(true);
     } else {
-       Bongo.Movement.intake.flush(false);
+       Bongo.Movement.intake.open(false);
     }
 
     // Flywheel control speed
