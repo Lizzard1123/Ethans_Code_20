@@ -926,6 +926,8 @@ void initialize()
   Big_Brother.set_signature(Big_Brother_CUSTOMBLUE_SIG_NUM, &Big_Brother_CUSTOMBLUE_SIG);
 }
 
-void disabled() {}
+void disabled() {
+  Bongo.Movement.stopAll();
+}
 
 void competition_initialize() {}

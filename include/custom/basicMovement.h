@@ -386,9 +386,11 @@ public:
   // stops all movement
   void stopAll()
   {
-    intake.stopBoth();
+    intake.activate(false);
     uptake.setToggle(false);
     flywheel.flywheelset(false);
+    moveLeft(0);
+    moveRight(0);
   }
 };
 #endif // ifndef MOVE

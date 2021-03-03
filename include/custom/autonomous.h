@@ -749,11 +749,11 @@ public:
         //cycle
         Movement.intake.open(false);
         Movement.uptake.setToggle(true);
-        while(untilColorFound(!teamIsBlue)){
+        while(untilColorFound(teamIsBlue)){
           delay(10);
         }
         Movement.intake.open(true);
-        delay(1000);
+        delay(800);
         Movement.uptake.setToggle(false);
         //go to other side of feild
         PIDMove(42, 42);
@@ -764,10 +764,14 @@ public:
         //go to tower corner
         Movement.moveLeft(100);
         Movement.moveRight(100);
-        delay(2500);
+        delay(2000);
         //shoot
         Movement.uptake.setToggle(true);
-        delay(3000);
+        while(untilColorFound(teamIsBlue)){
+          delay(10);
+        }
+        Movement.intake.open(true);
+        delay(1000);
         //get out
         Movement.uptake.setToggle(false);
         Movement.intake.activate(false);
