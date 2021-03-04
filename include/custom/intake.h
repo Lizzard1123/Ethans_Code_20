@@ -5,13 +5,22 @@ class intakeClass {
 private:
 
   double intakespeed = 100;
+  double deg = 0;
   bool isflush       = false;
   bool moving        = false;
   bool opposite      = false;
+  bool keep = false;
+  double pVal = .2;
 
 public:
 
   Math myMath;
+  //target middle
+  double middle = 500;
+  //lower end bound can go lower
+  double small = 0;
+  //higher end bound can go higher
+  double large = 800;
 
   // stops intakes
   void stopBoth() {
@@ -20,32 +29,26 @@ public:
   }
 
   void update() {
-    // if moving and not flushing
-    // spin intakes inward
-    if (moving && !isflush) {
-      // spins left opposite
-      if (opposite) {
-        LArm.move_velocity(myMath.toRPM(true, intakespeed, LArm.get_gearing()));
-      } else {
-        LArm.move_velocity(myMath.toRPM(false, intakespeed, LArm.get_gearing()));
-      }
-      RArm.move_velocity(myMath.toRPM(true, intakespeed, RArm.get_gearing()));
-
-      // if the intakes are flusing  reverse intakes
-    } else if (isflush) {
-      if (opposite) {
-        LArm.move_velocity(myMath.toRPM(false, intakespeed, LArm.get_gearing()));
-      } else {
-        LArm.move_velocity(myMath.toRPM(true, intakespeed, LArm.get_gearing()));
-      }
-      RArm.move_velocity(myMath.toRPM(false, intakespeed, RArm.get_gearing()));
+    if(moving){
+      LArm.move_velocity(myMath.toRPM(isflush, intakespeed, LArm.get_gearing()));
+      RArm.move_velocity(myMath.toRPM(!isflush, intakespeed, RArm.get_gearing()));
+    } else if (keep){
+      //LArm.move_velocity(myMath.toRPM(isflush, pVal * (deg - ), LArm.get_gearing()));
+      RArm.move_velocity(myMath.toRPM((deg - rightArm.get_value()) < 0, fabs(pVal * (deg - rightArm.get_value())), RArm.get_gearing()));
     } else {
       stopBoth();
     }
   }
-
   void activate(bool setting, bool other = false) {
     moving = setting; opposite = other;
+  }
+
+  void keepAtPos(double degg){
+    deg = degg;
+  }
+
+  void holdPos(bool keepp){
+    keep = keepp;
   }
 
   // sets flush

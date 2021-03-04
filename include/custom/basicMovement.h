@@ -7,6 +7,7 @@
 class RobotMovement
 {
 private:
+  //MY NAME IS ETHAN AND IM DUMB
   // how much the encodervaleues change the speed
   // one means for every encoder value different add to speed
   double headingScale = .5;
@@ -197,7 +198,7 @@ public:
   {
     int val = 0;
     int count = 5;
-    int tolerance = 10;
+    int tolerance = 5;
     while (true)
     {
       val = lineUpTower(true);

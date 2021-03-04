@@ -44,6 +44,9 @@ extern vision_signature_s_t  EYES__CUSTOM_GREEN;
 extern Optical Police;
 extern Optical outtakeSense;
 
+//pots
+extern ADIAnalogIn rightArm;
+
 //Imu
 extern Imu Vincent;
 

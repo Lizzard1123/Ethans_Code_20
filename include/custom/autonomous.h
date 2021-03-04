@@ -19,7 +19,7 @@ private:
   // global team color of bongo declared in global.cpp
   static bool teamIsBlue;
   // auton selector num
-  int autonCodeNum = 0;
+  int autonCodeNum = 3;
   // bongo has been initialized
   bool initz = false;
   // true if bongo is on left for auton
@@ -582,13 +582,14 @@ public:
   //handle outake checking
   static void handleOutake(void *)
   {
+    delay(1500);
     int offset = 50;
     int redTarget = 360;
     int blueTarget = 200;
     while (true)
     {
       // red
-      if (!teamIsBlue)
+      if (teamIsBlue)
       {
         if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset && Police.get_proximity() > 100)
         {
@@ -725,38 +726,40 @@ public:
           delay(10);
         }
         Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(100);
+        Movement.flywheel.setSpeed(80);
         // deploy da boi
         Movement.intake.activate(true);
-        delay(200);
+        delay(400);
         Movement.intake.open(true);
-
+        delay(400);
         //inward
         Movement.intake.open(false);
-
         //set pos right facing inward
-        setPos(122, 10);
+        setPos(116, 10);
         //halfway inbetween 2 right towers with someadded space
-        PIDMove(78, 34);
+        PIDMove(75, 34);
         //turn 90 relative to orgin to tower
         PIDTurn(-180);
+        Movement.intake.open(true);
         //line up
         Movement.autonLineUpTower();
         //go to tower but not in
         Movement.moveLeft(100);
         Movement.moveRight(100);
-        delay(1000);
+        delay(800);
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
         //cycle
         Movement.intake.open(false);
         Movement.uptake.setToggle(true);
-        while(untilColorFound(teamIsBlue)){
+        while(untilColorFound(!teamIsBlue)){
           delay(10);
         }
         Movement.intake.open(true);
-        delay(800);
+        delay(500);
         Movement.uptake.setToggle(false);
         //go to other side of feild
-        PIDMove(42, 42);
+        PIDMove(48, 42);
         //turn to opposite tower
         PIDTurn(-135);
         Movement.intake.open(false);
@@ -764,10 +767,12 @@ public:
         //go to tower corner
         Movement.moveLeft(100);
         Movement.moveRight(100);
-        delay(2000);
+        delay(1800);
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
         //shoot
         Movement.uptake.setToggle(true);
-        while(untilColorFound(teamIsBlue)){
+        while(untilColorFound(!teamIsBlue)){
           delay(10);
         }
         Movement.intake.open(true);
@@ -775,9 +780,10 @@ public:
         //get out
         Movement.uptake.setToggle(false);
         Movement.intake.activate(false);
-        PIDMove(42, 42);
+        PIDMove(48, 42);
         Movement.moveLeft(0);
         Movement.moveRight(0);
+        Movement.flywheel.setSpeed(100);
       }
     }
   }

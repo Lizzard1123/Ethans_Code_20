@@ -30,7 +30,10 @@ Optical outtakeSense(outtakeSensePort);
 
 // Imu
 Imu Vincent(IMUPort);
-//
+
+//pots
+ADIAnalogIn rightArm(8);
+
 // Odom
 okapi::ADIEncoder  leftOdom('a', 'b', false);
 okapi::ADIEncoder  rightOdom('c', 'd', true);
@@ -38,7 +41,7 @@ okapi::ADIEncoder  rightOdom('c', 'd', true);
 // Staic defines
 RobotMovement Robot::Movement;
 Math Robot::myMath;
-bool Robot::teamIsBlue = true;
+bool Robot::teamIsBlue = false;
 bool Robot::recordLocation = true;
 const int Robot::delayVisionTime = 50;
 const int Robot::IntakedarkThreshold; 
