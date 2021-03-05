@@ -33,6 +33,7 @@ Imu Vincent(IMUPort);
 
 //pots
 ADIAnalogIn rightArm(8);
+ADIAnalogIn leftArm(7);
 
 // Odom
 okapi::ADIEncoder  leftOdom('a', 'b', false);

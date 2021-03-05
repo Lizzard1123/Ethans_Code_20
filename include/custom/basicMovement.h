@@ -326,6 +326,20 @@ public:
   }
 
   //update left motor side of bongo
+  void moveTimed(double speed, double time)
+  {
+    FL.move_velocity(myMath.toRPM(false, speed, FL.get_gearing()));
+    BL.move_velocity(myMath.toRPM(false, speed, BL.get_gearing()));
+    FR.move_velocity(myMath.toRPM(false, speed, FR.get_gearing()));
+    BR.move_velocity(myMath.toRPM(false, speed, BR.get_gearing()));
+    delay(time);
+    FL.move_velocity(0);
+    BL.move_velocity(0);
+    FR.move_velocity(0);
+    BR.move_velocity(0);
+  }
+
+  //update left motor side of bongo
   void moveLeft(double speed)
   {
     FL.move_velocity(myMath.toRPM(false, speed, FL.get_gearing()));

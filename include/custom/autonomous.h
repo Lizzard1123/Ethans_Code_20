@@ -417,14 +417,14 @@ public:
     int blueTarget = 200;
     if (!isBlue)
       {
-        if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset)
+        if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset && Police.get_proximity() > 100)
         {
           return false;
         }
       }
       else
       {
-        if (Police.get_hue() >= blueTarget - offset && Police.get_hue() <= blueTarget + offset)
+        if (Police.get_hue() >= blueTarget - offset && Police.get_hue() <= blueTarget + offset && Police.get_proximity() > 100)
         {
           return false;
         }
@@ -726,7 +726,7 @@ public:
           delay(10);
         }
         Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(80);
+        Movement.flywheel.setSpeed(60);
         // deploy da boi
         Movement.intake.activate(true);
         delay(400);
@@ -737,18 +737,14 @@ public:
         //set pos right facing inward
         setPos(116, 10);
         //halfway inbetween 2 right towers with someadded space
-        PIDMove(75, 34);
+        PIDMove(76, 34);
         //turn 90 relative to orgin to tower
         PIDTurn(-180);
         Movement.intake.open(true);
         //line up
         Movement.autonLineUpTower();
         //go to tower but not in
-        Movement.moveLeft(100);
-        Movement.moveRight(100);
-        delay(800);
-        Movement.moveLeft(0);
-        Movement.moveRight(0);
+        Movement.moveTimed(100, 800);
         //cycle
         Movement.intake.open(false);
         Movement.uptake.setToggle(true);
@@ -762,16 +758,22 @@ public:
         PIDMove(48, 42);
         //turn to opposite tower
         PIDTurn(-135);
-        Movement.intake.open(false);
+        //go forward a bit then line up
+        Movement.moveTimed(100, 900);
+        //lockarms
+        Movement.intake.activate(false);
+        Movement.intake.holdPos(true);
+        Movement.intake.keepAtPos(Movement.intake.middle);
         Movement.autonLineUpTower();
         //go to tower corner
-        Movement.moveLeft(100);
-        Movement.moveRight(100);
-        delay(1800);
-        Movement.moveLeft(0);
-        Movement.moveRight(0);
+        Movement.moveTimed(100, 900);
         //shoot
         Movement.uptake.setToggle(true);
+        //unlock arms
+        Movement.intake.holdPos(false);
+        Movement.intake.activate(true);
+        Movement.intake.open(false);
+        //cycle
         while(untilColorFound(!teamIsBlue)){
           delay(10);
         }
@@ -783,7 +785,7 @@ public:
         PIDMove(48, 42);
         Movement.moveLeft(0);
         Movement.moveRight(0);
-        Movement.flywheel.setSpeed(100);
+        PIDTurn(0);
       }
     }
   }

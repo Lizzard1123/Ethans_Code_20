@@ -15,15 +15,7 @@ void opcontrol() {
     // change teams
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
-      //Bongo.Autonomous();
-      // gotta test arm first 
-      //check the direction it is going in with the values less than 0 for direction in loop
-      //if have no idea then printf value of pot to see whats up
-      //if(pot.val == 8){
-      // die  
-      //}
-      Bongo.Movement.intake.holdPos(true);
-      Bongo.Movement.intake.keepAtPos(Bongo.Movement.intake.middle);
+      Bongo.Autonomous();
     }
 
     // toggle flywheel why do i need this delete?
@@ -53,21 +45,22 @@ void opcontrol() {
 
     // intake control
     if(master.get_digital(E_CONTROLLER_DIGITAL_L1)){
-       Bongo.Movement.intake.activate(true);
+      Bongo.Movement.intake.holdPos(false);
+      Bongo.Movement.intake.activate(true);
+      Bongo.Movement.intake.open(false);
+    } else if(master.get_digital(E_CONTROLLER_DIGITAL_L2)){
+      Bongo.Movement.intake.holdPos(false);
+      Bongo.Movement.intake.activate(true);
+      Bongo.Movement.intake.open(true);
     } else {
-       Bongo.Movement.intake.activate(false);
+      Bongo.Movement.intake.holdPos(true);
+      Bongo.Movement.intake.activate(false);
+      Bongo.Movement.intake.keepAtPos(Bongo.Movement.intake.middle);
     }
 
     // uptake control
     if(master.get_digital_new_press(E_CONTROLLER_DIGITAL_R1)){
        Bongo.Movement.uptake.toggle();
-    }
-
-    // flush?
-    if(master.get_digital(E_CONTROLLER_DIGITAL_L2)){
-       Bongo.Movement.intake.open(true);
-    } else {
-       Bongo.Movement.intake.open(false);
     }
 
     // Flywheel control speed

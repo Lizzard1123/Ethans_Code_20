@@ -46,6 +46,7 @@ extern Optical outtakeSense;
 
 //pots
 extern ADIAnalogIn rightArm;
+extern ADIAnalogIn leftArm;
 
 //Imu
 extern Imu Vincent;

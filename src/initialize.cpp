@@ -911,8 +911,9 @@ void initialize()
   blackBack();
   loadScreen();
   rightArm.calibrate();
+  leftArm.calibrate();
   printf("Init pot \n");
-  delay(500);
+  delay(250);
   FL.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
   FR.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
   BL.set_brake_mode(E_MOTOR_BRAKE_BRAKE);
