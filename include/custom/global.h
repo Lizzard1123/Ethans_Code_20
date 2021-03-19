@@ -51,6 +51,9 @@ extern ADIAnalogIn leftArm;
 //Imu
 extern Imu Vincent;
 
+//LED
+extern ADIDigitalOut led;
+
 //Odom
 extern okapi::ADIEncoder  leftOdom;
 extern okapi::ADIEncoder  rightOdom;

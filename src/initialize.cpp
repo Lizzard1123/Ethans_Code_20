@@ -897,9 +897,7 @@ void blackBack(){
 void initialize()
 {
   Vincent.reset();
-  while(Vincent.is_calibrating()){
-    delay(10);
-  }
+  Bongo.initThreads();
   lv_init();
   initColor();
   initSide();
@@ -930,7 +928,7 @@ void initialize()
 }
 
 void disabled() {
-  Bongo.Movement.stopAll();
+  //Bongo.Movement.stopAll();
 }
 
 void competition_initialize() {}

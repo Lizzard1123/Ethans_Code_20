@@ -19,6 +19,7 @@ public:
     if (toggled && !isflush) {
       Lift.move_velocity(myMath.toRPM(true, liftspeed, Lift.get_gearing()));
     } else if (isflush) {
+      printf("g;ish");
       Lift.move_velocity(myMath.toRPM(false, liftspeed, Lift.get_gearing()));
     } else {
       stopBoth();

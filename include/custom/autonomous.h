@@ -18,12 +18,14 @@ private:
   static bool recordLocation;
   // global team color of bongo declared in global.cpp
   static bool teamIsBlue;
+  //toggle for pooping
+  static bool ballToggle;
   // auton selector num
   int autonCodeNum = 3;
   // bongo has been initialized
   bool initz = false;
   // true if bongo is on left for auton
-  bool left = false;
+  bool left = true;
   // threshold for detecting ball passing through back
   static const int IntakedarkThreshold = 10;
   // delay between checking outake in ms
@@ -415,16 +417,17 @@ public:
     int offset = 50;
     int redTarget = 360;
     int blueTarget = 200;
-    if (!isBlue)
+    double colorVal = Police.get_hue();
+    if (isBlue)
       {
-        if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset && Police.get_proximity() > 100)
+        if (colorVal <= offset || colorVal >= redTarget - offset && Police.get_proximity() > 100)
         {
           return false;
         }
       }
       else
       {
-        if (Police.get_hue() >= blueTarget - offset && Police.get_hue() <= blueTarget + offset && Police.get_proximity() > 100)
+        if (colorVal >= blueTarget - offset && colorVal <= blueTarget + offset && Police.get_proximity() > 100)
         {
           return false;
         }
@@ -434,6 +437,12 @@ public:
   //update bongo current pos
   static void updatePos(void *)
   {
+    delay(2000);
+        while (Vincent.is_calibrating())
+        {
+          printf("Waitggn");
+          delay(10);
+        }
     /*
     TODO
     reduce movement whilst turning
@@ -463,7 +472,7 @@ public:
       //double initialVal = -rightOdom.get() - correction;
       double initialVal = -rightOdom.get();
       rightOdomVal = myMath.toInch(initialVal, wheelCircumfrence);
-      printf("h %f \n", head);
+      //printf("h %f \n", head);
       //printf("P %f \n", prev);
       //printf("CP %f \n", changePheta);
       //printf("c %f  \n", correction);
@@ -494,6 +503,11 @@ public:
     }
   }
 
+  void toggleEject(){
+    ballToggle = !ballToggle;
+    led.set_value(ballToggle? 0 : 1);
+  }
+
   // set current position of bongo
   void setPos(double x, double y)
   {
@@ -508,7 +522,6 @@ public:
     std::string yPos = "Y: " + std::to_string(Y);
     lv_label_set_text(debugXLabel, xPos.c_str());
     lv_label_set_text(debugYLabel, yPos.c_str());
-    //delay(1000);
   }
 
   // checks to see if a ball has passed TODO make async
@@ -562,9 +575,9 @@ public:
     Movement.uptake.setSpeed(30);
 
     // max flywheel speed
-    //Movement.flywheel.setSpeed(100);
-    Flywheel.move_velocity(myMath.toRPM(true, 100,
-                                        Flywheel.get_gearing()));
+    Movement.flywheel.setSpeed(100);
+    //Flywheel.move_velocity(myMath.toRPM(true, 100,
+    //                                    Flywheel.get_gearing()));
     Movement.customFlush();
 
     // wait until the ball passes the back
@@ -586,26 +599,30 @@ public:
     int offset = 50;
     int redTarget = 360;
     int blueTarget = 200;
+    // while false lol
     while (true)
     {
-      // red
-      if (teamIsBlue)
-      {
-        if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset && Police.get_proximity() > 100)
+      if(ballToggle){
+        // red
+        if (teamIsBlue)
         {
-          printf("triggered");
-          waitUntilBallPasses();
+          if (Police.get_hue() <= offset || Police.get_hue() >= redTarget - offset && Police.get_proximity() > 100)
+          {
+            printf("triggered");
+            waitUntilBallPasses();
+          }
         }
-      }
-      else
-      {
-        if (Police.get_hue() >= blueTarget - offset && Police.get_hue() <= blueTarget + offset && Police.get_proximity() > 100)
+        else
         {
-          printf("triggered");
-          waitUntilBallPasses();
+          if (Police.get_hue() >= blueTarget - offset && Police.get_hue() <= blueTarget + offset && Police.get_proximity() > 100)
+          {
+            printf("triggered");
+            waitUntilBallPasses();
+          }
         }
+      } else {
+        //printf("Disabled");
       }
-
       c::task_delay(15);
     }
   }
@@ -718,6 +735,52 @@ public:
       // run RED SIDE third code
       if (left)
       {
+        //init auton 
+        Vincent.reset();
+        delay(2000);
+        while (Vincent.is_calibrating())
+        {
+          printf("Waitn");
+          delay(10);
+        }
+        Movement.flywheel.flywheelset(true);
+        Movement.flywheel.setSpeed(50);
+        Movement.uptake.setToggle(true);
+        // deploy da boi
+        Movement.intake.activate(true);
+        Movement.intake.open(true);
+        delay(400);
+        Movement.intake.open(false);
+        delay(400);
+        setPos(96, 12);
+        //go to right tower
+        PIDMove(108, 36);
+        PIDTurn(135);
+        //line up
+        //Movement.autonLineUpTower();
+        //go forward with stiff arms
+        Movement.intake.activate(false);
+        Movement.intake.holdPos(true);
+        Movement.intake.keepAtPos(Movement.intake.middle);
+        Movement.moveTimed(100, 1100);
+        //uptake and shoot
+        delay(2000);
+        //backout
+        Movement.moveTimed(-100, 900);
+        //go to opposite side and turn
+        PIDMove(36, 36);
+        PIDTurn(225);
+        //line up
+        //Movement.autonLineUpTower();
+        //go forward and uptake
+        Movement.moveTimed(100, 1000);
+        //uptake
+        delay(2000);
+        //backout and turn to path
+        Movement.moveTimed(-100, 900);
+        Movement.intake.activate(true);
+        Movement.intake.holdPos(false);
+        PIDTurn(360);
       }
       else
       {
@@ -726,7 +789,7 @@ public:
           delay(10);
         }
         Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(60);
+        Movement.flywheel.setSpeed(50);
         // deploy da boi
         Movement.intake.activate(true);
         delay(400);
@@ -735,9 +798,9 @@ public:
         //inward
         Movement.intake.open(false);
         //set pos right facing inward
-        setPos(116, 10);
+        setPos(117, 10);
         //halfway inbetween 2 right towers with someadded space
-        PIDMove(76, 34);
+        PIDMove(72, 34);
         //turn 90 relative to orgin to tower
         PIDTurn(-180);
         Movement.intake.open(true);
@@ -766,7 +829,7 @@ public:
         Movement.intake.keepAtPos(Movement.intake.middle);
         Movement.autonLineUpTower();
         //go to tower corner
-        Movement.moveTimed(100, 900);
+        Movement.moveTimed(100, 1000);
         //shoot
         Movement.uptake.setToggle(true);
         //unlock arms
@@ -782,7 +845,7 @@ public:
         //get out
         Movement.uptake.setToggle(false);
         Movement.intake.activate(false);
-        PIDMove(48, 42);
+        PIDMove(30, 30);
         Movement.moveLeft(0);
         Movement.moveRight(0);
         PIDTurn(0);

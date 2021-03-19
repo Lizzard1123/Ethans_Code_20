@@ -5,8 +5,8 @@ Motor FL(FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 Motor FR(FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
 Motor BL(BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 Motor BR(BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor LArm(LArmPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor RArm(RArmPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
+Motor LArm(LArmPort, E_MOTOR_GEARSET_36, false, E_MOTOR_ENCODER_DEGREES);
+Motor RArm(RArmPort, E_MOTOR_GEARSET_36, false, E_MOTOR_ENCODER_DEGREES);
 Motor Flywheel(FlywheelPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
 Motor Lift(LiftPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
 
@@ -31,6 +31,9 @@ Optical outtakeSense(outtakeSensePort);
 // Imu
 Imu Vincent(IMUPort);
 
+//LED
+ADIDigitalOut led('F', 1);
+
 //pots
 ADIAnalogIn rightArm(8);
 ADIAnalogIn leftArm(7);
@@ -44,10 +47,11 @@ RobotMovement Robot::Movement;
 Math Robot::myMath;
 bool Robot::teamIsBlue = false;
 bool Robot::recordLocation = true;
+bool Robot::ballToggle = false;
 const int Robot::delayVisionTime = 50;
 const int Robot::IntakedarkThreshold; 
 const double Robot::posDelay = 20;
-const double Robot::angleOffset = -90;
+const double Robot::angleOffset = 90;
 
 double Robot::X = 0;
 double Robot::Y = 0;

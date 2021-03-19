@@ -11,7 +11,7 @@ private:
   // how much the encodervaleues change the speed
   // one means for every encoder value different add to speed
   double headingScale = .5;
-  double angleOffsetMove = -90;
+  double angleOffsetMove = 90;
   double LXaxis = 0;
   double LYaxis = 0;
   double RXaxis = 0;
@@ -97,6 +97,7 @@ public:
   {
     // take signature
     vision_object_s_t tower = EYES.get_by_sig(0, EYES__CUSTOM_GREEN_NUM);
+    //error = 100;
     if (tower.width >= widthLimit)
     {
       width = tower.width;
@@ -197,8 +198,8 @@ public:
   void autonLineUpTower()
   {
     int val = 0;
-    int count = 5;
-    int tolerance = 5;
+    int count = 15;
+    int tolerance = 3;
     while (true)
     {
       val = lineUpTower(true);
@@ -387,6 +388,7 @@ public:
   //experimental kinda flush uptake and output w/ flywheel
   void customFlush()
   {
+    printf("Insidf");
     uptake.flush(true);
     flywheel.outputBall(true);
   }
@@ -394,6 +396,7 @@ public:
   //sets uptake flush to false and flywheel output to false
   void customFlushRev()
   {
+    printf("Insidg");
     uptake.flush(false);
     flywheel.outputBall(false);
   }
