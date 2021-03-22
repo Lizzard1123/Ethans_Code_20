@@ -728,6 +728,7 @@ public:
       }
       else
       {
+        
       }
     }
     else
@@ -753,16 +754,16 @@ public:
         Movement.intake.open(false);
         delay(400);
         setPos(96, 12);
+        Movement.intake.activate(false);
+        Movement.intake.holdPos(true);
+        Movement.intake.keepAtPos(Movement.intake.middle);
         //go to right tower
         PIDMove(108, 36);
         PIDTurn(135);
         //line up
         //Movement.autonLineUpTower();
         //go forward with stiff arms
-        Movement.intake.activate(false);
-        Movement.intake.holdPos(true);
-        Movement.intake.keepAtPos(Movement.intake.middle);
-        Movement.moveTimed(100, 1100);
+        Movement.moveTimed(100, 1200);
         //uptake and shoot
         delay(2000);
         //backout
@@ -772,8 +773,9 @@ public:
         PIDTurn(225);
         //line up
         //Movement.autonLineUpTower();
+        Movement.autonLineUpBall();
         //go forward and uptake
-        Movement.moveTimed(100, 1000);
+        Movement.moveTimed(100, 1100);
         //uptake
         delay(2000);
         //backout and turn to path
@@ -784,6 +786,57 @@ public:
       }
       else
       {
+        //init auton 
+        Vincent.reset();
+        delay(2500);
+        while (Vincent.is_calibrating())
+        {
+          printf("Waitn");
+          delay(10);
+        }
+        Movement.flywheel.flywheelset(true);
+        Movement.flywheel.setSpeed(50);
+        //Movement.uptake.setToggle(true);
+        setPos(112, 9);
+        //go to right tower
+        PIDMove(120, 24);
+        // deploy da boi
+        Movement.intake.activate(true);
+        Movement.intake.open(true);
+        delay(400);
+        Movement.intake.open(false);
+        delay(400);
+        Movement.uptake.setToggle(true);
+        Movement.moveTimed(100, 400);
+       
+        while(untilColorFound(teamIsBlue)){
+          delay(10);
+        }
+        Movement.uptake.setToggle(false);
+        PIDMove(72, 36);
+        PIDTurn(180);
+        Movement.uptake.setToggle(true);
+        delay(1000);
+
+        PIDMove(36, 36);
+        PIDTurn(225);
+        //line up
+        //Movement.autonLineUpTower();
+        Movement.autonLineUpBall();
+        //go forward and uptake
+        Movement.moveTimed(100, 1100);
+        //uptake
+        delay(2000);
+        //backout and turn to path
+        Movement.moveTimed(-100, 900);
+        Movement.intake.activate(true);
+        Movement.intake.holdPos(false);
+        PIDTurn(360);
+
+
+
+        /*
+        old
         while (Vincent.is_calibrating())
         {
           delay(10);
@@ -849,6 +902,8 @@ public:
         Movement.moveLeft(0);
         Movement.moveRight(0);
         PIDTurn(0);
+        */
+
       }
     }
   }

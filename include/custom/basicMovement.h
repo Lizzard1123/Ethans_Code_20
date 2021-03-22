@@ -11,7 +11,7 @@ private:
   // how much the encodervaleues change the speed
   // one means for every encoder value different add to speed
   double headingScale = .5;
-  double angleOffsetMove = 90;
+  double angleOffsetMove = 135;
   double LXaxis = 0;
   double LYaxis = 0;
   double RXaxis = 0;

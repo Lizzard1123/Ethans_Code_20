@@ -76,16 +76,16 @@ void opcontrol() {
     if (master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
       Bongo.Movement.uptake.flush(true);
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedHigh);
-    } else if (master.get_digital(E_CONTROLLER_DIGITAL_Y)) {
+    } else if (master.get_digital(E_CONTROLLER_DIGITAL_X)) {
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedLow);
     } else {
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedMedium);
     }
 
-    //line up with the tower
-    if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
-      Bongo.Movement.lineUpTower();
-    }
+    ////line up with the tower
+    //if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
+    //  Bongo.Movement.lineUpTower();
+    //}
 
     //Line up with the ball
     //if(master.get_digital(E_CONTROLLER_DIGITAL_Y)){
