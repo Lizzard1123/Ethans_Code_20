@@ -51,7 +51,7 @@ bool Robot::ballToggle = false;
 const int Robot::delayVisionTime = 50;
 const int Robot::IntakedarkThreshold; 
 const double Robot::posDelay = 20;
-const double Robot::angleOffset = 135;
+const double Robot::angleOffset = 90;
 
 double Robot::X = 0;
 double Robot::Y = 0;

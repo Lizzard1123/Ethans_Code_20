@@ -15,7 +15,7 @@ void opcontrol() {
     // change teams
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
       Bongo.changeTeam();
-      Bongo.Autonomous();
+      //Bongo.Autonomous();
     }
 
     // toggle flywheel why do i need this delete?
@@ -32,7 +32,7 @@ void opcontrol() {
     Bongo.Movement.updateControllerAxis();
 
     // catie control
-    // Bongo.Movement.catieControll();
+    //Bongo.Movement.catieControll();
 
     // cardinal Directions
     if (master.get_digital(E_CONTROLLER_DIGITAL_UP)) {
@@ -73,8 +73,9 @@ void opcontrol() {
     }
 
     // Flywheel control speed
+    //catie fast is x slow is r2
     if (master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
-      Bongo.Movement.uptake.flush(true);
+      //Bongo.Movement.uptake.flush(true);
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedHigh);
     } else if (master.get_digital(E_CONTROLLER_DIGITAL_X)) {
       Bongo.Movement.flywheel.setSpeed(Bongo.Movement.flywheel.speedLow);
@@ -88,9 +89,9 @@ void opcontrol() {
     //}
 
     //Line up with the ball
-    //if(master.get_digital(E_CONTROLLER_DIGITAL_Y)){
-      //Bongo.Movement.lineUpBall();
-    //}
+    if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
+      Bongo.Movement.lineUpTower();
+    }
 
     // starts the spin on motors or cuts power
     Bongo.Movement.move();

@@ -31,6 +31,8 @@ private:
   // delay between checking outake in ms
   static const int delayVisionTime;
 
+  double threshold = 6.5;
+
 public:
   /*robot subsytems*/
   // class handler for movement + other funtions
@@ -434,6 +436,23 @@ public:
       }
       return true;
   }
+  bool untilFlyhweelPower(){
+    double threshold = 8;
+    double val = Flywheel.get_power();
+    if (fabs(val >= threshold))
+    {
+      return false;
+    }
+    return true;
+  }
+  bool untilUptakePower(){
+    double val = Lift.get_power();
+    if (val >= threshold)
+    {
+      return false;
+    }
+    return true;
+  }
   //update bongo current pos
   static void updatePos(void *)
   {
@@ -669,7 +688,7 @@ public:
     Task updatePosition(updatePos, nullptr, TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "updatePos");
 
-    //handler for outake
+    //handler for outakepros
     Task sort(handleOutake, nullptr, TASK_PRIORITY_DEFAULT,
               TASK_STACK_DEPTH_DEFAULT, "sort");
     initz = true;
@@ -677,7 +696,7 @@ public:
 
   /*
 
- AUTON MESS
+ AUTON MESS teztsign new  kernal and clivesuo
 
 */
   void AutonomousOne()
@@ -737,13 +756,13 @@ public:
       if (left)
       {
         //init auton 
-        Vincent.reset();
-        delay(2000);
-        while (Vincent.is_calibrating())
-        {
-          printf("Waitn");
-          delay(10);
-        }
+        //Vincent.reset();
+        //delay(2000);
+        //while (Vincent.is_calibrating())
+        //{
+        //  printf("Waitn");
+        //  delay(10);
+        //}
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(50);
         Movement.uptake.setToggle(true);
@@ -752,158 +771,162 @@ public:
         Movement.intake.open(true);
         delay(400);
         Movement.intake.open(false);
-        delay(400);
-        setPos(96, 12);
-        Movement.intake.activate(false);
-        Movement.intake.holdPos(true);
-        Movement.intake.keepAtPos(Movement.intake.middle);
+        //delay(400);
+        setPos(93, 12);
+        //Movement.intake.activate(false);
+        //Movement.intake.holdPos(true);
+        //Movement.intake.keepAtPos(Movement.intake.middle);
         //go to right tower
-        PIDMove(108, 36);
+        PIDMove(114, 30);
         PIDTurn(135);
+        Movement.autonLineUpBall();
         //line up
         //Movement.autonLineUpTower();
         //go forward with stiff arms
-        Movement.moveTimed(100, 1200);
-        //uptake and shoot
-        delay(2000);
+        //new power cycle
+        //wait until ball inside
+        //Movement.moveTimed(75, 1200);
+        Movement.moveLeft(30);
+        Movement.moveRight(30);
+        while(untilUptakePower()){
+          delay(5);
+        }
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
+        //Movement.intake.open(true);
+        while(untilFlyhweelPower()){
+          delay(5);
+          Movement.lineUpTower(true);
+        }
+        //ball shoots
+        //delay(100);
         //backout
         Movement.moveTimed(-100, 900);
         //go to opposite side and turn
-        PIDMove(36, 36);
+        //PIDTurn(180);
+
+
+        //middle tower
+        PIDMove(79, 40);
+        PIDTurn(135);
+        PIDMove(79, 55);
+
+
+        PIDMove(40, 30);
+        Movement.intake.open(false);
         PIDTurn(225);
         //line up
         //Movement.autonLineUpTower();
         Movement.autonLineUpBall();
         //go forward and uptake
-        Movement.moveTimed(100, 1100);
+        //Movement.moveTimed(75, 1375);
         //uptake
-        delay(2000);
+        
+        Movement.flywheel.setSpeed(50);
+        Movement.moveLeft(20);
+        Movement.moveRight(20);
+        threshold = 7;
+        while(untilUptakePower()){
+          delay(5);
+        }
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
+        //Movement.intake.open(true);
+        while(untilFlyhweelPower()){
+          delay(5);
+          Movement.lineUpTower(true);
+        }
+        
+        Movement.flywheel.setSpeed(45);
         //backout and turn to path
         Movement.moveTimed(-100, 900);
         Movement.intake.activate(true);
         Movement.intake.holdPos(false);
         PIDTurn(360);
+        
       }
       else
       {
         //init auton 
-        Vincent.reset();
-        delay(2500);
-        while (Vincent.is_calibrating())
-        {
-          printf("Waitn");
-          delay(10);
-        }
+        //Vincent.reset();
+        //delay(2000);
+        //while (Vincent.is_calibrating())
+        //{
+        //  printf("Waitn");
+        //  delay(10);
+        //}
         Movement.flywheel.flywheelset(true);
         Movement.flywheel.setSpeed(50);
-        //Movement.uptake.setToggle(true);
-        setPos(112, 9);
-        //go to right tower
-        PIDMove(120, 24);
+        Movement.uptake.setToggle(true);
         // deploy da boi
         Movement.intake.activate(true);
         Movement.intake.open(true);
         delay(400);
         Movement.intake.open(false);
-        delay(400);
-        Movement.uptake.setToggle(true);
-        Movement.moveTimed(100, 400);
-       
-        while(untilColorFound(teamIsBlue)){
-          delay(10);
+        //delay(400);
+        setPos(93, 12);
+        //Movement.intake.activate(false);
+        //Movement.intake.holdPos(true);
+        //Movement.intake.keepAtPos(Movement.intake.middle);
+        //go to right tower
+        PIDMove(114, 30);
+        PIDTurn(135);
+        Movement.autonLineUpBall();
+        //line up
+        //Movement.autonLineUpTower();
+        //go forward with stiff arms
+        //new power cycle
+        //wait until ball inside
+        //Movement.moveTimed(75, 1200);
+        Movement.moveLeft(30);
+        Movement.moveRight(30);
+        while(untilUptakePower()){
+          delay(5);
         }
-        Movement.uptake.setToggle(false);
-        PIDMove(72, 36);
-        PIDTurn(180);
-        Movement.uptake.setToggle(true);
-        delay(1000);
-
-        PIDMove(36, 36);
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
+        //Movement.intake.open(true);
+        while(untilFlyhweelPower()){
+          delay(5);
+          Movement.lineUpTower(true);
+        }
+        //ball shoots
+        //delay(100);
+        //backout
+        Movement.moveTimed(-100, 900);
+        //go to opposite side and turn
+        //PIDTurn(180);
+        PIDMove(40, 30);
+        Movement.intake.open(false);
         PIDTurn(225);
         //line up
         //Movement.autonLineUpTower();
         Movement.autonLineUpBall();
         //go forward and uptake
-        Movement.moveTimed(100, 1100);
+        //Movement.moveTimed(75, 1375);
         //uptake
-        delay(2000);
+        
+        Movement.flywheel.setSpeed(50);
+        Movement.moveLeft(20);
+        Movement.moveRight(20);
+        threshold = 7;
+        while(untilUptakePower()){
+          delay(5);
+        }
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
+        //Movement.intake.open(true);
+        while(untilFlyhweelPower()){
+          delay(5);
+          Movement.lineUpTower(true);
+        }
+        
+        Movement.flywheel.setSpeed(45);
         //backout and turn to path
         Movement.moveTimed(-100, 900);
         Movement.intake.activate(true);
         Movement.intake.holdPos(false);
         PIDTurn(360);
-
-
-
-        /*
-        old
-        while (Vincent.is_calibrating())
-        {
-          delay(10);
-        }
-        Movement.flywheel.flywheelset(true);
-        Movement.flywheel.setSpeed(50);
-        // deploy da boi
-        Movement.intake.activate(true);
-        delay(400);
-        Movement.intake.open(true);
-        delay(400);
-        //inward
-        Movement.intake.open(false);
-        //set pos right facing inward
-        setPos(117, 10);
-        //halfway inbetween 2 right towers with someadded space
-        PIDMove(72, 34);
-        //turn 90 relative to orgin to tower
-        PIDTurn(-180);
-        Movement.intake.open(true);
-        //line up
-        Movement.autonLineUpTower();
-        //go to tower but not in
-        Movement.moveTimed(100, 800);
-        //cycle
-        Movement.intake.open(false);
-        Movement.uptake.setToggle(true);
-        while(untilColorFound(!teamIsBlue)){
-          delay(10);
-        }
-        Movement.intake.open(true);
-        delay(500);
-        Movement.uptake.setToggle(false);
-        //go to other side of feild
-        PIDMove(48, 42);
-        //turn to opposite tower
-        PIDTurn(-135);
-        //go forward a bit then line up
-        Movement.moveTimed(100, 900);
-        //lockarms
-        Movement.intake.activate(false);
-        Movement.intake.holdPos(true);
-        Movement.intake.keepAtPos(Movement.intake.middle);
-        Movement.autonLineUpTower();
-        //go to tower corner
-        Movement.moveTimed(100, 1000);
-        //shoot
-        Movement.uptake.setToggle(true);
-        //unlock arms
-        Movement.intake.holdPos(false);
-        Movement.intake.activate(true);
-        Movement.intake.open(false);
-        //cycle
-        while(untilColorFound(!teamIsBlue)){
-          delay(10);
-        }
-        Movement.intake.open(true);
-        delay(1000);
-        //get out
-        Movement.uptake.setToggle(false);
-        Movement.intake.activate(false);
-        PIDMove(30, 30);
-        Movement.moveLeft(0);
-        Movement.moveRight(0);
-        PIDTurn(0);
-        */
-
       }
     }
   }

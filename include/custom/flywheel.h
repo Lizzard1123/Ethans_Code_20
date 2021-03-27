@@ -10,8 +10,8 @@ private:
 
 public:
 
-  double speedLow    = 50;
-  double speedMedium = 60;
+  double speedLow    = 45;
+  double speedMedium = 55;
   double speedHigh   = 100;
   Math myMath;
 

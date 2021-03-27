@@ -2,6 +2,126 @@
 //if 0 means dont compile inside
 #if 0
 //newer at top
+
+//init auton 
+        //Vincent.reset();
+        //delay(2500);
+        //while (Vincent.is_calibrating())
+        //{
+        //  printf("Waitn");
+        //  delay(10);
+        //}
+        Movement.flywheel.flywheelset(true);
+        Movement.flywheel.setSpeed(50);
+        //Movement.uptake.setToggle(true);
+        setPos(112, 9);
+        //go to right tower
+        PIDMove(120, 24);
+        // deploy da boi
+        Movement.intake.activate(true);
+        Movement.intake.open(true);
+        delay(400);
+        Movement.intake.open(false);
+        delay(400);
+        Movement.uptake.setToggle(true);
+        Movement.moveTimed(100, 400);
+       
+        while(untilColorFound(teamIsBlue)){
+          delay(10);
+        }
+        Movement.uptake.setToggle(false);
+        PIDMove(72, 36);
+        PIDTurn(180);
+        Movement.uptake.setToggle(true);
+        delay(1000);
+
+        PIDMove(36, 36);
+        PIDTurn(225);
+        //line up
+        //Movement.autonLineUpTower();
+        Movement.autonLineUpBall();
+        //go forward and uptake
+        Movement.moveTimed(100, 1100);
+        //uptake
+        delay(2000);
+        //backout and turn to path
+        Movement.moveTimed(-100, 900);
+        Movement.intake.activate(true);
+        Movement.intake.holdPos(false);
+        PIDTurn(360);
+
+
+
+        /*
+        old
+        while (Vincent.is_calibrating())
+        {
+          delay(10);
+        }
+        Movement.flywheel.flywheelset(true);
+        Movement.flywheel.setSpeed(50);
+        // deploy da boi
+        Movement.intake.activate(true);
+        delay(400);
+        Movement.intake.open(true);
+        delay(400);
+        //inward
+        Movement.intake.open(false);
+        //set pos right facing inward
+        setPos(117, 10);
+        //halfway inbetween 2 right towers with someadded space
+        PIDMove(72, 34);
+        //turn 90 relative to orgin to tower
+        PIDTurn(-180);
+        Movement.intake.open(true);
+        //line up
+        Movement.autonLineUpTower();
+        //go to tower but not in
+        Movement.moveTimed(100, 800);
+        //cycle
+        Movement.intake.open(false);
+        Movement.uptake.setToggle(true);
+        while(untilColorFound(!teamIsBlue)){
+          delay(10);
+        }
+        Movement.intake.open(true);
+        delay(500);
+        Movement.uptake.setToggle(false);
+        //go to other side of feild
+        PIDMove(48, 42);
+        //turn to opposite tower
+        PIDTurn(-135);
+        //go forward a bit then line up
+        Movement.moveTimed(100, 900);
+        //lockarms
+        Movement.intake.activate(false);
+        Movement.intake.holdPos(true);
+        Movement.intake.keepAtPos(Movement.intake.middle);
+        Movement.autonLineUpTower();
+        //go to tower corner
+        Movement.moveTimed(100, 1000);
+        //shoot
+        Movement.uptake.setToggle(true);
+        //unlock arms
+        Movement.intake.holdPos(false);
+        Movement.intake.activate(true);
+        Movement.intake.open(false);
+        //cycle
+        while(untilColorFound(!teamIsBlue)){
+          delay(10);
+        }
+        Movement.intake.open(true);
+        delay(1000);
+        //get out
+        Movement.uptake.setToggle(false);
+        Movement.intake.activate(false);
+        PIDMove(30, 30);
+        Movement.moveLeft(0);
+        Movement.moveRight(0);
+        PIDTurn(0);
+        */
+
+       
     // motivational lizard + cosmetics
     // Brain.Screen.drawImageFromFile("Lizzard.png", 0, 0);
     // start pooper vision

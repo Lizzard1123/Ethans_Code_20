@@ -11,7 +11,7 @@ private:
   // how much the encodervaleues change the speed
   // one means for every encoder value different add to speed
   double headingScale = .5;
-  double angleOffsetMove = 135;
+  double angleOffsetMove = 90;
   double LXaxis = 0;
   double LYaxis = 0;
   double RXaxis = 0;
@@ -42,17 +42,21 @@ private:
   double targetCX;
   double CX;
   double width;
-  double Pval = .55;
+  double error_past = 0;
+  double Dval = 2;
+  double Pval = .3;
   double widthLimit = 20;
 
   //ball PID vars
   // more goes to the right
-  double ball_offset = 100;
+  double ball_offset = 150;
   double ball_error;
   double ball_targetCX;
   double ball_CX;
   double ball_width;
-  double ball_Pval = .29;
+  double ball_error_past = 0;
+  double ball_Dval = 2;
+  double ball_Pval = .2;
   double ball_widthLimit = 20;
 
   //deadzone : min num to be detected from joystick
@@ -106,10 +110,10 @@ public:
       printf("Error: %f", error);
       targetCX = -1.3286 * width + 140.619 + offset;
       error = CX - targetCX;
-      FLspeed += Pval * error;
-      FRspeed -= Pval * error;
-      BLspeed += Pval * error;
-      BRspeed -= Pval * error;
+      FLspeed += (Pval * error + Dval * ((error - error_past) / 5)/*time delay*/);
+      FRspeed -= (Pval * error + Dval * ((error - error_past) / 5)/*time delay*/);
+      BLspeed += (Pval * error + Dval * ((error - error_past) / 5)/*time delay*/);
+      BRspeed -= (Pval * error + Dval * ((error - error_past) / 5)/*time delay*/);
       if (set)
       {
         moveFL(Pval * error);
@@ -117,6 +121,7 @@ public:
         moveBL(Pval * error);
         moveBR(Pval * -error);
       }
+      error_past = error;
     }
     return error;
   }
@@ -137,10 +142,10 @@ public:
       ball_targetCX = 158 - ball_CX + ball_offset;
       ball_error = ball_CX - ball_targetCX;
       printf("ball_error: %f \n", ball_error);
-      FLspeed += ball_Pval * ball_error;
-      FRspeed -= ball_Pval * ball_error;
-      BLspeed += ball_Pval * ball_error;
-      BRspeed -= ball_Pval * ball_error;
+      FLspeed += (ball_Pval * ball_error + ball_Dval * ((ball_error - ball_error_past) / 5)/*time delay*/);
+      FRspeed -= (ball_Pval * ball_error + ball_Dval * ((ball_error - ball_error_past) / 5)/*time delay*/);
+      BLspeed += (ball_Pval * ball_error + ball_Dval * ((ball_error - ball_error_past) / 5)/*time delay*/);
+      BRspeed -= (ball_Pval * ball_error + ball_Dval * ((ball_error - ball_error_past) / 5)/*time delay*/);
       if (set)
       {
         moveFL(ball_Pval * ball_error);
@@ -148,6 +153,7 @@ public:
         moveBL(ball_Pval * ball_error);
         moveBR(ball_Pval * -ball_error);
       }
+      ball_error_past = ball_error;
     }
     else if (BLUEBALL.width >= ball_widthLimit)
     {
@@ -177,7 +183,7 @@ public:
   void autonLineUpBall()
   {
     int val = 0;
-    int count = 0;
+    int count = 3;
     int tolerance = 3;
     while (true)
     {
@@ -198,7 +204,7 @@ public:
   void autonLineUpTower()
   {
     int val = 0;
-    int count = 15;
+    int count = 3;
     int tolerance = 3;
     while (true)
     {
