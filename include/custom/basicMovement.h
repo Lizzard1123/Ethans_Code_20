@@ -10,8 +10,9 @@ private:
   //MY NAME IS ETHAN AND IM DUMB
   // how much the encodervaleues change the speed
   // one means for every encoder value different add to speed
+  //heading of bongo
+  double rotation = 0;
   double headingScale = .5;
-  double angleOffsetMove = 90;
   double LXaxis = 0;
   double LYaxis = 0;
   double RXaxis = 0;
@@ -277,7 +278,7 @@ public:
       }
 
       // current angle
-      double currentAngle = Vincent.get_rotation() + angleOffsetMove;
+      double currentAngle = rotation;
       FLspeed += myMath.sRound(
           myMath.multiplier(FLnum, currentAngle, Dangle) * speed, 3);
       FRspeed += myMath.sRound(
@@ -416,5 +417,15 @@ public:
     moveLeft(0);
     moveRight(0);
   }
+  
+  double setRotation(double val){
+    rotation = val;
+  }
+
+  //returns bongo's orientation
+  double getRotation(){
+    return rotation;
+  }
+
 };
 #endif // ifndef MOVE

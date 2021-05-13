@@ -53,6 +53,7 @@ extern ADIDigitalOut led;
 //Odom
 extern okapi::ADIEncoder  leftOdom;
 extern okapi::ADIEncoder  rightOdom;
+extern okapi::ADIEncoder  middleOdom;
 
 //pots
 extern ADIAnalogIn TeamColor;

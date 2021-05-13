@@ -7,7 +7,6 @@
 class Robot
 {
 private:
-  static const double angleOffset;
   // global X pos of bongo declared in global.cpp
   static double X;
   // global Y pos of bongo declared in global.cpp
@@ -126,7 +125,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Vincent.get_rotation() + angleOffset;
+      double currentAngle = Movement.getRotation();
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       // fancy algo
@@ -208,7 +207,7 @@ public:
     while (true)
     {
       // update left and right odom values
-      headingVal = Vincent.get_rotation() + angleOffset;
+      headingVal = Movement.getRotation();
       printf("Heading: %f", headingVal);
 
       // find the error of both sides  for P
@@ -259,7 +258,6 @@ public:
 
       if (reachedGoal)
       {
-        // Vincent.setRotation(0, degrees);
         Movement.moveLeft(0);
         Movement.moveRight(0);
         recordLocation = true;
@@ -320,7 +318,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Vincent.get_heading() + angleOffset;
+      double currentAngle = Movement.getRotation();
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       // fancy algo
@@ -345,7 +343,7 @@ public:
       */
 
       // update left and right odom values
-      t_headingVal = Vincent.get_rotation() + angleOffset;
+      t_headingVal = Movement.getRotation();
 
       // find the error of both sides  for P
       error = t_turnTarget - t_headingVal;
@@ -468,27 +466,15 @@ public:
   //update bongo current pos
   static void updatePos(void *)
   {
-    delay(2000);
-    while (Vincent.is_calibrating())
-    {
-      printf("Waitggn");
-      delay(10);
-    }
-    /*
-    TODO
-    reduce movement whilst turning
-    */
-    double wheelCircumfrence = 8.65795;
-    //offset for auton starting pos
-    double head = Vincent.get_rotation() + angleOffset;
+    double wheelCircumfrence = 10.11;
+    double wheelSmallCircumfrence = 8.65795;
+    double head = Movement.getRotation();
     double rightOdomVal;
     double leftOdomVal;
-    //0.055
-    double radius = 3.12;
-    //double prev = 0;
-    //double tolerance = 0.01;
+    double middleOdomVal;
     while (true)
     {
+      //just in case i forget to code properly
       if (isnan(X))
       {
         X = 0;
@@ -497,39 +483,32 @@ public:
       {
         Y = 0;
       }
-      //head = Vincent.get_rotation();
-      //double changePheta = (head - prev);
-      //double correction = ((changePheta < tolerance) ? 0 : changePheta) * radius;
-      //double initialVal = -rightOdom.get() - correction;
-      double initialVal = -rightOdom.get();
-      rightOdomVal = myMath.toInch(initialVal, wheelCircumfrence);
-      //printf("h %f \n", head);
-      //printf("P %f \n", prev);
-      //printf("CP %f \n", changePheta);
-      //printf("c %f  \n", correction);
-      //printf("i %f  \n", initialVal);
-      //printf("v %f \n", rightOdomVal);
-      leftOdomVal = leftOdom.get();
+      //update heading part
+
+      //find isolated forward and sideways movement
+      double forwardMovement = (rightOdom.get() - leftOdom.get())/2;
+      double sidewaysMovement = middleOdom.get();
+      //to distance
+      forwardMovement = myMath.toInch(forwardMovement, wheelCircumfrence);
+      sidewaysMovement = myMath.toInch(sidewaysMovement, wheelSmallCircumfrence);
+
       if (recordLocation)
       {
         // YWhee
-        Y += rightOdomVal * cos(head * M_PI / 180);
-        X += rightOdomVal * sin(head * M_PI / 180);
+        Y += forwardMovement * cos(head * M_PI / 180);
+        X += forwardMovement * sin(head * M_PI / 180);
 
         // X wheel
-        Y -= myMath.toInch(leftOdomVal * sin(head * M_PI / 180),
-                           wheelCircumfrence);
-        X += myMath.toInch(leftOdomVal * cos(head * M_PI / 180),
-                           wheelCircumfrence);
+        Y -= sidewaysMovement * sin(head * M_PI / 180);
+        X += sidewaysMovement * cos(head * M_PI / 180);
       }
-
       //debug
 
       // reset
-      //prev = head;
       rightOdom.reset();
       leftOdom.reset();
-      head = Vincent.get_rotation() + angleOffset;
+      middleOdom.reset();
+      head = Movement.getRotation();
       c::task_delay(posDelay);
     }
   }
@@ -697,16 +676,16 @@ public:
   void initThreads()
   {
     // control updates from intake uptake flywheel
-    Task control(updateEverything, nullptr, TASK_PRIORITY_DEFAULT,
-                 TASK_STACK_DEPTH_DEFAULT, "control");
+    //Task control(updateEverything, nullptr, TASK_PRIORITY_DEFAULT,
+    //             TASK_STACK_DEPTH_DEFAULT, "control");
 
     // track location
     Task updatePosition(updatePos, nullptr, TASK_PRIORITY_DEFAULT,
                         TASK_STACK_DEPTH_DEFAULT, "updatePos");
 
     //handler for outakepros
-    Task sort(handleOutake, nullptr, TASK_PRIORITY_DEFAULT,
-              TASK_STACK_DEPTH_DEFAULT, "sort");
+    //Task sort(handleOutake, nullptr, TASK_PRIORITY_DEFAULT,
+    //          TASK_STACK_DEPTH_DEFAULT, "sort");
     initz = true;
   }
 
@@ -729,14 +708,6 @@ public:
 
   void AutonomousTwo()
   {
-    //init auton
-    //Vincent.reset();
-    //delay(2000);
-    //while (Vincent.is_calibrating())
-    //{
-    //  printf("Waitn");
-    //  delay(10);
-    //}
     Movement.flywheel.flywheelset(true);
     Movement.flywheel.setSpeed(50);
     Movement.uptake.setToggle(true);
@@ -817,15 +788,6 @@ public:
 
   void AutonomousThree()
   {
-
-    //init auton
-    //Vincent.reset();
-    //delay(2000);
-    //while (Vincent.is_calibrating())
-    //{
-    //  printf("Waitn");
-    //  delay(10);
-    //}
     Movement.flywheel.flywheelset(true);
     Movement.flywheel.setSpeed(50);
     Movement.uptake.setToggle(true);

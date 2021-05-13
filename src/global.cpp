@@ -40,7 +40,8 @@ ADIAnalogIn leftArm(7);
 
 // Odom
 okapi::ADIEncoder  leftOdom('a', 'b', false);
-okapi::ADIEncoder  rightOdom('c', 'd', true);
+okapi::ADIEncoder  rightOdom('c', 'd', false);
+okapi::ADIEncoder  middleOdom('e', 'f', false);
 
 // Staic defines
 RobotMovement Robot::Movement;
@@ -51,7 +52,6 @@ bool Robot::ballToggle = false;
 const int Robot::delayVisionTime = 50;
 const int Robot::IntakedarkThreshold; 
 const double Robot::posDelay = 20;
-const double Robot::angleOffset = 90;
 
 double Robot::X = 0;
 double Robot::Y = 0;
