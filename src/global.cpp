@@ -47,7 +47,6 @@ okapi::ADIEncoder  middleOdom('e', 'f', false);
 RobotMovement Robot::Movement;
 Math Robot::myMath;
 bool Robot::teamIsBlue = false;
-bool Robot::recordLocation = true;
 bool Robot::ballToggle = false;
 const int Robot::delayVisionTime = 50;
 const int Robot::IntakedarkThreshold; 

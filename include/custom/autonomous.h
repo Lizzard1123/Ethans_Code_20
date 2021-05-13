@@ -13,8 +13,6 @@ private:
   static double Y;
   // global position update delay for bongo declared in global.cpp
   static const double posDelay;
-  // global record position state declared in global.cpp
-  static bool recordLocation;
   // global team color of bongo declared in global.cpp
   static bool teamIsBlue;
   //toggle for pooping
@@ -184,7 +182,6 @@ public:
   // PID syncronous turning TODO merge with movement
   int PIDTurn(double target)
   {
-    recordLocation = false;
     double tolerance = .5;
     int PIDspeed = 10;
     double motorSpeed = 0;
@@ -260,7 +257,6 @@ public:
       {
         Movement.moveLeft(0);
         Movement.moveRight(0);
-        recordLocation = true;
         break;
       }
 
@@ -445,12 +441,14 @@ public:
     {
       count = 0;
       return false;
-    } else if (val >= threshold){
+    }
+    else if (val >= threshold)
+    {
       count++;
     }
     return true;
   }
-  
+
   bool untilUptakePower()
   {
     double val = Lift.get_power();
@@ -458,7 +456,9 @@ public:
     {
       count = 0;
       return false;
-    } else if (val >= threshold){
+    }
+    else if (val >= threshold)
+    {
       count++;
     }
     return true;
@@ -466,8 +466,11 @@ public:
   //update bongo current pos
   static void updatePos(void *)
   {
+    //I derived the original formula and for the reiteration and added wheel i combined it with work done here
+    //https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-186-mobile-autonomous-systems-laboratory-january-iap-2005/study-materials/odomtutorial.pdf
     double wheelCircumfrence = 10.11;
     double wheelSmallCircumfrence = 8.65795;
+    double wheelSeperation = 5;
     double head = Movement.getRotation();
     double rightOdomVal;
     double leftOdomVal;
@@ -484,24 +487,24 @@ public:
         Y = 0;
       }
       //update heading part
-
+      double changeOfHeading = (rightOdom.get() - leftOdom.get()) / wheelSeperation;
+      Movement.setRotation(Movement.getRotation() + changeOfHeading);
       //find isolated forward and sideways movement
-      double forwardMovement = (rightOdom.get() - leftOdom.get())/2;
+      double forwardMovement = (rightOdom.get() - leftOdom.get()) / 2;
       double sidewaysMovement = middleOdom.get();
       //to distance
       forwardMovement = myMath.toInch(forwardMovement, wheelCircumfrence);
       sidewaysMovement = myMath.toInch(sidewaysMovement, wheelSmallCircumfrence);
 
-      if (recordLocation)
-      {
-        // YWhee
-        Y += forwardMovement * cos(head * M_PI / 180);
-        X += forwardMovement * sin(head * M_PI / 180);
-
-        // X wheel
-        Y -= sidewaysMovement * sin(head * M_PI / 180);
-        X += sidewaysMovement * cos(head * M_PI / 180);
-      }
+      // forward wheels in relation to coordinates
+      //HEY YOU
+      //mit student says switch cos and sin on these here if your code breaks its bc hes smarter than you and you need to fix this
+      Y += forwardMovement * cos(head * M_PI / 180);
+      X += forwardMovement * sin(head * M_PI / 180);
+      //crackhead
+      // sideways wheel in relation to cooridantes
+      Y -= sidewaysMovement * sin(head * M_PI / 180);
+      X += sidewaysMovement * cos(head * M_PI / 180);
       //debug
 
       // reset
@@ -531,8 +534,10 @@ public:
   {
     std::string xPos = "X: " + std::to_string(X);
     std::string yPos = "Y: " + std::to_string(Y);
+    std::string roationPos = "roation: " + std::to_string(Movement.getRotation());
     lv_label_set_text(debugXLabel, xPos.c_str());
     lv_label_set_text(debugYLabel, yPos.c_str());
+    lv_label_set_text(debugRotationLabel, roationPos.c_str());
   }
 
   // checks to see if a ball has passed TODO make async

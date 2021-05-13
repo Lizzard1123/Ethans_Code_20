@@ -150,6 +150,10 @@ lv_obj_t *debugY = lv_obj_create(scrDebug, NULL);
 
 lv_obj_t *debugYLabel = lv_label_create(debugY, NULL);
 
+lv_obj_t *debugRotation = lv_obj_create(scrDebug, NULL);
+
+lv_obj_t *debugRotationLabel = lv_label_create(debugY, NULL);
+
 bool colorSelected = false;
 bool sideSelected = false;
 bool autonSelected = false;
