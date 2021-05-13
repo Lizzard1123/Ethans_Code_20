@@ -1,18 +1,17 @@
 #ifndef GLOBAL
 #define GLOBAL
 #include "main.h"
-#define FLPort 20
-#define FRPort 16
-#define BLPort 17
-#define BRPort 18
-#define LArmPort 1
+#define FLPort 5 //20
+#define FRPort 2//16
+#define BLPort 1 //17
+#define BRPort 9 //18
+#define LArmPort 12
 #define RArmPort 13
 #define FlywheelPort 7
 #define LiftPort 19
 #define PolicePort 14
-#define EYESPort 10
-#define Big_BrotherPort 6
-#define IMUPort 8
+#define EYESPort 11
+#define Big_BrotherPort 10//6
 #define outtakeSensePort 15
 //motors
 extern Motor FL;
@@ -47,9 +46,6 @@ extern Optical outtakeSense;
 //pots
 extern ADIAnalogIn rightArm;
 extern ADIAnalogIn leftArm;
-
-//Imu
-extern Imu Vincent;
 
 //LED
 extern ADIDigitalOut led;

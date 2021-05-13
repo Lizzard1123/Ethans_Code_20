@@ -575,7 +575,7 @@ public:
       if (iterations >= maxIterations)
       {
         printf("end \n");
-        break;
+        return false;
       }
       else
       {

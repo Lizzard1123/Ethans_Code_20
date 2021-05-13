@@ -1,10 +1,10 @@
 #include "custom/autonomous.h"
 
 // motors
-Motor FL(FLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor FR(FRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
-Motor BL(BLPort, E_MOTOR_GEARSET_18, false, E_MOTOR_ENCODER_DEGREES);
-Motor BR(BRPort, E_MOTOR_GEARSET_18, true, E_MOTOR_ENCODER_DEGREES);
+Motor FL(FLPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+Motor FR(FRPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
+Motor BL(BLPort, E_MOTOR_GEARSET_06, false, E_MOTOR_ENCODER_DEGREES);
+Motor BR(BRPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
 Motor LArm(LArmPort, E_MOTOR_GEARSET_36, false, E_MOTOR_ENCODER_DEGREES);
 Motor RArm(RArmPort, E_MOTOR_GEARSET_36, false, E_MOTOR_ENCODER_DEGREES);
 Motor Flywheel(FlywheelPort, E_MOTOR_GEARSET_06, true, E_MOTOR_ENCODER_DEGREES);
@@ -30,9 +30,6 @@ vision_signature_s_t Big_Brother_CUSTOMRED_SIG = Vision::signature_from_utility(
 //Optical sensor
 Optical Police(PolicePort);
 Optical outtakeSense(outtakeSensePort);
-
-// Imu
-Imu Vincent(IMUPort);
 
 //LED
 ADIDigitalOut led('F', 1);

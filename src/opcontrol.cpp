@@ -89,9 +89,9 @@ void opcontrol() {
     //}
 
     //Line up with the ball
-    //if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
-    //  Bongo.Movement.lineUpTower();
-    //}
+    if(master.get_digital(E_CONTROLLER_DIGITAL_X)){
+      Bongo.Movement.lineUpBall();
+    }
 
     // starts the spin on motors or cuts power
     Bongo.Movement.move();

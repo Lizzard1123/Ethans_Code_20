@@ -896,13 +896,13 @@ void blackBack(){
 
 void initialize()
 {
-  Vincent.reset();
-  delay(2000);
-  while (Vincent.is_calibrating())
-  {
-    printf("Waitn");
-    delay(10);
-  }
+  //Vincent.reset();
+  //delay(2000);
+  //while (Vincent.is_calibrating())
+  //{
+  //  printf("Waitn");
+  //  delay(10);
+  //}
   Bongo.initThreads();
   lv_init();
   initColor();

@@ -56,7 +56,7 @@ private:
   double ball_width;
   double ball_error_past = 0;
   double ball_Dval = 2;
-  double ball_Pval = .2;
+  double ball_Pval = .02; // was .2
   double ball_widthLimit = 20;
 
   //deadzone : min num to be detected from joystick
