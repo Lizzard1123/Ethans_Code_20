@@ -62,6 +62,7 @@ extern ADIAnalogIn AutonNumber;
 //labels debug
 extern lv_obj_t *debugXLabel;
 extern lv_obj_t *debugYLabel;
+extern lv_obj_t *debugRotationLabel;
 
 //global teamcolor
 extern bool teamIsBlue;

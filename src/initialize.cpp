@@ -151,8 +151,8 @@ lv_obj_t *debugY = lv_obj_create(scrDebug, NULL);
 lv_obj_t *debugYLabel = lv_label_create(debugY, NULL);
 
 lv_obj_t *debugRotation = lv_obj_create(scrDebug, NULL);
-
-lv_obj_t *debugRotationLabel = lv_label_create(debugY, NULL);
+//test
+lv_obj_t *debugRotationLabel = lv_label_create(debugRotation, NULL);
 
 bool colorSelected = false;
 bool sideSelected = false;
@@ -874,12 +874,15 @@ void initDebug(){
   debugPlain.body.grad_color = LV_COLOR_MAKE(0xd1, 0xd1, 0xd1);
   lv_obj_set_style(debugX, &debugPlain);
   lv_obj_set_style(debugY, &debugPlain);
+  lv_obj_set_style(debugRotation, &debugPlain);
   //debugs
   //four collums with 8 sections each
   lv_obj_set_size(debugX, LV_HOR_RES/4, LV_VER_RES/8);
   lv_obj_set_pos(debugX, 0, 0);
   lv_obj_set_size(debugY, LV_HOR_RES/4, LV_VER_RES/8);
   lv_obj_set_pos(debugY, 0, LV_VER_RES/8);
+  lv_obj_set_size(debugRotation, LV_HOR_RES/4, LV_VER_RES/8);
+  lv_obj_set_pos(debugRotation, 0, LV_VER_RES/4);
 }
 
 void blackBack(){

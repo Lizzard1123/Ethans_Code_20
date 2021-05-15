@@ -418,7 +418,7 @@ public:
     moveRight(0);
   }
   
-  double setRotation(double val){
+  void setRotation(double val){
     rotation = val;
   }
 
