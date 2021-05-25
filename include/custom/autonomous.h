@@ -11,6 +11,8 @@ private:
   static double X;
   // global Y pos of bongo declared in global.cpp
   static double Y;
+  //temp
+  static double thisRotation;
   // global position update delay for bongo declared in global.cpp
   static const double posDelay;
   // global team color of bongo declared in global.cpp
@@ -123,7 +125,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Movement.getRotation();
+      double currentAngle = thisRotation;
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       // fancy algo
@@ -191,6 +193,7 @@ public:
     double Derivative = 0;
     double integralone = 0;
     double Pval = 2.5;
+    double rot = 0;
     //double Ival = .1;
 
     // double Ival = 0;
@@ -204,7 +207,7 @@ public:
     while (true)
     {
       // update left and right odom values
-      headingVal = Movement.getRotation();
+      headingVal = thisRotation;
       printf("Heading: %f", headingVal);
 
       // find the error of both sides  for P
@@ -262,6 +265,7 @@ public:
 
       delay(PIDspeed);
     }
+    Movement.setRotation(rot);
     return 1;
   }
 
@@ -314,7 +318,7 @@ public:
       speed = (error * Pval) + (integral * Ival) + (derivative * Dval);
 
       // get current angle
-      double currentAngle = Movement.getRotation();
+      double currentAngle = thisRotation;
       double Dangle = myMath.angleBetween(X, Y, targetX, targetY);
 
       // fancy algo
@@ -339,7 +343,7 @@ public:
       */
 
       // update left and right odom values
-      t_headingVal = Movement.getRotation();
+      t_headingVal = thisRotation;
 
       // find the error of both sides  for P
       error = t_turnTarget - t_headingVal;
@@ -464,14 +468,23 @@ public:
     return true;
   }
   //update bongo current pos
+
+  void resetOdom(){
+    X = 0;
+    Y = 0;
+    Movement.setRotation(0);
+    thisRotation = 0;
+  }
+
   static void updatePos(void *)
   {
     //I derived the original formula and for the reiteration and added wheel i combined it with work done here
     //https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-186-mobile-autonomous-systems-laboratory-january-iap-2005/study-materials/odomtutorial.pdf
     double wheelCircumfrence = 10.11;
     double wheelSmallCircumfrence = 8.65795;
-    double wheelSeperation = 5;
-    double head = Movement.getRotation();
+    //bigger increases angle more
+    double wheelSeperation = 9.2;
+    double head = thisRotation;
     double rightOdomVal;
     double leftOdomVal;
     double middleOdomVal;
@@ -487,10 +500,13 @@ public:
         Y = 0;
       }
       //update heading part
-      double changeOfHeading = (rightOdom.get() - leftOdom.get()) / wheelSeperation;
-      Movement.setRotation(Movement.getRotation() + changeOfHeading);
+      double changeOfHeading = (leftOdom.get() - rightOdom.get()) / wheelSeperation;
+      Movement.setRotation(thisRotation + changeOfHeading);
+      thisRotation = thisRotation + changeOfHeading;
+      //set new
+      head = thisRotation;
       //find isolated forward and sideways movement
-      double forwardMovement = (rightOdom.get() - leftOdom.get()) / 2;
+      double forwardMovement = (rightOdom.get() + leftOdom.get()) / 2;
       double sidewaysMovement = middleOdom.get();
       //to distance
       forwardMovement = myMath.toInch(forwardMovement, wheelCircumfrence);
@@ -506,14 +522,25 @@ public:
       Y -= sidewaysMovement * sin(head * M_PI / 180);
       X += sidewaysMovement * cos(head * M_PI / 180);
       //debug
-
+      printf("right: %f", rightOdom.get());
+      printf("left: %f", leftOdom.get());
       // reset
       rightOdom.reset();
       leftOdom.reset();
       middleOdom.reset();
-      head = Movement.getRotation();
       c::task_delay(posDelay);
     }
+  }
+
+  void testOdom(){
+    //PIDTurn(180);
+    PIDTurn(90);
+  }
+
+  void testOdom2(){
+    //IDMove(0, 15);
+    PIDMove(0, 0);
+    PIDTurn(0);
   }
 
   void toggleEject()
@@ -534,7 +561,7 @@ public:
   {
     std::string xPos = "X: " + std::to_string(X);
     std::string yPos = "Y: " + std::to_string(Y);
-    std::string roationPos = "roation: " + std::to_string(Movement.getRotation());
+    std::string roationPos = "roation: " + std::to_string(thisRotation);
     lv_label_set_text(debugXLabel, xPos.c_str());
     lv_label_set_text(debugYLabel, yPos.c_str());
     lv_label_set_text(debugRotationLabel, roationPos.c_str());

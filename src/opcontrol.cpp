@@ -14,12 +14,15 @@ void opcontrol() {
     Bongo.debugPos();
     // change teams
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
+      Bongo.resetOdom();
+      Bongo.testOdom();
       Bongo.changeTeam();
       //Bongo.Autonomous();
     }
 
     // toggle flywheel why do i need this delete?
     if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_B)) {
+      Bongo.testOdom2();
       Bongo.Movement.flywheel.flywheeltoggleswitch();
     }
 
